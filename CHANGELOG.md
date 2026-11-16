@@ -2,6 +2,10 @@
 
 Newest first.
 
+## 2026-11-16: logo
+- Darshan's logo (`assets/source/originals/logo/The_Lost_Gold_Train.png`, already transparent) imported as `ui_splash_logo`. It's shown top left above the Outlaw, as in the art references, with a slow shimmer, and on the loading screen. Without logo art, the title is drawn in text above the reels.
+- Left column re-laid out: logo, mascot, then BUY FREE SPINS at the bottom (the free spins card takes its place). Positions are in `CONFIG.logo`, `CONFIG.mascot` and `CONFIG.buyButton`.
+
 ## 2026-11-16: first playable build
 - **Specs:** GDD, rules, pay table and asset spec written for The Lost Gold Train (original *Book of Tut* maths and feature buy, Darshan's choice).
 - **Maths:** 9 symbols with the reference pay table (The Outlaw, Sheriff's Star, Revolver, Gold Bars, A–10) plus Dynamite as Wild + Scatter. New feature buy at 100× (weighted 3/4/5 Dynamite trigger; bought free spins with their own special-symbol shares). Free spins now give the special symbol a fixed per-symbol share of each reel (replaces the multiplier), so the Outlaw is the dream special. Tuned: RTP 96.65–97.29% over 4 × 6M rounds, free spins 1 in 178, median round 59×, feature buy return 95.5–96.4%. Hit rate 26.8% (reference 31–33%), flagged.
