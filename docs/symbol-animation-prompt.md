@@ -226,13 +226,20 @@ One rule I would keep in **every Claude symbol prompt** is the **POSITION LOCK**
 ## Prototype implementation status
 Tool: `tools/asset-pipeline/anim_from_keys.py` (sheets kept in `assets/source/originals/anims/`).
 
-| Symbol | Mode | How the brief is met |
-| --- | --- | --- |
-| Gold Bars (`sym_03_win`) | `light` | Pose 1 is the artwork in all 45 frames; light that is clearly brighter and near-white in each key (the shine sweep, glints) is lifted onto it and builds, peaks and decays between keys. The stack never moves. |
-| Sheriff's Star (`sym_01_win`) | `light --glints` with `glints/sheriff.json` | The AI key poses redraw the badge at a slightly different scale (up to 35 px), so lifting their pixels doubled the rims. Instead the glint path is read from the keys (bottom-left tip → left arm → centre → right arm → top-right tip → top tip) and painted as sparkles on pose 1. |
-| The Outlaw (`sym_00_win`) | `motion` | Keys aligned to pose 1 on the tile frame, in-betweens follow dense optical flow (no cross-fade); where flow fails (gun drop to the grin) the switch is a short hard cut instead of a double image. |
-| Steam train (`train_win`, not in the game) | `motion` | As the Outlaw. |
+| Symbol | In game | Options | How the brief is met |
+| --- | --- | --- | --- |
+| The Outlaw (`sym_00_win`) | yes | `motion --settle 13` | Keys aligned to pose 1 on the tile frame; in-betweens follow dense optical flow (no cross-fade). The gun-to-grin change is too big for flow, so it switches in under a frame; a dissolve was tried and ghosted. |
+| Sheriff's Star (`sym_01_win`) | yes | `light --glints --glint-script glints/sheriff.json` | The keys redraw the badge at a slightly different scale, so the glint path is read from them and painted on pose 1. |
+| Revolver (`sym_02_win`) | yes | `motion --soft --settle 12` | Barrel heats, muzzle flash, fireball, smoke clears; smoke and fire dissolve (`--soft`). |
+| Gold Bars (`sym_03_win`) | yes | `light` | Pose 1 in all frames; the shine sweep and glints from the keys are lifted onto it. |
+| Dynamite (`sym_scatter_win`) | yes, now also the Scatter's art | `motion --soft --settle 13` | Clock ticks, explodes into fire and smoke, reassembles. |
+| Steam train (`train_win`) | no (not a symbol) | `motion --settle 13` | Smoke and steam build and clear. |
+| Wanted poster (`wanted_poster_win`) | no | `motion --settle 13` | Paper curls and flaps, settles flat. |
+| Money bag (`money_bag_win`) | no | `motion --settle 13` | Bag hops, flops, gold dust bursts. |
+| Horseshoe (`horseshoe_win`) | no | `light --glints --glint-script glints/horseshoe.json` | Warm glow, then star glints on the left arm and right tip. |
 
-All: 45 frames, 30 fps, 1.5 s, frame 45 wraps into frame 1; tile silhouette and an outer border band are pose 1's in every frame (background and frame lock); the AI watermark in the last key is replaced with pose 1's pixels; frame 1 is also the idle symbol, so a win starts without a pop. In game, animated symbols skip the code-side pop/scale (position lock) and keep the glow.
+`--settle K`: the last poses of every sheet are "back to neutral" but redrawn slightly moved or bigger, which made the loop jump. Those keys use pose 1 instead, so frame 45 eases exactly into frame 1. The tool prints every frame-to-frame step; all nine loops now wrap with a step of 0 to 0.2 (out of 255).
+
+All: 45 frames, 30 fps, 1.5 s, frame 45 wraps into frame 1 (checked by the tool's step report); tile silhouette and an outer border band are pose 1's in every frame (background and frame lock); the AI watermark in the last key is replaced with pose 1's pixels; frame 1 is also the idle symbol, so a win starts without a pop. In game, animated symbols skip the code-side pop/scale (position lock) and keep the glow. A win highlight lasts 45 frames, and each line in the line-by-line view also lasts 45 frames (`lineCycle`, was 36), so every win plays the complete 1.5 s loop.
 
 Known limits: the key poses themselves are AI redraws, so the Outlaw's face and clothing detail differs slightly between keys and shows as soft texture change during the move; the light layers on the Gold Bars cross-fade between keys rather than tracking one highlight continuously.

@@ -16,6 +16,7 @@ Every asset ID in `assets/manifest.js`, where its art came from, and what is sti
 | `sym_00_expanded` | `24_full_body_outlaw_character.png` | cropped to the reel's tall shape |
 | `bg_base_main` | `basegame.png` (Darshan, 2026-11-16: sunset canyon, train on the curve, lantern post) | 1672×941 cover-scaled to 1920×1080 (about 15% up; edges cropped by a few px) |
 | `bg_freegame_main` | `freegame.png` (inside the gold wagon, GOVT. GOLD crates, lantern) | same |
+| `sym_02_win`, `sym_scatter_win` | `07_revolver`, `06_dynamite_timer` sheets | as below; frame 1 is now the Revolver's and the Dynamite's idle art (the Dynamite changed from the power-symbol tile to the timer tile) |
 | `sym_00_win`, `sym_01_win`, `sym_03_win` | `0X_*_spritesheet.png` (16 key poses each) | 45-frame win animations, 9×5 sheets of 320×239 frames (`anim_from_keys.py`, see `docs/symbol-animation-prompt.md`); frame 1 replaces the idle art of the Outlaw, Sheriff's Star and Gold Bars |
 | `ui_splash_logo` | `The_Lost_Gold_Train.png` (Darshan, 2026-11-16; already transparent) | trimmed to 1200×763 WebP; shown top left of the game and on the loading screen |
 | `fx_scatter_full` | `19_power_symbol_dynamite.png` | composed: the dynamite at the top and a painted fuse down the reel with a burning tip (made in the prototype; replace with painted art if wanted) |

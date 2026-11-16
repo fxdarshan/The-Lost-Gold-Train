@@ -135,7 +135,7 @@
     frames: {
       bgBaseLoop: 120,                  // background breathing
       symWin: [10, 20, 15],             // winning symbol: pop, hold, settle
-      lineCycle: 36,                    // each line shown on its own after the all-lines view
+      lineCycle: 45,                    // each line shown on its own after the all-lines view (one full 1.5 s symbol animation)
       scatterLand: 12,                  // scatter squash when it lands
       fuse: [24, 18, 18],               // trigger: fuse unrolls down the reel, crackers pop, settle
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold

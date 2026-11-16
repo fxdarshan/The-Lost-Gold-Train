@@ -23,7 +23,7 @@ window.ASSET_MANIFEST = {
   fit: {
     // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
     default:          [0.96, 0.98],
-    sym_scatter_idle: [1.04, 1.10]
+    sym_scatter_idle: [0.96, 0.98]
   },
 
   images: {
@@ -47,7 +47,9 @@ window.ASSET_MANIFEST = {
     // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
     sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: draws, grins, holsters
     sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Sheriff's Star: glints travel round the badge
+    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Revolver: barrel heats, fires, smoke clears
     sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Gold Bars: shine sweep and glints
+    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Dynamite: ticks, explodes, reassembles
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
@@ -69,7 +71,9 @@ window.ASSET_MANIFEST = {
   anims: {
     sym_00_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_01_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
+    sym_02_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_scatter_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
   },
 
   sounds: {

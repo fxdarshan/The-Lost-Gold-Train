@@ -2,6 +2,11 @@
 
 Newest first.
 
+## 2026-11-16: more win animations, smooth 1.5 s loops
+- Five more sheets from Darshan: Revolver and Dynamite are in the game (the Dynamite's art is now the timer tile; the fuse strip was rebuilt from it). Wanted poster, money bag and horseshoe are processed but not symbols.
+- `anim_from_keys.py`: `--settle` (neutral end keys use pose 1, so every loop lands exactly on its start), `--soft` (smoke and fire dissolve), stricter alignment, and a per-frame smoothness report. All nine loops re-made; wrap steps 0 to 0.2.
+- `lineCycle` 36 → 45 frames, so each line in the line-by-line view plays the full 1.5 s animation.
+
 ## 2026-11-16: symbol win animations
 - Darshan's 16-key-pose sheets for the Outlaw, Sheriff's Star and Gold Bars turned into 45-frame, 30 fps loops following his brief (`docs/symbol-animation-prompt.md`): new tool `tools/asset-pipeline/anim_from_keys.py` (light mode for the gold and badge, optical-flow motion for the Outlaw, position/border lock, watermark removal). Frame 1 is now each symbol's idle art.
 - Game: winning symbols play their sheet (`anims` in `assets/manifest.js`, `Assets.anim`); animated symbols skip the pop/scale.

@@ -18,8 +18,11 @@ Turn a 4x4 sheet of 16 AI key poses (left-to-right, top-to-bottom, on white) int
 Output: <out>_sheet.webp (9 x 5 grid of 45 frames), <out>_frame00.png (frame 1, for the idle symbol),
 <out>_preview.gif (30 fps, for review), and a JSON line with the sheet layout.
 
-    python3 -I tools/asset-pipeline/anim_from_keys.py <sheet.png> <out_prefix> --mode light|motion [--width 320] [--strict] [--glints [--glint-script tools/asset-pipeline/glints/<symbol>.json]]
+    python3 -I tools/asset-pipeline/anim_from_keys.py <sheet.png> <out_prefix> --mode light|motion [--width 320] [--strict] [--soft] [--settle K] [--glints [--glint-script tools/asset-pipeline/glints/<symbol>.json]]
 
+  --settle K: keys K..16 are neutral 'return' poses; use pose 1 for them so the loop lands exactly on the start.
+  --soft (motion mode): where flow can't follow (smoke, explosions, muzzle flash) cross-fade instead of a hard switch.
+  The smoothness report (stderr) lists every frame-to-frame step including the 45 -> 1 wrap.
   --glints (light mode): for objects redrawn at a different scale between keys: glint positions and sizes are
   read from the keys, and sparkles are painted on pose 1, so no pixel of a misaligned key is used.
 """
@@ -33,6 +36,8 @@ mode = sys.argv[sys.argv.index('--mode') + 1] if '--mode' in sys.argv else 'moti
 W_OUT = int(sys.argv[sys.argv.index('--width') + 1]) if '--width' in sys.argv else 320
 STRICT = '--strict' in sys.argv or '--glints' in sys.argv
 GLINTS = '--glints' in sys.argv
+SOFT = '--soft' in sys.argv
+SETTLE = int(sys.argv[sys.argv.index('--settle') + 1]) if '--settle' in sys.argv else 0
 SCRIPT = sys.argv[sys.argv.index('--glint-script') + 1] if '--glint-script' in sys.argv else None
 N_OUT, FPS, COLS = 45, 30, 9
 
@@ -68,7 +73,7 @@ for i, im in enumerate(cells):
             try:
                 _, M2 = cv2.findTransformECC(gray(ref), gray(im), np.eye(2, 3, dtype=np.float32), cv2.MOTION_AFFINE,
                                              (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6), mk, 5)
-                if np.hypot(M2[0, 2], M2[1, 2]) < cw * .1 and np.abs(M2[:, :2] - np.eye(2)).max() < .1:
+                if np.hypot(M2[0, 2], M2[1, 2]) < cw * .08 and np.abs(M2[:, :2] - np.eye(2)).max() < .04:
                     M = M2; break
             except cv2.error:
                 pass
@@ -87,6 +92,12 @@ aligned[15] = aligned[15] * (1 - wm) + aligned[0] * wm
 band = ref_a & ~cv2.erode(ref_a.astype(np.uint8), np.ones((int(cw * .07),) * 2, np.uint8)).astype(bool)
 band_f = cv2.GaussianBlur(band.astype(np.float32), (0, 0), 3)[..., None]
 aligned = [a * (1 - band_f) + ref * band_f for a in aligned]
+
+# 3b. --settle K: keys K..16 are the 'return to neutral' poses; AI redraws them slightly moved or rescaled,
+#     which shows as a jump at the loop point. Replace them with pose 1 so the loop eases back into the exact
+#     starting art (position lock + seamless wrap).
+if SETTLE:
+    for k in range(SETTLE - 1, 16): aligned[k] = aligned[0].copy()
 
 # 4. key -> frame timing: 16 keys evenly around the loop, gentle global ease
 def key_pos(f):
@@ -165,6 +176,7 @@ else:
         # cross-fading, so no double image appears
         err = np.abs(A - B).mean(-1)
         hard = cv2.GaussianBlur(np.clip((err - 25) / 25, 0, 1), (0, 0), 3)
+        if SOFT: hard = hard * 0                    # --soft: smoke, fire, flashes dissolve (cross-fade) instead of switching
         w = (1 - hard) * s + hard * np.clip((s - .4) / .2, 0, 1)
         return (1 - w[..., None]) * A + w[..., None] * B
 
@@ -181,6 +193,11 @@ for f in range(N_OUT):
     h_out = round(im.height * W_OUT / im.width)
     frames.append(im.resize((W_OUT, h_out), Image.LANCZOS))
 
+# smoothness: size of every frame-to-frame step, including the 45 -> 1 wrap
+arr = [np.asarray(f.convert('RGB')).astype(np.float32) for f in frames]
+steps = [float(np.abs(arr[(i + 1) % N_OUT] - arr[i]).mean()) for i in range(N_OUT)]
+med = float(np.median(steps)) or 1e-6
+print(json.dumps({'steps': [round(x, 1) for x in steps], 'wrap': round(steps[-1], 1), 'maxOverMedian': round(max(steps) / med, 1)}), file=sys.stderr)
 fw, fh = frames[0].size; rows = (N_OUT + COLS - 1) // COLS
 sheet_out = Image.new('RGBA', (fw * COLS, fh * rows), (0, 0, 0, 0))
 for i, fr in enumerate(frames): sheet_out.paste(fr, ((i % COLS) * fw, (i // COLS) * fh))

@@ -5,7 +5,7 @@ There is no animation spec for this game yet. These are the prototype's own timi
 | Key | Frames | What |
 | --- | --- | --- |
 | `symWin` | 10 / 20 / 15 | winning symbol: pop to 112% with a glow, hold with a small bob, settle |
-| `lineCycle` | 36 | each winning line on its own after the all-lines view (skipped in autoplay) |
+| `lineCycle` | 45 | each winning line on its own after the all-lines view (skipped in autoplay) |
 | `scatterLand` | 12 | Scatter squash when it lands |
 | `anticipation` | 45 per reel | extra spin time for each reel after two Scatters are showing, with a glowing frame (and the fx_lantern decoration if supplied) |
 | `fuse` | 24 / 18 / 18 | trigger: the full-reel Scatter art (fx_scatter_full) is revealed down the reel, sparks pop, settle |

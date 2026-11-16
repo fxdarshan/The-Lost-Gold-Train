@@ -29,10 +29,10 @@ Average free spins round by special symbol: the Outlaw about 220×, Sheriff's St
 | --- | --- | --- | --- |
 | 0 | The Outlaw | John Hunter | `01_character_portrait` |
 | 1 | Sheriff's Star | Tutankhamun mask | `04_sheriff_badge` |
-| 2 | Revolver | Golden cat | `07_revolver` |
+| 2 | Revolver | Golden cat | `07_revolver` (animated) |
 | 3 | Gold Bars | Scarab | `03_gold_bars` |
 | 4–8 | A, K, Q, J, 10 | card ranks | `11`–`15_royal_*` |
-| 9 | Dynamite (Wild + Scatter) | Book of Tut | `19_power_symbol_dynamite` |
+| 9 | Dynamite (Wild + Scatter) | Book of Tut | `06_dynamite_timer` (animated; was `19_power_symbol_dynamite`) |
 
 Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 
