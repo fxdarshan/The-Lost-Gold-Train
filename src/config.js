@@ -19,11 +19,11 @@
  */
 (function (root) {
   const CONFIG = {
-    title: 'Starter Slot',
+    title: 'The Lost Gold Train',
     // short theme texts used by the splash screen, modals and rules screen
     texts: {
-      brand: 'Starter Slot',                        // small line on the splash screen
-      loading: ['Shuffling the Reels...', 'Polishing the Symbols...', 'Counting the Coins...', 'Lighting the Lights...'],
+      brand: 'All Aboard',                          // small line on the splash screen (ASSUMED until the GDD says)
+      loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
       retrigger: 'MORE FREE SPINS!',               // retrigger modal title
       expandedPanel: ['#7fd0ff', '#bfe9ff', '#ffffff']   // sky behind sym_00_expanded art (top to bottom)
     },

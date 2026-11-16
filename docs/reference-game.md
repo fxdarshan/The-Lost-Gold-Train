@@ -1,59 +1,139 @@
 # Reference game: John Hunter and the Book of Tut (Pragmatic Play)
 
-Starter Slot (sample game) uses this game's features and maths, as Darshan asked on 2026-11-15. This file holds only the **published facts** and where they came from. Where the sources disagree, the conflict and the value used are listed below. Anything not published is marked ASSUMED or TUNED in `src/config.js` and listed in the README under "Decisions".
+Research done 2026-11-16 for a new game started from `slot-starter-template`. This file holds published facts only, each with its source. Values that are not published are listed under "Unknown" and become ASSUMED or TUNED in `src/config.js`.
 
-Sources Darshan gave:
-- Review: https://www.bigwinboard.com/john-hunter-and-the-book-of-tut-pragmatic-play-slot-review/
-- Official page: https://www.pragmaticplay.com/en/games/john-hunter-and-the-book-of-tut-slot/
-- Videos: https://www.youtube.com/watch?v=PETQquwWx-g and https://www.youtube.com/watch?v=hNaidHqhfPY (could not be read here: YouTube rate-limited the fetch; nothing below comes from them)
+Sources Darshan gave: Pragmatic Play's official page, Slotstemple, NetBet (that link is the **Respin** version, a different game: see section 8), Slotester, and three YouTube videos. Slotstemple and all three YouTube videos could not be read from here (the sites refused the request), so nothing below comes from them. The rest come from the extra sources listed at the end.
 
-Extra sources for the full pay table (the two pages above don't list it):
-- https://slotester.com/john-hunter-and-the-book-of-tut/ (premium pays "x total bet", read from the game at a 2.00 bet; scatter pays)
-- https://www.online-slot.co.uk/online-slots/reviews/john-hunter-and-the-book-of-tut/ (low symbol pays, John Hunter pays)
-
-## Facts
+## 1. Identity
 
 | Item | Value | Source |
 | --- | --- | --- |
-| Grid | 5 reels × 3 rows | Bigwinboard |
-| Lines | 10 fixed | Bigwinboard |
-| RTP | 96.50% | Official, Bigwinboard |
-| Volatility | High (5 of 5) | Bigwinboard |
-| Bet range | 0.10 to 100 per spin | Bigwinboard |
-| Max win | 5,500× (official) / 5,000× (reviews) | see conflicts |
-| Book symbol | Wild (substitutes for every pay symbol) and Scatter | Bigwinboard |
-| Scatter pays | 3 / 4 / 5 Books anywhere = 2× / 20× / 200× total bet | Bigwinboard, Slotester |
-| Free spins | 3+ Books award 10 free spins | Official, Bigwinboard |
-| Retrigger | 3+ Books during free spins add 10 more, no limit | Official, Bigwinboard |
-| Special symbol | Before free spins, one regular pay symbol is picked at random | Official, Bigwinboard |
-| Expansion | The special symbol expands vertically to fill its reel when enough are showing for a win | Official |
-| Expansion pays | Premiums pay "even if they are not adjacent to each other" | Bigwinboard |
-| Hit frequency | not published | |
-| Feature buy, gamble | not mentioned | |
+| Provider | Pragmatic Play | all |
+| Release | 14/15 May 2020 | OLBG, Sigma |
+| Series | John Hunter (4th game) | AboutSlots |
+| Theme | Ancient Egypt; a *Book of Ra* style game | Bigwinboard, Casinos.com |
+| Grid | 5 reels × 3 rows | Slotester, Bigwinboard, theScore rules |
+| Lines | 10 fixed, left to right | Slotester, theScore rules |
 
-## Pay table (x total bet, for one line)
+## 2. Maths headline
+
+| Item | Value | Source |
+| --- | --- | --- |
+| RTP | **96.50%** default | Official page |
+| RTP variants | 95.50% and 94.50% (operator choice) | SpinHunter, AboutSlots (94.50%) |
+| Volatility | High, 5/5 on Pragmatic's meter | Bigwinboard; Slotester says Medium |
+| Max win | **5,500×** | Official page, Slotester, AboutSlots; Bigwinboard says 5,000×; OLBG says 6,600× |
+| Max win probability | 1 in 1 billion spins | AboutSlots |
+| Hit frequency | 33.33% (published); 31% measured over 20,000 spins | AboutSlots, OLBG; Slotester |
+| Free spins frequency | 1 in 174 (published); about 1 in 150 measured | AboutSlots; Slotester |
+| Bet range | 0.10 to 100 per spin is most common; some operators 0.10 to 250, others lower caps | Bigwinboard, Sigma; Slotester; theScore |
+
+## 3. Symbols and pay table (× total bet, for one line)
 
 | Symbol | 2 | 3 | 4 | 5 |
 | --- | --- | --- | --- | --- |
-| John Hunter | 1 | 10 | 100 | 500 |
+| John Hunter (top) | 1 | 10 | 100 | 500 |
 | Tutankhamun mask | 0.5 | 4 | 40 | 200 |
-| Cat | 0.5 | 3 | 10 | 75 |
+| Golden cat | 0.5 | 3 | 10 | 75 |
 | Scarab | 0.5 | 3 | 10 | 75 |
 | A, K | | 0.5 | 4 | 15 |
 | Q, J, 10 | | 0.5 | 2.5 | 10 |
-| Book (scatter, anywhere) | | 2 | 20 | 200 |
+| **Book** (scatter, anywhere) | | 2 | 20 | 200 |
 
-The 5,000× maximum matches the top symbol expanded on all 5 reels: 500× on each of the 10 lines.
+Source: Slotester (read in the game at a 2.00 bet); scatter pays also Gamblersarea and Bigwinboard; mask pays also Stake. Slotester's table layout is ambiguous for the mask, cat and scarab; the values above are the only reading consistent with "premiums pay from 2" and 5,000× = 500 × 10 lines. Premiums pay from 2 of a kind, card ranks from 3 (Slotester, Bigwinboard).
 
-## Conflicts and how they were settled
+## 4. Rules
 
-- **Max win:** the official page says 5,500×, the reviews say 5,000×. The official value is used (`CONFIG.maxWin = 5500`).
-- **"Random symbols can also have a chance to expand"** (official page, free spins). No source explains it beyond the special symbol, so only the special symbol expands. Open question for Darshan.
-- **Line shapes** are not published in the sources found. The classic 10-line book-slot layout is used (ASSUMED).
-- **Reel strips / symbol weights** are not published. They were tuned with `tools/simulate.js` to the 96.50% RTP (TUNED).
+From a casino help page that appears to copy the game's rules (theScore Bet), confirmed by reviews:
 
-## Prototype implementation status
+1. **Book** is Wild (substitutes for all pay symbols) and Scatter (pays anywhere, 2× / 20× / 200× for 3 / 4 / 5).
+2. **Free spins:** 3+ Books pay their scatter win and award **10 free spins**.
+3. **Mystery (special) symbol:** before the free spins, one symbol is chosen **at random, weighted, from the list of regular symbols**. The choice is shown as a book opening on a page.
+4. **Free spin win = two rounds added together:**
+   - normal line wins first;
+   - then the special symbol expands to fill every reel it is on, **only if it is on enough reels to win** (2 for premiums, 3 for card ranks). It then pays on all 10 lines, **even on reels that are not next to each other**.
+5. **Retrigger:** 3+ Books during free spins add **10 more**, keep the same special symbol, and have no limit.
+6. **Feature buy:** 10 free spins for **100× the total bet** from the base game. The bought trigger spin has 3, 4 or 5 Books, chosen by weight. Bought free spins use **a different reel set for each special symbol**. The buy isn't offered in some markets, such as the UK.
+7. **Random expansion (open question):** Pragmatic's page says that during the feature, random symbols can also expand vertically. No other source describes this, and the rules text doesn't mention it. It may just be marketing wording for the special symbol.
 
-- Everything in the Facts table is implemented in `src/engine.js` and `src/config.js`, except volatility, which is a result rather than a rule (the simulator shows 71.7% of rounds lose and 0.14% pay 100× or more).
-- RTP measured with the simulator: 96.35% average over 4 runs of 4 million rounds (95.90% to 96.83%, so about ±0.5% run to run).
-- Starter Slot (sample game) has two extra premium symbols (Gold Bar, Coins) because the supplied art has six premiums against the reference game's four. Their pays are ASSUMED; see `docs/pay-table.md`.
+Sources: theScore help page, Official page, Slotester, Bigwinboard, PayByMobileSlots, AskGamblers, Gambling.com.
+
+## 5. How it plays (measured)
+
+| Measure | Value | Source |
+| --- | --- | --- |
+| Base game | mostly small wins while waiting for Books; frequent dead spins | Bigwinboard |
+| Longest dry streak | 19 spins (average 3.19) over 20,000 spins | Slotester |
+| Biggest base win without bonus | 200.5× | Slotester |
+| Free spins win | median 60×, mean 80.7× (trigger spin included) | Slotester (233 bonuses) |
+| Free spins win (another player) | average 94.5×, best 408.5× | AskGamblers |
+| Free spins per buy | 11 on average (10 to 40); 8 of 100 buys retriggered | Slotester |
+| Bought bonus return | 101% over 100 buys, median 0.76× the price, 63 of 100 below price | Slotester |
+| Example | John Hunter on reels 2, 4 and 5 expanded and paid 100× (200 at a 2.00 bet) | Slotester |
+
+What this means for the maths: free spins carry about **45 to 50%** of the RTP (1 in about 160 to 174 spins × about 80× average). That's more than the starter template's sample gives them (about 37%).
+
+## 6. Presentation (from reviews)
+
+- 5×3 reels in a gold Egyptian frame, with Egyptian music.
+- A book opens and its pages flip to reveal the special symbol.
+- Expanded symbols cover whole reels; full-screen John Hunter is the big moment.
+- Classic *Book of Ra* feel; visuals are a step up from the original *Book of Ra*.
+
+Sources: Bigwinboard, Gamblersarea, Gambling.com.
+
+## 7. Unknown (not published anywhere found)
+
+- Reel strips or symbol weights, base and free spins.
+- The special symbol weights (the rules say only "weighted").
+- Book count weights on the bought trigger spin.
+- The 10 line shapes. Assumed: the classic book-slot layout (middle, top, bottom, V, ^, …).
+- The "random symbols expand" wording (section 4, item 7).
+
+## 8. The NetBet link is a different game: *John Hunter and the Book of Tut Respin* (Oct 2022)
+
+| Item | Respin version |
+| --- | --- |
+| Grid, lines | 5×3, 10 lines |
+| RTP / volatility | 96.50% / High 5/5 |
+| Max win | **4,000×** |
+| Mystery Respin (base game) | On base spins a mystery symbol can be chosen at random. If 3+ land, they expand to fill their reels, and a respin follows. New mystery symbols also expand and give another respin. It ends when no new ones land or the screen is full. |
+| Free spins | 10 free spins; one mystery symbol for the whole round, with the same expand-and-respin process |
+| Bonus buy | 100× the bet (outside the UK) |
+| Top line | John Hunter filling the screen: up to 1,000× the stake |
+| Hit frequency | 25% |
+
+Sources: Gaming Intelligence, OLBG, Gambling.com (UK, NZ, US), European Gaming, Slotstemple (Respin page). The sources disagree on whether the base-game expansion needs a win or just enough symbols.
+
+## 9. Related game, for context only
+*Book of Tut Megaways* (2023): 6 reels, up to 117,649 ways, random expanding symbol in the base game too, 96.00% RTP, 10,000× max win (Gambling.com, OLBG, Book of Ra Slots).
+
+## 10. What the starter template already does, and what a faithful copy needs
+
+| Feature | Template | Needed |
+| --- | --- | --- |
+| 5×3, 10 lines, pay table, Book Wild + Scatter, 10 FS, retriggers, special symbol picked by weight, expansion on non-adjacent reels paid after line wins | yes | none |
+| Max win cap | 5,500× | none |
+| RTP 96.50% | tuned (spread ±1%) | re-tune so free spins carry about 45 to 50%, not 37% |
+| Feature buy 100× (weighted 3/4/5 Books, separate reels per special symbol) | no | new |
+| RTP variants 95.50% / 94.50% | no | config switch (optional) |
+| Respin version's Mystery Respin | no | only if that version is chosen |
+
+## Sources
+- Pragmatic Play (official): https://www.pragmaticplay.com/en/games/john-hunter-and-the-book-of-tut-slot/
+- Slotester (pay table, 20,000-spin test): https://slotester.com/john-hunter-and-the-book-of-tut/
+- theScore Bet help (rules text): https://thescorebethelp.zendesk.com/hc/en-us/articles/15313590346253-John-Hunter-and-the-Book-of-Tut
+- Bigwinboard: https://www.bigwinboard.com/john-hunter-and-the-book-of-tut-pragmatic-play-slot-review/
+- AboutSlots: https://www.aboutslots.com/casino-slots/john-hunter-and-the-book-of-tut
+- SpinHunter (RTP variants): https://spinhunter.co.uk/slots/john-hunter-and-the-book-of-tut-slot-demo-and-review/
+- OLBG: https://www.olbg.com/slots/games/john-hunter-and-the-book-of-tut
+- AskGamblers: https://www.askgamblers.com/casino-games/online-slots/reviews/john-hunter-and-the-book-of-tut-pragmatic-play
+- Sigma: https://sigma.world/play/games/pragmatic-play/john-hunter-and-the-book-of-tut/
+- Stake: https://stake.com/casino/games/pragmatic-play-book-of-tut
+- Gamblersarea: https://gamblersarea.com/game/BookofTut
+- PayByMobileSlots: https://www.paybymobileslots.com/all-games/slots/book-of-tut
+- NetBet (Respin): https://casino.netbet.com/game/john-hunter-and-the-book-of-tut-respin-94
+- Gambling.com Respin (NZ): https://www.gambling.com/nz/online-casinos/pokies/john-hunter-and-the-book-of-tut-respin
+- OLBG Respin: https://www.olbg.com/slots/games/john-hunter-and-the-book-of-tut-respin
+- Gaming Intelligence (Respin launch): https://www.gamingintelligence.com/studio-showcase/?p=3534
+- Not readable from here: Slotstemple (original), YouTube PETQquwWx-g, hG-EUziVBus, CvssRX4ZJzA.

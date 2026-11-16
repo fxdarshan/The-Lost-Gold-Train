@@ -1,4 +1,8 @@
-# Slot Starter Template
+# The Lost Gold Train (prototype)
+
+> New game started 2026-11-16 from `fxdarshan/slot-starter-template`. Reference game: Pragmatic Play's *John Hunter and the Book of Tut* (research in [`docs/reference-game.md`](docs/reference-game.md)). Until the theme, art and remaining specs arrive, it plays the template's sample book-style game with placeholder art; current state in [`HANDOFF.md`](HANDOFF.md).
+
+## About the template
 
 A ready-to-run HTML5 slot prototype to start every new game from. It ships with a working sample game, **Starter Slot**: book-style, 5×3, 10 lines, the features and maths of *John Hunter and the Book of Tut*, and code-drawn placeholder art. A new game replaces the specs, the values and the art; the engine, demo tools, checks and build stay.
 
