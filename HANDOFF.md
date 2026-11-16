@@ -9,7 +9,7 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
   1. Full symbol set: are the ASSUMED pays for the six new pictures right? Keep Power Dynamite as a multiplier Wild on reels 2-4 (multipliers add)? The earlier 9-symbol version is commit 8c3fe9d.
   2. Hit rate 21.4% against the reference's 31–33%: keep, or drop a few symbols to raise it?
   3. Win banners and a hanging lantern; prompts in `docs/art-direction.md` §4.
-  4. Key-pose sheets for the A and Power Dynamite.
+  4. Key-pose sheets for the A and Power Dynamite. Darshan finds the current animations soulless: new acted key-pose prompt with a timing chart in `docs/keypose-prompt-outlaw.md`; waiting for the Outlaw sheet made from it, then add per-key timing to `anim_from_keys.py`.
   5. Higher-resolution symbols (about 2×) for final.
   6. Strongbox reveal for the pick: wanted?
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).

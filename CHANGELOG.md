@@ -2,6 +2,9 @@
 
 Newest first.
 
+## 2026-11-16: acted key-pose prompt
+- `docs/keypose-prompt-outlaw.md`: 16-key "quick draw" performance for the Outlaw with consistency rules and a per-key timing chart, plus the structure to reuse for other symbols.
+
 ## 2026-11-16: win animations for the rest of the set
 - Darshan's new sheets: Lantern, K, Q, J, 10, Wild and Scatter now animate (75 frames / 2.5 s, seamless loops). 16 of 19 picture ids animate; the A and Power Dynamite stay static (no sheets yet).
 - Wild and Scatter idle art is now frame 1 of their sheets (framed tiles like the other symbols), so their badge-size fit was removed. The two files arrived with swapped names; mapped by picture.
