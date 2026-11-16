@@ -158,7 +158,10 @@
     // so the Outlaw mascot can stand on the left, as in the reference images.
     stage: { landscape: [1920, 1080] },
     window: { x: 540, y: 150, w: 1300, h: 690 },
-    mascot: { x: 30, y: 230, w: 480, h: 720 },   // box the mascot art is fitted into (feet on the bottom edge)
+    // left column, as in the art references: the logo on top, the Outlaw mascot below, the buy button at the bottom
+    logo: { x: 15, y: 4, w: 510, h: 255 },       // box the logo (ui_splash_logo) is fitted into
+    mascot: { x: 30, y: 250, w: 480, h: 612 },   // box the mascot art is fitted into (feet on the bottom edge)
+    buyButton: { x: 50, y: 868, w: 440, h: 68 },
     hudTop: 944,                        // the bottom bar starts here (mockup y 1940)
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar
   };

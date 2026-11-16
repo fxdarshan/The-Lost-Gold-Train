@@ -14,6 +14,7 @@ Every asset ID in `assets/manifest.js`, where its art came from, and what is sti
 | `sym_scatter_idle` Dynamite | `19_power_symbol_dynamite.png` | same, neighbour slivers dropped |
 | `char_mascot` | `24_full_body_outlaw_character.png` | already transparent; resized to 1200 px high |
 | `sym_00_expanded` | `24_full_body_outlaw_character.png` | cropped to the reel's tall shape |
+| `ui_splash_logo` | `The_Lost_Gold_Train.png` (Darshan, 2026-11-16; already transparent) | trimmed to 1200×763 WebP; shown top left of the game and on the loading screen |
 | `fx_scatter_full` | `19_power_symbol_dynamite.png` | composed: the dynamite at the top and a painted fuse down the reel with a burning tip (made in the prototype; replace with painted art if wanted) |
 
 Symbols are framed tiles about 280×230 px. They fill a 260×230 cell, so they're shown near their native size.
@@ -28,9 +29,8 @@ Symbols are framed tiles about 280×230 px. They fill a 260×230 cell, so they'r
 | `bg_base_main` | sunset canyon with the train; timber reel frame around x 540 to 1840, y 150 to 840 (1920×1080) | art direction §4 |
 | `bg_freegame_main` | the same scene at night | art direction §4 |
 | `banner_win_nice` … `_epic` | painted signboards with gold Western lettering | art direction §4 |
-| `ui_splash_logo` | THE LOST GOLD TRAIN logo | art direction §4 |
 | `fx_lantern` | hanging railway lantern (transparent) | art direction §4 |
 | sounds | music and effects named in `assets/manifest.js` | |
 
 ## Prototype implementation status
-13 of 23 image IDs are delivered and loaded. Upload new art to `art/` named by asset ID; it is imported with `tools/asset-pipeline/import_art.py`.
+14 of 23 image IDs are delivered and loaded. Upload new art to `art/` named by asset ID; it is imported with `tools/asset-pipeline/import_art.py`.

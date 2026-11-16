@@ -43,16 +43,15 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 4. **Free spins intro:** "10 FREE SPINS".
 5. **Special symbol pick.** The symbols cycle in a card, slow down and stop. (Planned: the dynamite blasts open a strongbox; needs art.)
 6. **Transition** to night: the free spins background, and the bar turns dark blue.
-7. **Free spins.** The message pill counts "FREE SPIN n OF m"; a card at the top left shows the expanding symbol. When the special symbol expands, it flashes, each of its reels grows into a full column, and all 10 lines pay. The Outlaw's column shows his full-body art over a sunset panel.
+7. **Free spins.** The message pill counts "FREE SPIN n OF m"; a card under the mascot shows the expanding symbol. When the special symbol expands, it flashes, each of its reels grows into a full column, and all 10 lines pay. The Outlaw's column shows his full-body art over a sunset panel.
 8. **Retrigger:** "MORE DYNAMITE! +10 FREE SPINS".
 9. **Summary** (total, spins, or "MAX WIN REACHED"), then back to the base game.
-10. **Feature buy.** BUY FREE SPINS (top left) shows the price at the current bet; tap twice to confirm. It's hidden during free spins, where the special symbol card takes its place.
+10. **Feature buy.** BUY FREE SPINS (bottom left, under the mascot) shows the price at the current bet; tap twice to confirm. It's hidden during free spins, where the special symbol card takes its place.
 11. **Big win banners** at 10/20/50/100/250/500× (ASSUMED thresholds).
 
 ## 6. Screen layout (1920×1080)
 - Reels: x 540 to 1840, y 150 to 840 (cells 260×230), right of centre.
-- Outlaw mascot on the left (box x 30 to 510, y 230 to 950), facing the reels; idle breathing and sway.
-- BUY FREE SPINS / special symbol card at top left; title above the reels.
+- Left column, as in the art references: the logo at the top (x 15 to 525, y 4 to 259, slow shimmer), the Outlaw mascot below it (x 30 to 510, y 250 to 862), facing the reels with idle breathing and sway, and BUY FREE SPINS at the bottom (x 50 to 490, y 868 to 936). In free spins the special symbol card takes the buy button's place.
 - Bottom bar from y 944: settings, sound, info, CASH, LINES, BET (per line) with − / +, TOTAL BET, WIN, SPIN, AUTOPLAY; message pill above it, centred under the reels.
 
 ## 7. Decisions
@@ -65,7 +64,7 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 - **Line shapes:** classic 10-line book layout (ASSUMED).
 
 ## 8. Open questions
-1. Backgrounds (base sunset and free spins night), banner art and the logo are still needed: prompts in `docs/art-direction.md` §4. The concept pack had none.
+1. Backgrounds (base sunset and free spins night) and banner art are still needed (the logo arrived 2026-11-16): prompts in `docs/art-direction.md` §4. The concept pack had none.
 2. Symbol art is about 280 px wide. That's fine on the 1920 stage, but soft on large screens; 2× versions would be better for final.
 3. Hit rate (26.8% against 31–33%): keep it or rebalance?
 4. Strongbox reveal for the special symbol pick: wanted? It needs a strongbox opening animation or frames.

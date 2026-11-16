@@ -59,7 +59,7 @@
   };
   const pill = { x: x0 + gw / 2 - 350, y: 881, w: 700, h: 58 };
   // feature buy button, top left above the mascot (the special symbol card takes its place in free spins)
-  const buyBtn = { x: 40, y: 36, w: 440, h: 76 };
+  const buyBtn = C.buyButton || { x: 40, y: 36, w: 440, h: 76 };
   const M = C.mascot;
 
   G.board = engine.randomGrid({ noScatter: true });
@@ -209,6 +209,14 @@
     const fx = M.x + M.w / 2, fy = M.y + M.h;    // feet
     ctx.save(); ctx.translate(fx, fy - hop); ctx.rotate(sway); ctx.scale(1, breathe);
     ctx.drawImage(img, -w / 2, -h, w, h); ctx.restore();
+  }
+
+  // the game logo (ui_splash_logo) in its box with a slow shimmer; without logo art, the title in text above the reels
+  function drawLogo(t) {
+    const img = A.real.ui_splash_logo ? A.get('ui_splash_logo') : null;
+    if (!img || !C.logo) { blockText(C.title.toUpperCase(), x0 + gw / 2, Math.max(48, y0 - 60), 64, { maxW: gw }); return; }
+    const L2 = C.logo, s = 1 + .012 * Math.sin(t * 1.4), k = Math.min(L2.w / img.width, L2.h / img.height) * s, w = img.width * k, h = img.height * k;
+    ctx.drawImage(img, L2.x + L2.w / 2 - w / 2, L2.y + L2.h / 2 - h / 2, w, h);
   }
 
   /* ------------------------------------------------------------ symbols */
@@ -400,12 +408,12 @@
     // free spins: the special symbol card, bottom left over the clouds
     if (inFS && fs.special != null) {
       // the special symbol card, top left (where the buy button sits in the base game)
-      const b = buyBtn, ch2 = 120;
+      const b = buyBtn, ch2 = b.h;
       ctx.save(); const gg = ctx.createLinearGradient(0, b.y, 0, b.y + ch2); gg.addColorStop(0, '#8a3a12'); gg.addColorStop(1, '#4a1a08');
       ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, ch2, 16); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke(); ctx.restore();
-      const img = A.symbol(fs.special), k = Math.min(130 / img.width, 100 / img.height); ctx.drawImage(img, b.x + 80 - img.width * k / 2, b.y + ch2 / 2 - img.height * k / 2, img.width * k, img.height * k);
-      uiText('EXPANDING SYMBOL', b.x + 300, b.y + 42, 24, '#ffe9a8', 'center', 700);
-      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + 300, b.y + 80, 30, '#fff', 'center', 700);
+      const img = A.symbol(fs.special), k = Math.min(100 / img.width, (ch2 - 10) / img.height); ctx.drawImage(img, b.x + 66 - img.width * k / 2, b.y + ch2 / 2 - img.height * k / 2, img.width * k, img.height * k);
+      uiText('EXPANDING SYMBOL', b.x + 280, b.y + ch2 * .32, 20, '#ffe9a8', 'center', 700);
+      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + 280, b.y + ch2 * .7, 28, '#fff', 'center', 700);
     } else if (C.buy && C.buy.enabled) {
       // feature buy: first click arms it, a second click within 3 s buys
       const b = buyBtn, armed = performance.now() - G.buyArm < 3000, off = G.busy;
@@ -414,8 +422,8 @@
       ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, b.h, 38); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke();
       ctx.restore();
       ctx.save(); ctx.globalAlpha = off ? .45 : 1;
-      uiText(armed ? 'TAP AGAIN TO BUY' : 'BUY FREE SPINS', b.x + b.w / 2, b.y + 28, 26, '#fff', 'center', 700);
-      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + 56, 24, '#ffe9a8', 'center', 700);
+      uiText(armed ? 'TAP AGAIN TO BUY' : 'BUY FREE SPINS', b.x + b.w / 2, b.y + b.h * .36, 26, '#fff', 'center', 700);
+      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + b.h * .74, 24, '#ffe9a8', 'center', 700);
       ctx.restore();
     }
   }
@@ -608,6 +616,7 @@
     if (G.camera !== 1) { ctx.translate(W / 2, H / 2); ctx.scale(G.camera, G.camera); ctx.translate(-W / 2, -H / 2); }
     drawEnvironment(t);
     drawMascot(t);
+    drawLogo(t);
     drawGrid(t);
     drawExpanded(t);
     drawFuses(t);

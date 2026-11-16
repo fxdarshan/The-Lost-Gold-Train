@@ -29,7 +29,6 @@
     x.fillStyle = free ? '#2a2030' : '#a0522d'; x.beginPath(); x.moveTo(0, H * .55); x.lineTo(W * .2, H * .38); x.lineTo(W * .32, H * .5); x.lineTo(W * .55, H * .33); x.lineTo(W * .8, H * .45); x.lineTo(W, H * .36); x.lineTo(W, H); x.lineTo(0, H); x.fill();
     x.fillStyle = '#6a4224'; x.fillRect(L.x - 40, L.y - 50, L.w + 80, L.h + 90);
     for (let i = 0; i < 5; i++) { x.fillStyle = free ? '#1e2438' : '#3a2414'; x.fillRect(L.x + i * L.w / 5 + 4, L.y, L.w / 5 - 8, L.h); }
-    x.fillStyle = '#ffd34a'; x.font = 'bold 60px sans-serif'; x.textAlign = 'center'; x.fillText(root.CONFIG.title.toUpperCase(), L.x + L.w / 2, 80);
     return c;
   }
   function scatterFull() {
