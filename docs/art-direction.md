@@ -26,8 +26,8 @@ The reference game has 4 premiums, 5 card ranks, and the Book (Wild + Scatter). 
 | 1 | **Sheriff's Star** (gold badge) | Tutankhamun mask | 0.5 / 4 / 40 / 200 | five-point gold star with ball tips, engraved, on a scrap of leather |
 | 2 | **Revolver** | Golden cat | 0.5 / 3 / 10 / 75 | Colt-style, steel teal-grey with brass and a wooden grip, angled |
 | 3 | **Gold Bars** | Scarab | 0.5 / 3 / 10 / 75 | stacked bars stamped with a train mark, a gleam on the top bar |
-| 6–10 | **A, K, Q, J, 10** | card ranks | 3/4/5: A, K 0.5 / 4 / 15; Q, J, 10 0.5 / 2.5 / 10 | carved weathered-wood letters with gold leaf edges; each a different wash colour (A rust red, K sienna, Q dusty teal, J ochre, 10 sage green) |
-| S | **Dynamite Bundle** (red sticks with a pocket-watch timer) | the Book: Wild + Scatter | 3/4/5 anywhere: 2 / 20 / 200 | the reference's dynamite-and-clock bundle, lit fuse sparking |
+| 4–8 | **A, K, Q, J, 10** | card ranks | 3/4/5: A, K 0.5 / 4 / 15; Q, J, 10 0.5 / 2.5 / 10 | carved weathered-wood letters with gold leaf edges; each a different wash colour (A rust red, K sienna, Q dusty teal, J ochre, 10 sage green) |
+| 9 | **Dynamite Bundle** (red sticks with a pocket-watch timer) | the Book: Wild + Scatter | 3/4/5 anywhere: 2 / 20 / 200 | the reference's dynamite-and-clock bundle, lit fuse sparking |
 
 **Spare props**, if Darshan prefers them to any symbol above: Wanted poster, Money bag, Gold nugget, Lantern, Cowboy hat, Horseshoe, Cash stack. Adding them as extra symbols changes the maths (unpublished pays, re-tune); swapping them in for a symbol above doesn't.
 
@@ -62,10 +62,10 @@ The base style line goes at the start of every prompt:
 | `sym_01_idle.png` | Gold five-point sheriff's star badge with ball tips, engraved "SHERIFF", pinned to a scrap of worn leather, gleaming |
 | `sym_02_idle.png` | Antique Colt revolver, steel with teal-grey sheen, brass details, worn wooden grip, angled 30 degrees |
 | `sym_03_idle.png` | Stack of three gold bars stamped with a small locomotive mark, bright gleam on the top bar |
-| `sym_06_idle.png` (A), `sym_07_idle.png` (K), `sym_08_idle.png` (Q), `sym_09_idle.png` (J), `sym_10_idle.png` (10) | Letter "A" (K / Q / J / 10) carved from weathered wood with gold-leaf edges, colour wash in rust red (sienna / dusty teal / ochre / sage green) |
+| `sym_04_idle.png` (A), `sym_05_idle.png` (K), `sym_06_idle.png` (Q), `sym_07_idle.png` (J), `sym_08_idle.png` (10) | Letter "A" (K / Q / J / 10) carved from weathered wood with gold-leaf edges, colour wash in rust red (sienna / dusty teal / ochre / sage green) |
 | `sym_scatter_idle.png` | Bundle of red dynamite sticks tied with rope, a brass pocket-watch timer strapped on the front, lit fuse throwing sparks, glowing |
 
-Ids 4 and 5 (`sym_04_idle`, `sym_05_idle`) are the template's two extra symbols; with the set above they are removed from the maths, unless spare props are added there.
+
 
 **Backgrounds** (save in `art/backgrounds/`, landscape 16:9, at least 1920×1080):
 - `bg_base_main.png`: *wide desert canyon at sunset, red mesas, a black steam locomotive with carriages crossing in the distance with smoke trail, foreground a large frame of weathered timber planks with iron brackets and rivets around an empty dark-wood panel in the centre (reel area, 5 columns × 3 rows, about 78% of the width and 72% of the height), empty, no symbols, no UI*
@@ -79,10 +79,11 @@ Ids 4 and 5 (`sym_04_idle`, `sym_05_idle`) are the template's two extra symbols;
 
 Upload the files on GitHub (repo → `art/` → Add file → Upload files) named exactly as above, under 25 MB each.
 
-## 5. Open questions
-1. Name: **The Lost Gold Train** (repo) or **Last Train Gold** (references)?
-2. Is the symbol set in §2 right, or should a spare prop (Wanted poster, Money bag, …) replace one?
-3. Outlaw on the left of the reels as a big character (as in the references), or reels centred with no character?
+## 5. Decisions (Darshan, 2026-11-16)
+1. Name: **The Lost Gold Train**.
+2. Symbols match the reference game's roles, using the art pack: the set in §2.
+3. The Outlaw is the game's **mascot**, standing left of the reels.
 
 ## Prototype implementation status
-Not started: the game still uses placeholder art. Symbol names in `src/config.js` follow §2 once Darshan confirms it.
+- Delivered and in the game: all symbols, the Dynamite, the mascot and the full-reel Outlaw, from `Last_Train_Gold_Separated_Assets.zip` (see `docs/game-asset-specification.md`).
+- Still needed: both backgrounds, the win banners, the logo and the hanging lantern (prompts in §4).

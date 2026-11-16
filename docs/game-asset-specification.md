@@ -1,19 +1,36 @@
-# Starter Slot (sample game): Asset Specification
+# The Lost Gold Train: Asset Specification
 
-Every asset ID in `assets/manifest.js`. Name an art file after its ID, put it in `art/`, and run `python3 tools/asset-pipeline/import_art.py` (see `art/README.md`). Anything missing stays a code-drawn placeholder.
+Every asset ID in `assets/manifest.js`, where its art came from, and what is still missing. Art direction: `docs/art-direction.md`. Supplied pack: `Last_Train_Gold_Separated_Assets.zip` (2026-11-16), kept unchanged in `assets/source/originals/last_train_gold/`; the cut-outs made from it are in `art/`.
 
-| ID | What | Size after import | Required |
-| --- | --- | --- | --- |
-| `bg_base_main` | base game background with the reel frame (reels empty) | 1920×1080 JPG | yes |
-| `bg_freegame_main` | free spins background | 1920×1080 JPG | yes |
-| `sym_00_idle` … `sym_10_idle` | 11 pay symbols, highest pay first (`sym_00` = top symbol, `sym_06`-`sym_10` = A K Q J 10) | 600 px wide WebP | yes |
-| `sym_scatter_idle` | Scatter (Wild + Scatter) | 600 px wide WebP | yes |
-| `sym_00_expanded` | full-reel art for the top symbol when it expands | WebP, tall | optional |
-| `fx_scatter_full` | full-reel Scatter, revealed down the reel when free spins trigger | WebP, tall | optional |
-| `fx_lantern` | small hanging decoration for anticipation and modals | WebP | optional |
-| `banner_win_nice`, `_big`, `_mega`, `_superb`, `_sensational`, `_epic` | title art for win banners (amount drawn below) | up to 1200 px WebP | optional |
-| `ui_splash_logo` | game logo for the splash screen | up to 1200 px WebP | optional |
-| sounds | names in `assets/manifest.js` → `sounds` | MP3 | optional |
+## Delivered
+
+| ID | Pack file | Processing |
+| --- | --- | --- |
+| `sym_00_idle` The Outlaw | `01_character_portrait.png` | white background removed (`cut_white_tiles.py`) |
+| `sym_01_idle` Sheriff's Star | `04_sheriff_badge.png` | same |
+| `sym_02_idle` Revolver | `07_revolver.png` | same |
+| `sym_03_idle` Gold Bars | `03_gold_bars.png` | same |
+| `sym_04_idle` … `sym_08_idle` A, K, Q, J, 10 | `11_royal_A` … `15_royal_10` | same |
+| `sym_scatter_idle` Dynamite | `19_power_symbol_dynamite.png` | same, neighbour slivers dropped |
+| `char_mascot` | `24_full_body_outlaw_character.png` | already transparent; resized to 1200 px high |
+| `sym_00_expanded` | `24_full_body_outlaw_character.png` | cropped to the reel's tall shape |
+| `fx_scatter_full` | `19_power_symbol_dynamite.png` | composed: the dynamite at the top and a painted fuse down the reel with a burning tip (made in the prototype; replace with painted art if wanted) |
+
+Symbols are framed tiles about 280×230 px. They fill a 260×230 cell, so they're shown near their native size.
+
+## Not used (kept in the originals folder)
+`02_steam_train`, `05_wanted_poster`, `06_dynamite_timer` (tile version of the Dynamite), `08_money_bag`, `09_horseshoe`, `10_lantern` (a framed tile, not a hanging lantern), `16_character_bust`, `17_wild`, `18_scatter`, `20`–`23` multipliers, and the reference sheets. Reason: the reference game has no separate Wild, no multipliers and no extra symbols (GDD §7).
+
+## Still needed (code-drawn placeholders until supplied)
+
+| ID | What | Prompt |
+| --- | --- | --- |
+| `bg_base_main` | sunset canyon with the train; timber reel frame around x 540 to 1840, y 150 to 840 (1920×1080) | art direction §4 |
+| `bg_freegame_main` | the same scene at night | art direction §4 |
+| `banner_win_nice` … `_epic` | painted signboards with gold Western lettering | art direction §4 |
+| `ui_splash_logo` | THE LOST GOLD TRAIN logo | art direction §4 |
+| `fx_lantern` | hanging railway lantern (transparent) | art direction §4 |
+| sounds | music and effects named in `assets/manifest.js` | |
 
 ## Prototype implementation status
-All IDs are wired; none are supplied in the template.
+13 of 23 image IDs are delivered and loaded. Upload new art to `art/` named by asset ID; it is imported with `tools/asset-pipeline/import_art.py`.

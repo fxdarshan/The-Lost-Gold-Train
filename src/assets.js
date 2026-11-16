@@ -6,8 +6,10 @@
 (function (root) {
   const P = root.Placeholders;
   const Assets = { img: {}, real: {}, W: 1920, H: 1080, L: null };
-  const SYM_KEYS = { 0: 'sym_00_idle', 11: 'sym_scatter_idle' };
-  for (let i = 1; i <= 10; i++) SYM_KEYS[i] = 'sym_' + String(i).padStart(2, '0') + '_idle';
+  // symbol id -> manifest key: regular symbols sym_00_idle, sym_01_idle, ...; the Scatter sym_scatter_idle
+  const SYM_KEYS = {};
+  root.CONFIG.regular.forEach(i => { SYM_KEYS[i] = 'sym_' + String(i).padStart(2, '0') + '_idle'; });
+  SYM_KEYS[root.CONFIG.SCATTER] = 'sym_scatter_idle';
   Assets.SYM_KEYS = SYM_KEYS;
 
   function loadImage(src) {
@@ -29,6 +31,7 @@
       case 'bg_freegame_main': return P.background(W, H, true);
       case 'fx_scatter_full': return P.scatterFull();
       case 'fx_lantern': return P.lantern();
+      case 'char_mascot': return P.mascot();
     }
     return null;
   }

@@ -22,22 +22,40 @@
   }
   function background(W, H, free) {
     const c = mk(W, H), x = c.getContext('2d'), L = root.CONFIG.window;
-    const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, free ? '#1a2a6a' : '#3aa0e0'); g.addColorStop(1, free ? '#3a4aa0' : '#f0a060'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-    x.fillStyle = '#b0181f'; x.fillRect(L.x - 40, L.y - 60, L.w + 80, L.h + 100);
-    for (let i = 0; i < 5; i++) { x.fillStyle = free ? '#4a1050' : '#5a0f16'; x.fillRect(L.x + i * L.w / 5 + 4, L.y, L.w / 5 - 8, L.h); }
-    x.fillStyle = '#ffd34a'; x.font = 'bold 64px sans-serif'; x.textAlign = 'center'; x.fillText(root.CONFIG.title.toUpperCase(), W / 2, 90);
+    // sunset desert (base) or moonlit night (free spins), a timber frame and dark-wood reel panels
+    const g = x.createLinearGradient(0, 0, 0, H);
+    (free ? ['#141a3a', '#2a3a6a', '#4a4a6a'] : ['#e8783a', '#f0a050', '#d89a60']).forEach((c2, i) => g.addColorStop(i / 2, c2));
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    x.fillStyle = free ? '#2a2030' : '#a0522d'; x.beginPath(); x.moveTo(0, H * .55); x.lineTo(W * .2, H * .38); x.lineTo(W * .32, H * .5); x.lineTo(W * .55, H * .33); x.lineTo(W * .8, H * .45); x.lineTo(W, H * .36); x.lineTo(W, H); x.lineTo(0, H); x.fill();
+    x.fillStyle = '#6a4224'; x.fillRect(L.x - 40, L.y - 50, L.w + 80, L.h + 90);
+    for (let i = 0; i < 5; i++) { x.fillStyle = free ? '#1e2438' : '#3a2414'; x.fillRect(L.x + i * L.w / 5 + 4, L.y, L.w / 5 - 8, L.h); }
+    x.fillStyle = '#ffd34a'; x.font = 'bold 60px sans-serif'; x.textAlign = 'center'; x.fillText(root.CONFIG.title.toUpperCase(), L.x + L.w / 2, 80);
     return c;
   }
   function scatterFull() {
     const c = mk(260, 620), x = c.getContext('2d');
     x.fillStyle = '#1a2a8a'; x.fillRect(0, 0, 260, 620);
     for (let i = 0; i < 18; i++) { x.fillStyle = '#d61f26'; x.fillRect(80 + (i % 2) * 50, 160 + i * 25, 48, 22); x.fillStyle = '#ffd34a'; x.fillRect(80 + (i % 2) * 50, 160 + i * 25, 6, 22); }
-    x.drawImage(symbol(11, 'Scatter'), 10, 0, 240, 210); return c;
+    x.drawImage(symbol(root.CONFIG.SCATTER, 'Scatter'), 10, 0, 240, 210); return c;
   }
   function lantern() {
     const c = mk(120, 260), x = c.getContext('2d');
     x.fillStyle = '#ffd34a'; x.fillRect(58, 0, 4, 40); x.fillStyle = '#e8202a'; x.beginPath(); x.ellipse(60, 120, 55, 75, 0, 0, 7); x.fill();
     x.fillStyle = '#ffd34a'; x.fillRect(35, 40, 50, 10); x.fillRect(35, 190, 50, 10); x.fillStyle = '#c8101a'; x.fillRect(56, 200, 8, 60); return c;
   }
-  root.Placeholders = { symbol, background, scatterFull, lantern };
+  // the Outlaw mascot as a simple painted silhouette: hat, poncho, revolver arm
+  function mascot() {
+    const c = mk(400, 800), x = c.getContext('2d');
+    x.fillStyle = '#3a2418'; x.beginPath(); x.ellipse(200, 120, 150, 30, 0, 0, 7); x.fill();        // hat brim
+    x.fillRect(130, 40, 140, 85);                                                                     // crown
+    x.fillStyle = '#c89a6a'; x.beginPath(); x.ellipse(200, 175, 55, 60, 0, 0, 7); x.fill();           // face
+    x.fillStyle = '#b0201a'; x.fillRect(150, 220, 100, 40);                                            // bandana
+    x.fillStyle = '#6a4228'; x.beginPath(); x.moveTo(80, 260); x.lineTo(320, 260); x.lineTo(300, 560); x.lineTo(100, 560); x.closePath(); x.fill();   // coat
+    x.fillStyle = '#2a3a4a'; x.fillRect(120, 560, 70, 230); x.fillRect(210, 560, 70, 230);           // legs
+    x.fillStyle = '#6a4228'; x.save(); x.translate(300, 290); x.rotate(-.9); x.fillRect(0, -20, 150, 40); x.restore();   // arm
+    x.fillStyle = '#556a76'; x.fillRect(370, 150, 30, 60);                                             // revolver
+    x.fillStyle = 'rgba(255,255,255,.85)'; x.font = 'bold 28px sans-serif'; x.textAlign = 'center'; x.fillText('THE OUTLAW', 200, 420);
+    return c;
+  }
+  root.Placeholders = { symbol, background, scatterFull, lantern, mascot };
 })(window);

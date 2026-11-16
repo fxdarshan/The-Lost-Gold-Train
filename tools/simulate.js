@@ -7,16 +7,18 @@
  * spins about 1 in 150 to 1 in 200 spins.
  */
 const CONFIG = require('../src/config.js');
-if (process.env.W) Object.assign(CONFIG, JSON.parse(process.env.W));   // tuning overrides, e.g. W='{"specialBoost":2}'
+if (process.env.W) Object.assign(CONFIG, JSON.parse(process.env.W));   // tuning overrides, e.g. W='{"specialShare":0.1}'
 const Engine = require('../src/engine.js');
 
 const rounds = Number(process.argv[2]) || 2e6;
+const buys = Math.max(20000, Math.round(rounds / 40));   // feature buys simulated separately
 let seed = Number(process.argv[3]) || 12345;
 const rng = () => { seed = (seed * 1664525 + 1013904223) >>> 0; let t = seed ^ (seed >>> 15); t = Math.imul(t, 2246822507) >>> 0; return ((t ^ (t >>> 13)) >>> 0) / 4294967296; };
 const eng = Engine.create(CONFIG, rng);
 
 const bet = 1;
 let paid = 0, basePaid = 0, fsPaid = 0, hits = 0, fsTriggers = 0, retriggers = 0, fsSpins = 0, capped = 0, maxX = 0, expands = 0;
+const fsWins = [];
 const tiers = CONFIG.winTiers.map(() => 0), bySpecial = {}, expCount = { 2: 0, 3: 0, 4: 0, 5: 0 };
 const buckets = [0, 0, 0, 0, 0];   // round wins: 0, <1x, 1-10x, 10-100x, 100x+
 
@@ -37,7 +39,7 @@ for (let i = 0; i < rounds; i++) {
       if (r.freeSpins) { fsLeft += r.freeSpins; retriggers++; }
       if (win + fsw >= CONFIG.maxWin * bet) break;
     }
-    bySpecial[special].paid += fsw; fsPaid += fsw; win += fsw;
+    bySpecial[special].paid += fsw; fsPaid += fsw; win += fsw; fsWins.push(fsw + base.total);
   }
   if (win > CONFIG.maxWin * bet) { win = CONFIG.maxWin * bet; capped++; }
   paid += win;
@@ -51,8 +53,28 @@ console.log(`Rounds simulated : ${rounds.toLocaleString()}`);
 console.log(`RTP              : ${pct(paid / (rounds * bet))}   (reference 96.50%)  base ${pct(basePaid / rounds)}, free spins ${pct(fsPaid / rounds)}`);
 console.log(`Hit frequency    : ${pct(hits / rounds)}   (base spins with any win)`);
 console.log(`Free spins       : 1 in ${(rounds / Math.max(1, fsTriggers)).toFixed(0)}, average ${(fsSpins / Math.max(1, fsTriggers)).toFixed(1)} spins, average win ${(fsPaid / Math.max(1, fsTriggers)).toFixed(1)}x, retriggers ${retriggers}`);
+fsWins.sort((a, b) => a - b);
+console.log(`Free spins round : median ${(fsWins[fsWins.length >> 1] || 0).toFixed(1)}x (trigger spin included; reference median 60x, mean 80.7x)`);
 console.log(`Expansions       : ${(expands / Math.max(1, fsSpins) * 100).toFixed(1)}% of free spins; by reels 2:${expCount[2]} 3:${expCount[3]} 4:${expCount[4]} 5:${expCount[5]}`);
 console.log(`By special       : ${Object.keys(bySpecial).sort((a, b) => a - b).map(k => `${CONFIG.symbolNames[k]} ${(bySpecial[k].paid / bySpecial[k].n).toFixed(0)}x`).join(', ')}`);
 console.log(`Round wins       : 0 ${pct(buckets[0] / rounds)}, <1x ${pct(buckets[1] / rounds)}, 1-10x ${pct(buckets[2] / rounds)}, 10-100x ${pct(buckets[3] / rounds)}, 100x+ ${pct(buckets[4] / rounds)}`);
 console.log(`Win banners      : ${CONFIG.winTiers.map((t, i) => t.id + ' 1 in ' + (tiers[i] ? Math.round(rounds / tiers[i]) : '-')).join(', ')}`);
 console.log(`Max win seen     : ${maxX.toFixed(1)}x   (cap ${CONFIG.maxWin}x, capped ${capped} times)`);
+
+// ---- feature buy: price CONFIG.buy.price x bet, trigger spin with weighted 3/4/5 Scatters, bought free spins
+if (CONFIG.buy && CONFIG.buy.enabled) {
+  let ret = 0, under = 0, spinsTot = 0; const res = [];
+  for (let i = 0; i < buys; i++) {
+    const base = eng.resolveSpin(eng.buyGrid(), { bet });
+    let win = base.total, left = base.freeSpins; const special = eng.pickSpecial();
+    while (left > 0) {
+      left--; spinsTot++;
+      const r = eng.resolveSpin(eng.randomGrid({ fs: true, special, bought: true }), { bet, inFreeSpins: true, special });
+      win += r.total; if (r.freeSpins) left += r.freeSpins;
+      if (win >= CONFIG.maxWin * bet) { win = CONFIG.maxWin * bet; break; }
+    }
+    ret += win; res.push(win); if (win < CONFIG.buy.price) under++;
+  }
+  res.sort((a, b) => a - b);
+  console.log(`Feature buy      : RTP ${pct(ret / (buys * CONFIG.buy.price * bet))} over ${buys.toLocaleString()} buys at ${CONFIG.buy.price}x; median ${res[buys >> 1].toFixed(1)}x, mean ${(ret / buys).toFixed(1)}x, below price ${pct(under / buys)}, ${(spinsTot / buys).toFixed(1)} spins per buy`);
+}

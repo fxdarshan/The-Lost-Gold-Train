@@ -29,15 +29,23 @@
     }
     // cumulative weight tables per reel, base and free spins
     const tables = {};
-    // free spins: the special symbol's weight is multiplied by CONFIG.specialBoost (TUNED)
-    function table(fs, special) {
-      const key = fs ? 'fs' + (special ?? '') : 'base';
+    // Free spins: the special symbol gets a fixed share of every reel, whichever symbol it is
+    // (CONFIG.specialShare, TUNED), so a premium special lands as often as a low one and pays more.
+    // Bought free spins use CONFIG.buy.specialShare (REF: bought free spins have their own reels per special).
+    function table(fs, special, bought) {
+      const key = fs ? (bought ? 'buy' : 'fs') + (special ?? '') : 'base';
       if (tables[key]) return tables[key];
       const w = (fs && C.weightsFreeSpins) || C.weights;
-      return (tables[key] = w.map(row => { let a = 0; return row.map((x, s) => (a += x * (fs && s === special ? C.specialBoost || 1 : 1))); }));
+      let share = bought && C.buy ? C.buy.specialShare : C.specialShare;
+      if (share && typeof share === 'object') share = share[special];   // per-symbol shares
+      return (tables[key] = w.map(row => {
+        const others = row.reduce((t, x, s) => t + (s === special ? 0 : x), 0);
+        const sw = fs && special != null && share ? others * share / (1 - share) : null;
+        let a = 0; return row.map((x, s) => (a += (sw != null && s === special ? sw : x)));
+      }));
     }
     function randomSymbol(reel, o = {}) {
-      const t = table(o.fs, o.special)[reel], total = t[t.length - 1];
+      const t = table(o.fs, o.special, o.bought)[reel], total = t[t.length - 1];
       for (let tries = 0; tries < 50; tries++) {
         const r = rng() * total;
         let s = 0; while (t[s] < r) s++;
@@ -47,7 +55,7 @@
       return C.regular[C.regular.length - 1];
     }
 
-    /** Random stop. opts.fs uses the free spins weights (with opts.special boosted); opts.noScatter keeps Scatters off the board. */
+    /** Random stop. opts.fs uses the free spins weights (opts.special boosted; opts.bought for bought free spins); opts.noScatter keeps Scatters off the board. */
     function randomGrid(opts = {}) {
       const g = [];
       for (let c = 0; c < N; c++) { g.push([]); for (let r = 0; r < R; r++) g[c].push(randomSymbol(c, opts)); }
@@ -80,6 +88,18 @@
       const pos = [];
       for (let c = 0; c < N; c++) for (let r = 0; r < R; r++) if (grid[c][r] === S) pos.push([c, r]);
       return pos;
+    }
+
+    /**
+     * Feature buy trigger spin (REF): a random board with 3, 4 or 5 Scatters, the count drawn from
+     * CONFIG.buy.scatterWeights, each Scatter on a different reel.
+     */
+    function buyGrid() {
+      const n = Number(pickWeighted(C.buy.scatterWeights));
+      const g = randomGrid({ noScatter: true }), reels = [...Array(N).keys()];
+      for (let i = reels.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [reels[i], reels[j]] = [reels[j], reels[i]]; }
+      reels.slice(0, n).forEach(c => { g[c][Math.floor(rng() * R)] = S; });
+      return g;
     }
 
     /** Free spins: reels holding the special symbol, and the pay if it expands. */
@@ -144,7 +164,7 @@
       return t;
     }
 
-    return { randomGrid, randomSymbol, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
+    return { randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
   }
 
   const Engine = { create };

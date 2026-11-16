@@ -3,14 +3,15 @@
  *
  *   C          open / close the cheat menu (drawn over the game, never in recordings)
  *   F          next spin: 3 Scatters, free spins (random special symbol)
- *   P          next spin: 3 Scatters, free spins with symbol 0 (top symbol) as the special symbol
+ *   P          next spin: 3 Scatters, free spins with the Outlaw as the special symbol
  *   4 / 5      4 or 5 Scatters (20x / 200x plus free spins)
+ *   B          feature buy (charges 100x the bet, like the BUY FREE SPINS button)
  *   E          free spin: the special symbol expands on 3 reels
  *   T          free spin: the special symbol on all 5 reels
  *   R          free spin: retrigger (+10)
  *   1 / 2 / 3 / 6  NICE / BIG / MEGA / SUPERB win banner (real boards)
  *   A          2 Scatters with anticipation, no trigger
- *   X          single line win      M  several lines      W  Scatter as Wild in a win
+ *   X          single line win      M  several lines      W  Dynamite as Wild in a win
  *   N          no win               0  clear forced spins
  *   Symbol win dropdown (in the menu): pick a symbol and 2-5 in a row, then Force next spin or Play now.
  *   Space      spin
@@ -25,30 +26,32 @@
   const T = (type, extra) => Object.assign({ type }, extra);
 
   const SCENARIOS = [
-    { id: 'free-spins', label: 'Free spins', note: '3 Scatters, the special symbol pick, then 10 random free spins',
+    { id: 'free-spins', label: 'Free spins', note: '3 Dynamite, the special symbol pick, then 10 random free spins',
       items: [T('trigger')] },
-    { id: 'top-free-spins', label: 'Free spins: top symbol expands', note: 'Top symbol as the special symbol; it expands on 3 reels, then on all 5',
+    { id: 'outlaw-free-spins', label: 'Free spins: the Outlaw expands', note: 'The Outlaw as the special symbol; he expands on 3 reels, then on all 5',
       items: [T('trigger', { special: 0 }), T('expand'), T('random'), T('expand5')] },
-    { id: 'expansions', label: 'Every expansion size', note: 'Symbol 1 special: expands on 2, 3 and 5 reels, with a retrigger',
+    { id: 'expansions', label: 'Every expansion size', note: "Sheriff's Star special: expands on 2, 3 and 5 reels, with a retrigger",
       items: [T('trigger', { special: 1 }), T('expand2'), T('expand'), T('retrigger'), T('expand5')] },
-    { id: 'retrigger', label: 'Free spins retrigger', note: '3 Scatters during free spins add 10 more',
+    { id: 'buy', label: 'Feature buy (100×)', note: 'Buys free spins: weighted 3/4/5 Dynamite trigger, then bought free spins',
+      items: [T('buy')] },
+    { id: 'retrigger', label: 'Free spins retrigger', note: '3 Dynamite during free spins add 10 more',
       items: [T('trigger'), T('random'), T('retrigger'), T('expand')] },
-    { id: 'all-banners', label: 'All win banners', note: 'NICE, BIG, MEGA and SUPERB from real boards, then 5 Scatters (200x)',
+    { id: 'all-banners', label: 'All win banners', note: 'NICE, BIG, MEGA and SUPERB from real boards, then 5 Dynamite (200x)',
       items: [T('nice'), T('big'), T('mega'), T('superb'), T('trigger5')] },
-    { id: 'max-win', label: 'Max win cap (5,500×)', note: 'Top symbol special on all 5 reels on every free spin until the cap ends the round',
+    { id: 'max-win', label: 'Max win cap (5,500×)', note: 'The Outlaw special on all 5 reels on every free spin until the cap ends the round',
       items: [T('trigger', { special: 0 }), T('expand5'), T('expand5'), T('expand5'), T('expand5')] },
-    { id: 'base-tour', label: 'Base game tour', note: 'No win, line win, several lines, Scatter as Wild, 2-Scatter tease, Big banner',
+    { id: 'base-tour', label: 'Base game tour', note: 'No win, line win, several lines, Dynamite as Wild, 2-Dynamite tease, Big banner',
       items: [T('nowin'), T('small'), T('multi'), T('wildwin'), T('tease'), T('big')] }
   ];
 
   // key, outcome item, short label for the menu
   const HOTKEYS = [
-    ['F', T('trigger'), 'Free spins'], ['P', T('trigger', { special: 0 }), 'Free spins, top symbol special'],
-    ['4', T('trigger4'), '4 Scatters'], ['5', T('trigger5'), '5 Scatters'],
+    ['F', T('trigger'), 'Free spins'], ['P', T('trigger', { special: 0 }), 'Free spins, Outlaw special'],
+    ['B', T('buy'), 'Feature buy'], ['4', T('trigger4'), '4 Dynamite'], ['5', T('trigger5'), '5 Dynamite'],
     ['E', T('expand'), 'Expand (3 reels)'], ['T', T('expand5'), 'Expand (5 reels)'], ['R', T('retrigger'), 'Retrigger'],
     ['1', T('nice'), 'NICE banner'], ['2', T('big'), 'BIG banner'], ['3', T('mega'), 'MEGA banner'], ['6', T('superb'), 'SUPERB banner'],
-    ['A', T('tease'), '2 Scatters tease'], ['X', T('small'), 'Line win'], ['M', T('multi'), 'Several lines'],
-    ['W', T('wildwin'), 'Scatter as Wild'], ['N', T('nowin'), 'No win']
+    ['A', T('tease'), '2 Dynamite tease'], ['X', T('small'), 'Line win'], ['M', T('multi'), 'Several lines'],
+    ['W', T('wildwin'), 'Dynamite as Wild'], ['N', T('nowin'), 'No win']
   ];
   const KEYMAP = Object.fromEntries(HOTKEYS.map(([k, t]) => [k.toLowerCase(), t]));
   const label = t => (typeof t === 'string' ? (OUT[t] || { label: t }).label : root.Director.describe(t, Game.C));
@@ -62,7 +65,7 @@
   }
   // symbol win: the chosen symbol, len in a row (3-5), on the middle payline
   const symWin = (sym, len) => ({ type: 'symwin', sym: Number(sym), len: Number(len) });
-  const symbolOptions = () => Object.entries(Game.C.symbolNames).filter(([k]) => k >= 0 && k <= 10).sort((a, b) => a[0] - b[0])
+  const symbolOptions = () => Object.entries(Game.C.symbolNames).filter(([k]) => Number(k) !== Game.C.SCATTER).sort((a, b) => a[0] - b[0])
     .map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
   function playScenario(id, opts = {}) {
     const sc = SCENARIOS.find(s => s.id === id); if (!sc) { note(`Unknown scenario: ${String(id).slice(0, 40)}`); return false; }

@@ -110,12 +110,19 @@ async def main():
             Game.G.queue = [{type:'trigger', special:3}]; await Game.play();
             return [b0, bet, Game.G.balance, Game.G.win]; })()""")
         check('money: balance = before - bet + round win (free spins included)', abs(r[2] - (r[0] - r[1] + r[3])) < 0.005, str(r))
+        # 10b feature buy: 100x debited once, round win credited; not enough cash = no round
+        r = await pg.evaluate("""(async () => { Game.G.balance = 5000; const b0 = Game.G.balance, bet = Game.bet();
+            await Game.buy(); return [b0, bet, Game.G.balance, Game.G.win, Game.G.fs.played]; })()""")
+        check('feature buy: balance = before - 100x bet + round win, free spins played', abs(r[2] - (r[0] - 100 * r[1] + r[3])) < 0.005 and r[4] >= 10, str(r))
+        r = await pg.evaluate("""(async () => { Game.G.balance = 50; const ok = await Game.buy(); return [ok, Game.G.balance, Game.G.busy]; })()""")
+        check('feature buy without enough cash: refused, balance unchanged', r[0] is False and r[1] == 50 and r[2] is False, str(r))
+        await pg.evaluate("Game.G.balance = 5000")
         # 11 retrigger on the last free spin still plays the 10 extra spins
         n = await pg.evaluate("""(async () => { Game.G.queue = [{type:'trigger'}, ...Array(9).fill({type:'nowin'}), {type:'retrigger'}];
             await Game.play(); return [Game.G.fs.played, Game.G.fs.awarded]; })()""")
         check('retrigger on the last free spin: 20 spins played', n == [20, 20], str(n))
         # 12 max win cap: the round stops at 5,500x and the summary says so
-        r = await pg.evaluate("""(async () => { const bet = Game.bet(), b0 = Game.G.balance;
+        r = await pg.evaluate("""(async () => { Game.G.balance = 100000; const bet = Game.bet(), b0 = Game.G.balance;
             Game.G.queue = [{type:'trigger', special:0}, ...Array(10).fill({type:'expand5'})];
             await Game.play(); return [Game.G.win / bet, Game.G.fs.capped, Game.G.fs.played, (Game.G.balance - b0 + bet) / bet]; })()""")
         check('max win: round win capped at CONFIG.maxWin', abs(r[0] - 5500) < 1e-6 and r[1] and r[2] < 10 and abs(r[3] - 5500) < 1e-6, str(r))

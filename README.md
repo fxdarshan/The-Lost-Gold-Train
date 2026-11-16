@@ -1,6 +1,42 @@
 # The Lost Gold Train (prototype)
 
-> New game started 2026-11-16 from `fxdarshan/slot-starter-template`. Reference game: Pragmatic Play's *John Hunter and the Book of Tut* (research in [`docs/reference-game.md`](docs/reference-game.md)). Art direction: [`docs/art-direction.md`](docs/art-direction.md) (watercolour Western). Until the theme, art and remaining specs arrive, it plays the template's sample book-style game with placeholder art; current state in [`HANDOFF.md`](HANDOFF.md).
+A Wild West book-style slot in hand-painted watercolour. **The Outlaw** is the top symbol and the mascot beside the reels; **Dynamite** is Wild and Scatter; three or more give 10 free spins with a random expanding symbol, and free spins can also be bought for 100× the bet. Features and maths follow Pragmatic Play's *John Hunter and the Book of Tut* (the original).
+
+Started 2026-11-16 from [`fxdarshan/slot-starter-template`](https://github.com/fxdarshan/slot-starter-template). Current state and next steps: [`HANDOFF.md`](HANDOFF.md).
+
+| Doc | Covers |
+| --- | --- |
+| [`docs/reference-game.md`](docs/reference-game.md) | research on the reference game: rules, pays, measured play, sources |
+| [`docs/reference-gdd.md`](docs/reference-gdd.md) | design: numbers, symbols, flow, layout, decisions, open questions |
+| [`docs/official-game-rules.md`](docs/official-game-rules.md) / [`docs/pay-table.md`](docs/pay-table.md) | rules and pays |
+| [`docs/art-direction.md`](docs/art-direction.md) | watercolour Western direction, symbol set, prompts for the missing art |
+| [`docs/game-asset-specification.md`](docs/game-asset-specification.md) | each asset ID, its source file, what is still missing |
+| [`docs/cheats.md`](docs/cheats.md) / [`docs/edge-cases.md`](docs/edge-cases.md) | demo tools; checks |
+
+## Play it
+Single file: [`dist/the-lost-gold-train-prototype.html`](dist/the-lost-gold-train-prototype.html) (download and double-click), or `python3 -m http.server 8000` and open http://localhost:8000.
+
+## Mechanics
+| Feature | Rule |
+| --- | --- |
+| Grid | 5×3, 10 fixed lines, left to right, highest win per line |
+| Symbols | The Outlaw (2/3/4/5 = 1/10/100/500×), Sheriff's Star, Revolver, Gold Bars (pay from 2), A, K, Q, J, 10 |
+| Dynamite | Wild for every symbol; 3/4/5 anywhere pay 2/20/200× and award 10 free spins |
+| Free spins | random special symbol; when on enough reels to win it fills them and pays on all 10 lines, adjacent or not; 3+ Dynamite add 10, no limit |
+| Feature buy | 100× the bet: a 3/4/5-Dynamite trigger spin, then bought free spins |
+| Max win | 5,500× the bet per round |
+
+## Maths (`node tools/simulate.js 6000000 <seed>`, 4 seeds)
+| | Prototype | Reference |
+| --- | --- | --- |
+| RTP | 96.65% to 97.29% (average 96.9%) | 96.50% |
+| Base / free spins | 49% / 48% | |
+| Free spins | 1 in 178; median round 59×, mean 85× | 1 in 150 to 174; median 60×, mean 80.7× |
+| Feature buy return | 95.5% to 96.4% | not published |
+| Hit rate | 26.8% | 31% to 33% |
+| Max win | 5,500× cap, about 1 in 5 million | 1 in 1 billion |
+
+Decisions and open questions: GDD §7 and §8.
 
 ## About the template
 

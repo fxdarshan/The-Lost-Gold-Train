@@ -21,28 +21,30 @@
 window.ASSET_MANIFEST = {
   // fitting box per symbol, [width, height] as a fraction of the cell; art may overflow the cell a little
   fit: {
-    default:          [0.98, 1.06],
-    sym_scatter_idle: [1.00, 1.08],
-    sym_06_idle: [0.80, 0.86], sym_07_idle: [0.80, 0.86], sym_08_idle: [0.80, 0.86], sym_09_idle: [0.80, 0.86], sym_10_idle: [0.86, 0.80]
+    // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
+    default:          [0.96, 0.98],
+    sym_scatter_idle: [1.04, 1.10]
   },
 
   images: {
     bg_base_main:           'assets/images/environment/bg_base_main.jpg',
     bg_freegame_main:       'assets/images/environment/bg_freegame_main.jpg',
 
-    sym_00_idle:            'assets/images/symbols/sym_00_idle.webp',
-    sym_00_expanded:        'assets/images/symbols/sym_00_expanded.webp',
-    sym_01_idle:            'assets/images/symbols/sym_01_idle.webp',
-    sym_02_idle:            'assets/images/symbols/sym_02_idle.webp',
-    sym_03_idle:            'assets/images/symbols/sym_03_idle.webp',
-    sym_04_idle:            'assets/images/symbols/sym_04_idle.webp',
-    sym_05_idle:            'assets/images/symbols/sym_05_idle.webp',
-    sym_06_idle:            'assets/images/symbols/sym_06_idle.webp',
-    sym_07_idle:            'assets/images/symbols/sym_07_idle.webp',
-    sym_08_idle:            'assets/images/symbols/sym_08_idle.webp',
-    sym_09_idle:            'assets/images/symbols/sym_09_idle.webp',
-    sym_10_idle:            'assets/images/symbols/sym_10_idle.webp',
-    sym_scatter_idle:       'assets/images/symbols/sym_scatter_idle.webp',
+    // symbols (docs/art-direction.md §2), highest pay first
+    sym_00_idle:            'assets/images/symbols/sym_00_idle.webp',       // The Outlaw
+    sym_00_expanded:        'assets/images/symbols/sym_00_expanded.webp',   // The Outlaw, full reel (on the train roof)
+    sym_01_idle:            'assets/images/symbols/sym_01_idle.webp',       // Sheriff's Star
+    sym_02_idle:            'assets/images/symbols/sym_02_idle.webp',       // Revolver
+    sym_03_idle:            'assets/images/symbols/sym_03_idle.webp',       // Gold Bars
+    sym_04_idle:            'assets/images/symbols/sym_04_idle.webp',       // A
+    sym_05_idle:            'assets/images/symbols/sym_05_idle.webp',       // K
+    sym_06_idle:            'assets/images/symbols/sym_06_idle.webp',       // Q
+    sym_07_idle:            'assets/images/symbols/sym_07_idle.webp',       // J
+    sym_08_idle:            'assets/images/symbols/sym_08_idle.webp',       // 10
+    sym_scatter_idle:       'assets/images/symbols/sym_scatter_idle.webp',  // Dynamite (Wild + Scatter)
+
+    // the Outlaw mascot beside the reels (full body, transparent, tall)
+    char_mascot:            'assets/images/characters/char_mascot.webp',
 
     fx_scatter_full:        'assets/images/fx/fx_scatter_full.webp',
     fx_lantern:             'assets/images/fx/fx_lantern.webp',

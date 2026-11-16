@@ -9,11 +9,12 @@
     nowin:     { label: 'No win',                           color: '#6c6a80' },
     small:     { label: 'Single line win',                  color: '#4fbf8a' },
     multi:     { label: 'Several line wins',                color: '#3fb6c9' },
-    wildwin:   { label: 'Win with the Scatter as Wild',     color: '#e0794a' },
-    tease:     { label: '2 Scatters (anticipation, no trigger)', color: '#b08a5a' },
-    trigger:   { label: '3 Scatters → Free Spins',          color: '#e8423a' },
-    trigger4:  { label: '4 Scatters → Free Spins (20×)',    color: '#d9302a' },
-    trigger5:  { label: '5 Scatters → Free Spins (200×)',   color: '#c2101a' },
+    wildwin:   { label: 'Win with the Dynamite as Wild',     color: '#e0794a' },
+    tease:     { label: '2 Dynamite (anticipation, no trigger)', color: '#b08a5a' },
+    trigger:   { label: '3 Dynamite → Free Spins',          color: '#e8423a' },
+    trigger4:  { label: '4 Dynamite → Free Spins (20×)',    color: '#d9302a' },
+    trigger5:  { label: '5 Dynamite → Free Spins (200×)',   color: '#c2101a' },
+    buy:       { label: 'Feature buy (100× bet)',           color: '#d4a017' },
     nice:      { label: 'Nice win banner (10×+)',           color: '#d08a4a' },
     big:       { label: 'Big win banner (20×+)',            color: '#ff9a3c' },
     mega:      { label: 'Mega win banner (50×+)',           color: '#f2b632' },
@@ -23,12 +24,14 @@
     expand2:   { label: 'Free spin: special expands (2 reels)', color: '#8a6bdf', fs: true },
     expand5:   { label: 'Free spin: special on all 5 reels',    color: '#c86bff', fs: true },
     retrigger: { label: 'Free spin: retrigger (+10)',       color: '#ff6ad5', fs: true },
-    symwin:    { label: 'Symbol win',                       color: '#7ad06a' },   // item.sym 0-10, item.len 2-5
+    symwin:    { label: 'Symbol win',                       color: '#7ad06a' },   // item.sym a regular symbol id, item.len 2-5
     custom:    { label: 'Custom grid',                      color: '#2fd0c0' }
   };
 
   function create(CONFIG, engine) {
-    const C = CONFIG, S = C.SCATTER, R = C.rows, N = C.reels;
+    const C = CONFIG, S = C.SCATTER, R = C.rows, N = C.reels, NR = C.regular.length;
+    // premiums = symbols that pay 2 of a kind (used to build big-win boards)
+    const PREM = C.regular.filter(s => engine.minCount(s) === 2);
     const rnd = n => Math.floor(Math.random() * n);
     const scCount = g => engine.scatters(g).length;
 
@@ -53,16 +56,20 @@
       return g;
     }
 
-    /** Build an outcome. ctx = { bet, inFreeSpins, special } */
+    /** Build an outcome. ctx = { bet, inFreeSpins, special, bought } */
     function build(item, ctx) {
-      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special;
+      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special, bought = !!ctx.bought;
       const base = { bet, inFreeSpins: fs, special };
-      const rg = (o = {}) => engine.randomGrid(Object.assign({ fs, special, noScatter: true }, o));
+      const rg = (o = {}) => engine.randomGrid(Object.assign({ fs, special, bought, noScatter: true }, o));
       const quiet = () => ({ grid: rg(), opts: base });
       const noFeature = r => !stepOf(r, 'scatter') && !stepOf(r, 'expand');
       const finish = res => { if (res.freeSpins && !fs) res.special = item.special != null ? Number(item.special) : engine.pickSpecial(); return res; };
 
       switch (item.type) {
+        case 'buy':
+          // feature buy trigger spin (base game only): weighted 3/4/5 Scatters
+          if (fs) return engine.resolveSpin(engine.randomGrid({ fs, special, bought }), base);
+          return finish(engine.resolveSpin(engine.buyGrid(), base));
         case 'nowin':
           return search(r => r.total === 0, quiet);
         case 'small':
@@ -85,7 +92,7 @@
           return search(r => (noFeature(r) && r.total / bet >= lo && r.total / bet < hi) || 0, () => {
             const g = rg(), k = 1 + rnd(3);
             for (let i = 0; i < k; i++) {
-              const line = C.paylines[rnd(C.paylines.length)], s = rnd(6), len = 3 + rnd(3);
+              const line = C.paylines[rnd(C.paylines.length)], s = PREM.length ? PREM[rnd(PREM.length)] : rnd(NR), len = 3 + rnd(3);
               for (let c = 0; c < len; c++) g[c][line[c]] = s;
             }
             return { grid: g, opts: base };
@@ -93,7 +100,7 @@
         }
         case 'expand': case 'expand2': case 'expand5': {
           // the special symbol on n reels; without an active special (outside free spins) this plays as a normal spin
-          if (!fs || special == null) return engine.resolveSpin(rg(), base);
+          if (!fs || special == null) return engine.resolveSpin(engine.randomGrid({ fs, special, bought }), base);
           const need = item.type === 'expand2' ? 2 : item.type === 'expand5' ? 5 : 3;
           const n = item.type === 'expand2' ? Math.max(2, engine.minCount(special)) : need;
           return search(r => { const e = stepOf(r, 'expand'); return (e && e.count === n && !stepOf(r, 'scatter')) || 0; }, () => {
@@ -105,13 +112,13 @@
         }
         case 'symwin': {
           // the chosen symbol on the middle line, len in a row; only boards where that symbol is the only win
-          const s = Math.max(0, Math.min(10, Math.round(Number(item.sym)) || 0));
+          const s = Math.max(0, Math.min(NR - 1, Math.round(Number(item.sym)) || 0));
           const minLen = engine.minCount(s), n = Math.max(minLen, Math.min(5, Math.round(Number(item.len)) || 3));
           const make = () => {
             const g = rg();
             for (let c = 0; c < N; c++) {
               if (c < n) g[c][1] = s;
-              else if (g[c][1] === s) g[c][1] = (s + 1 + rnd(10)) % 11;     // end the line exactly at n
+              else if (g[c][1] === s) g[c][1] = (s + 1 + rnd(NR - 1)) % NR;     // end the line exactly at n
             }
             return { grid: g, opts: base };
           };
@@ -123,11 +130,11 @@
         }
         case 'custom': {
           const ok = Array.isArray(item.grid) && item.grid.length === N && item.grid.every(col => Array.isArray(col) && col.length === R && col.every(v => Number.isInteger(v) && v >= 0 && v <= S));
-          if (!ok) return engine.resolveSpin(engine.randomGrid({ fs, special }), base);   // a malformed grid plays as a normal spin
+          if (!ok) return engine.resolveSpin(engine.randomGrid({ fs, special, bought }), base);   // a malformed grid plays as a normal spin
           return finish(engine.resolveSpin(item.grid.map(col => col.slice()), base));
         }
         default:
-          return finish(engine.resolveSpin(engine.randomGrid({ fs, special }), base));
+          return finish(engine.resolveSpin(engine.randomGrid({ fs, special, bought }), base));
       }
     }
     return { build };
@@ -137,7 +144,7 @@
   function describe(item, CONFIG) {
     const o = OUTCOMES[item.type] || OUTCOMES.random, names = (CONFIG && CONFIG.symbolNames) || {};
     if (item.type === 'symwin') {
-      const sym = Math.max(0, Math.min(10, Math.round(Number(item.sym)) || 0));
+      const nr = CONFIG ? CONFIG.regular.length : 11, sym = Math.max(0, Math.min(nr - 1, Math.round(Number(item.sym)) || 0));
       return `${names[sym] || 'Symbol'} win, ${Math.max(2, Math.min(5, Math.round(Number(item.len)) || 3))} in a row`;
     }
     if (/^trigger/.test(item.type) && item.special != null) return `${o.label}, special ${names[item.special]}`;

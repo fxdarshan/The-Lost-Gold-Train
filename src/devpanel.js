@@ -35,12 +35,12 @@
     });
   }
   const adds = $('#adds');
-  ['nowin', 'small', 'multi', 'wildwin', 'tease', 'nice', 'big', 'mega', 'superb', 'trigger', 'trigger4', 'trigger5', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
+  ['nowin', 'small', 'multi', 'wildwin', 'tease', 'nice', 'big', 'mega', 'superb', 'trigger', 'trigger4', 'trigger5', 'buy', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
     const b = document.createElement('button'); b.innerHTML = `<span class="dot" style="background:${OUT[k].color}"></span>${OUT[k].label}`;
     b.onclick = () => { G.queue.push({ type: k }); renderQueue(); }; adds.appendChild(b);
   });
   // symbol win: pick a symbol and a line length from the dropdowns, add it to the list
-  $('#swSym').innerHTML = Object.entries(C.symbolNames).filter(([k]) => k >= 0 && k <= 10).sort((a, b) => a[0] - b[0]).map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
+  $('#swSym').innerHTML = Object.entries(C.symbolNames).filter(([k]) => Number(k) !== C.SCATTER).sort((a, b) => a[0] - b[0]).map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
   $('#swAdd').onclick = () => { G.queue.push({ type: 'symwin', sym: Number($('#swSym').value), len: Number($('#swLen').value) }); renderQueue(); };
   $('#clearQueue').onclick = () => { G.queue = []; renderQueue(); };
   $('#playQueue').onclick = () => { if (G.autoplay) { G.autoplay = false; update(); } else if (!G.busy) root.Game.playQueue(); };

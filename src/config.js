@@ -3,12 +3,11 @@
  * The engine (engine.js) reads only this object, so the same file drives the
  * browser game and the Node simulator (tools/simulate.js).
  *
- * SAMPLE GAME. The template ships with a working book-style game so everything runs on day one:
- * the features and maths of Pragmatic Play's "John Hunter and the Book of Tut" (docs/reference-game.md):
- *   5x3, 10 fixed lines, 96.50% RTP, Scatter = Wild + Scatter (the "book"),
+ * The Lost Gold Train: the features and maths of Pragmatic Play's "John Hunter and the Book of Tut"
+ * (docs/reference-game.md), with a Wild West watercolour theme (docs/art-direction.md):
+ *   5x3, 10 fixed lines, 96.50% RTP, Dynamite = Wild + Scatter (the "book"),
  *   3+ scatters = 10 free spins with one random expanding symbol, unlimited retriggers.
- * For a new game: replace the values below from docs/ (see NEW_GAME.md), mark every value that is not
- * in the specs ASSUMED or TUNED, and re-tune with tools/simulate.js.
+ * Every value not in the docs is marked ASSUMED or TUNED; re-tune with tools/simulate.js after changes.
  *
  * Sources:
  *   REF    docs/reference-game.md      (published facts of the reference game, with links)
@@ -22,10 +21,10 @@
     title: 'The Lost Gold Train',
     // short theme texts used by the splash screen, modals and rules screen
     texts: {
-      brand: 'All Aboard',                          // small line on the splash screen (ASSUMED until the GDD says)
+      brand: 'All Aboard',                          // small line on the splash screen (ASSUMED)
       loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
-      retrigger: 'MORE FREE SPINS!',               // retrigger modal title
-      expandedPanel: ['#7fd0ff', '#bfe9ff', '#ffffff']   // sky behind sym_00_expanded art (top to bottom)
+      retrigger: 'MORE DYNAMITE!',                 // retrigger modal title
+      expandedPanel: ['#f0a050', '#f6c98a', '#fbe8c8']   // sunset behind the Outlaw's full-reel art (top to bottom)
     },
 
     // ---------------------------------------------------------------- grid (REF: 5 reels x 3 rows)
@@ -33,14 +32,15 @@
     rows: 3,
 
     // Symbol ids: 0 = highest paying. SCATTER is the "book": wild and scatter at once.
-    regular: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    SCATTER: 11,
+    // The set follows docs/art-direction.md §2: the reference game's 4 premiums + 5 card ranks + the Book.
+    regular: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    SCATTER: 9,
     symbolNames: {
-      0: 'Crown', 1: 'Ruby', 2: 'Emerald', 3: 'Sapphire', 4: 'Gold Bar', 5: 'Coins',
-      6: 'A', 7: 'K', 8: 'Q', 9: 'J', 10: '10', 11: 'Scatter'
+      0: 'The Outlaw', 1: "Sheriff's Star", 2: 'Revolver', 3: 'Gold Bars',
+      4: 'A', 5: 'K', 6: 'Q', 7: 'J', 8: '10', 9: 'Dynamite'
     },
     // the reference game's symbol each one plays the part of
-    refSymbol: { 0: 'John Hunter', 1: 'Tutankhamun mask', 2: 'Cat', 3: 'Scarab', 4: '(none: extra)', 5: '(none: extra)', 6: 'A', 7: 'K', 8: 'Q', 9: 'J', 10: '10', 11: 'Book of Tut' },
+    refSymbol: { 0: 'John Hunter', 1: 'Tutankhamun mask', 2: 'Golden cat', 3: 'Scarab', 4: 'A', 5: 'K', 6: 'Q', 7: 'J', 8: '10', 9: 'Book of Tut' },
 
     // ------------------------------------------------------------ paylines (REF: 10 fixed lines)
     // Row index per reel: 0 Top, 1 Middle, 2 Bottom. ASSUMED: the classic 10-line book-slot layout
@@ -61,41 +61,55 @@
     // ------------------------------------------------------------ paytable (REF, x TOTAL bet for one line)
     // Line wins pay left to right on adjacent reels, highest win per line.
     paytable: {
-      0:  { 2: 1,   3: 10,  4: 100, 5: 500 },  // Crown    = John Hunter
-      1:  { 2: 0.5, 3: 4,   4: 40,  5: 200 },  // Ruby     = Tutankhamun mask
-      2:  { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Emerald  = Cat
-      3:  { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Sapphire = Scarab
-      4:  { 3: 1,   4: 5,   5: 25 },           // Gold Bar ASSUMED (extra symbol, no reference value)
-      5:  { 3: 1,   4: 5,   5: 25 },           // Coins    ASSUMED (extra symbol, no reference value)
-      6:  { 3: 0.5, 4: 4,   5: 15 },           // A
-      7:  { 3: 0.5, 4: 4,   5: 15 },           // K
-      8:  { 3: 0.5, 4: 2.5, 5: 10 },           // Q
-      9:  { 3: 0.5, 4: 2.5, 5: 10 },           // J
-      10: { 3: 0.5, 4: 2.5, 5: 10 }            // 10
+      0: { 2: 1,   3: 10,  4: 100, 5: 500 },  // The Outlaw     = John Hunter
+      1: { 2: 0.5, 3: 4,   4: 40,  5: 200 },  // Sheriff's Star = Tutankhamun mask
+      2: { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Revolver       = Golden cat
+      3: { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Gold Bars      = Scarab
+      4: { 3: 0.5, 4: 4,   5: 15 },           // A
+      5: { 3: 0.5, 4: 4,   5: 15 },           // K
+      6: { 3: 0.5, 4: 2.5, 5: 10 },           // Q
+      7: { 3: 0.5, 4: 2.5, 5: 10 },           // J
+      8: { 3: 0.5, 4: 2.5, 5: 10 }            // 10
     },
     scatterPays: { 3: 2, 4: 20, 5: 200 },      // REF: 3 / 4 / 5 books pay 2x / 20x / 200x total bet, anywhere
 
     // Symbol weights per reel for random stops (TUNED). Each cell is drawn independently.
-    // Rows: reel 1..5. Columns: symbol id 0..11 (11 = Scatter).
+    // Rows: reel 1..5. Columns: symbol id 0..9 (9 = Scatter). Odd and even reels favour different
+    // card ranks (fewer accidental lines), and the Scatter is rarer on the left reels, where as a Wild it
+    // starts lines, and commoner on the right: this keeps the base game near 49% of RTP while free
+    // spins trigger about 1 in 178 (reference: 1 in 150 to 174).
     weights: [
-      [4.6, 5.8, 7.5, 7.5, 7, 7, 10, 10, 10.5, 10.5, 10.5, 2.4],
-      [4.6, 5.8, 7.5, 7.5, 7, 7, 10, 10, 10.5, 10.5, 10.5, 2.4],
-      [4.6, 5.8, 7.5, 7.5, 7, 7, 10, 10, 10.5, 10.5, 10.5, 2.4],
-      [4.6, 5.8, 7.5, 7.5, 7, 7, 10, 10, 10.5, 10.5, 10.5, 2.4],
-      [4.6, 5.8, 7.5, 7.5, 7, 7, 10, 10, 10.5, 10.5, 10.5, 2.4]
+      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 0.8],
+      [2.2, 3.2, 4.5, 4.5, 8, 8, 15, 15, 15, 1.0],
+      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 1.9],
+      [2.2, 3.2, 4.5, 4.5, 8, 8, 15, 15, 15, 2.7],
+      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 3.2]
     ],
     // Free spins use their own weights (TUNED): fewer scatters, so retriggers are rarer.
     weightsFreeSpins: null,                    // null = same as base
-    specialBoost: 1.33,                         // free spins: the special symbol's weight is multiplied by this (TUNED)
+    // Free spins: the special symbol's share of every reel, per symbol (TUNED). Premiums get a smaller share
+    // than card ranks but pay far more, so the Outlaw is the rare dream special (about 200x average round)
+    // and a typical round lands near the reference's 60x median.
+    specialShare: { 0: 0.079, 1: 0.086, 2: 0.0965, 3: 0.0965, 4: 0.1625, 5: 0.1625, 6: 0.1725, 7: 0.1725, 8: 0.1725 },
 
     // ---------------------------------------------------------- free spins (REF)
     freeSpins: 10,                             // 3+ scatters award 10 free spins
     freeSpinsRetrigger: 10,                    // 3+ scatters during free spins add 10 more, no limit
     // Which symbol becomes the expanding symbol (TUNED weights; REF: "one regular symbol chosen at random")
-    specialWeights: { 0: 6, 1: 8, 2: 9, 3: 9, 4: 9, 5: 9, 6: 10, 7: 10, 8: 10, 9: 10, 10: 10 },
+    specialWeights: { 0: 6, 1: 8, 2: 9, 3: 9, 4: 10, 5: 10, 6: 10, 7: 10, 8: 10 },
     // The special symbol expands when it is on enough reels to win (2 for symbols that pay 2 of a kind,
     // else 3), anywhere on those reels, and then pays on every line regardless of adjacency (REF).
     expandPaysAllLines: true,
+
+    // ------------------------------------------------------------ feature buy (REF: theScore rules text)
+    // 10 free spins for 100x the total bet. The bought trigger spin has 3, 4 or 5 Scatters by weight;
+    // bought free spins use their own reels per special symbol (here: their own boost on the special).
+    buy: {
+      enabled: true,
+      price: 100,                              // REF: 100x total bet
+      scatterWeights: { 3: 85, 4: 13, 5: 2 },  // TUNED (REF: "weighted", values not published)
+      specialShare: { 0: 0.0770, 1: 0.0839, 2: 0.0941, 3: 0.0941, 4: 0.1584, 5: 0.1584, 6: 0.1682, 7: 0.1682, 8: 0.1682 }   // TUNED: bought free spins (97.5% of the natural shares, buy RTP 96.5%)
+    },
 
     maxWin: 5500,                              // REF (pragmaticplay.com): 5,500x per round. Reviews say 5,000x.
 
@@ -139,10 +153,12 @@
 
     spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },
 
-    // Layout in stage pixels (1920 x 1080): where the reels sit on the background art.
-    // Measure the reel area on bg_base_main (after import) and set it here; cells are w/reels x h/rows.
+    // Layout in stage pixels (1920 x 1080): where the reels sit on the background art (ASSUMED until the
+    // backgrounds arrive; docs/art-direction.md asks for the frame to match). The reels sit right of centre
+    // so the Outlaw mascot can stand on the left, as in the reference images.
     stage: { landscape: [1920, 1080] },
-    window: { x: 214.7, y: 138.7, w: 1488.6, h: 776.9 },
+    window: { x: 540, y: 150, w: 1300, h: 690 },
+    mascot: { x: 30, y: 230, w: 480, h: 720 },   // box the mascot art is fitted into (feet on the bottom edge)
     hudTop: 944,                        // the bottom bar starts here (mockup y 1940)
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar
   };

@@ -3,16 +3,20 @@
 The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **Read it first, update it last**, every session. Newest entry at the top; keep the last 5.
 
 ## Now
-- **State:** repo made from the template; title is The Lost Gold Train. Research on the reference game is in `docs/reference-game.md`. The game still plays the template's sample book-style maths with placeholder art.
-- **Next:** once Darshan answers below, write the GDD (`docs/templates/reference-gdd.md` → `docs/reference-gdd.md`), set the maths, add the 100× feature buy, re-tune so free spins carry about 45 to 50% of RTP (reference: free spins 1 in about 150 to 174, about 80× average).
-- **Waiting for Darshan:**
-  1. Original *Book of Tut* or the *Respin* version (Mystery Respin in the base game, 4,000× max)? Suggested: the original plus its 100× feature buy.
-  2. Art direction is set (`docs/art-direction.md`: watercolour Western from Darshan's reference). Confirm: the name (The Lost Gold Train or Last Train Gold), the proposed symbol set (Outlaw, Sheriff's Star, Revolver, Gold Bars, A-10, Dynamite as Wild + Scatter), and whether the Outlaw stands beside the reels. Art: generate with the prompts in §4 and upload to `art/`.
-  3. RTP: 96.50% only, or also the 95.50% / 94.50% versions?
-  4. Pragmatic's "random symbols may also expand" line: include it or not?
+- **State:** first playable build. Original *Book of Tut* maths + 100× feature buy; 9 symbols from Darshan's *Last Train Gold* art; the Outlaw mascot beside the reels. RTP 96.65–97.29% (4 × 6M), buy 95.5–96.4%. 22/22 edge cases. Backgrounds, banners, logo, lantern and sounds are still placeholders.
+- **Next:** import the backgrounds when they arrive (set `CONFIG.window` to their reel frame); then banners and logo. Optional: strongbox reveal for the special symbol pick.
+- **Waiting for Darshan** (GDD §8):
+  1. Backgrounds (base sunset, free spins night), win banners, logo, hanging lantern; prompts in `docs/art-direction.md` §4.
+  2. Higher-resolution symbols (about 2×) for final.
+  3. Hit rate 26.8% against the reference's 31–33%: keep or rebalance?
+  4. Strongbox reveal for the pick: wanted?
+  5. Use the pack's multiplier tiles anywhere (a new feature)?
+- **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, `cut_white_tiles.py`, mascot slot).
 
 ## Log
+### 2026-11-16 · claude.ai chat (3)
+- Darshan chose: name The Lost Gold Train, symbols matched to the reference, the Outlaw as mascot, the original game. Built specs, maths, feature buy, mascot layout; imported the art pack; tuned; docs.
 ### 2026-11-16 · claude.ai chat (2)
-- Art direction from Darshan's two "Last Train Gold" images: watercolour style, symbols and characters only (not their grids). Wrote `docs/art-direction.md` (style, palette, symbol set mapped to Book of Tut roles, free spins moments, per-asset prompts); images saved in `docs/art-reference/`.
+- Art direction from Darshan's two images: `docs/art-direction.md`, references in `docs/art-reference/`.
 ### 2026-11-16 · claude.ai chat
-- Repo created from the template. Researched *John Hunter and the Book of Tut* (and the Respin version) into `docs/reference-game.md`. Set the title. No maths changes.
+- Repo created from the template; reference game research in `docs/reference-game.md`.

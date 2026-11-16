@@ -36,7 +36,8 @@
     lines: null, labels: [], particles: [], dim: 0, fuses: [], expanded: {}, antic: null,
     banner: null, modal: null, trans: null, info: false,
     env: 0, envTarget: 0, camera: 1, message: null,
-    fs: { active: false, left: 0, played: 0, total: 0, awarded: 0, special: null },
+    fs: { active: false, left: 0, played: 0, total: 0, awarded: 0, special: null, bought: false },
+    buyArm: 0, mascotHop: 0,
     queue: [], onChange: () => {}
   };
   const bet = () => C.bets[G.betIndex];
@@ -56,7 +57,10 @@
     minus: { x: 905, y: 970, r: 24 }, plus: { x: 965, y: 970, r: 24 },
     spin: { x: 1647, y: 964, r: 78 }, auto: { x: 1647, y: 1058, r: 40 }
   };
-  const pill = { x: 610, y: 881, w: 700, h: 58 };
+  const pill = { x: x0 + gw / 2 - 350, y: 881, w: 700, h: 58 };
+  // feature buy button, top left above the mascot (the special symbol card takes its place in free spins)
+  const buyBtn = { x: 40, y: 36, w: 440, h: 76 };
+  const M = C.mascot;
 
   G.board = engine.randomGrid({ noScatter: true });
   const newFx = () => G.board.map(col => col.map(() => ({})));
@@ -77,7 +81,7 @@
     for (let c = 0; c < C.reels; c++) { if (n >= 2) return c; if (grid[c].includes(SC)) n++; }
     return C.reels;
   }
-  function startReels(grid, fs, special) {
+  function startReels(grid, fs, special, bought) {
     return new Promise(resolve => {
       const t0 = now(), sp = C.spin, R = C.rows, from = anticipationFrom(grid);
       grid.forEach((col, i) => {
@@ -85,7 +89,7 @@
         const extra = i >= from ? sec(FR.anticipation) * (i - from + 1) : 0;
         const Tstop = (sp.first + i * sp.gap) / G.speed + extra, wu = .1 / G.speed;
         const N = Math.max(R + 3, Math.round(sp.speed * (Tstop - wu)));
-        const rs = () => engine.randomSymbol(i, { fs, special });
+        const rs = () => engine.randomSymbol(i, { fs, special, bought });
         const s = [rs(), ...col, rs()];
         for (let k = 1; k < N; k++) s.push(rs());
         s.push(rs(), ...cur, rs());
@@ -193,6 +197,18 @@
     ctx.restore();
     // free spins: warm sparks drift up either side
     if (G.env > .5 && Math.random() < .03) emit('spark', Math.random() < .5 ? 40 + Math.random() * 150 : W - 190 + Math.random() * 150, H * .8, 1, { angle: -Math.PI / 2, spread: .2, speed: 60, gravity: -5, life: 6, size: 12, color: ['#ffb84a', '#ffd27a'] });
+  }
+
+  /* ------------------------------------------------------------ mascot */
+  // the Outlaw stands left of the reels: idle sway and breathing; hops on big wins and free spins
+  function drawMascot(t) {
+    const img = A.get('char_mascot'); if (!img || !M) return;
+    const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
+    const hopU = clamp((t - G.mascotHop) / .6, 0, 1), hop = G.mascotHop ? Math.sin(hopU * Math.PI) * 40 : 0;
+    const breathe = 1 + .012 * Math.sin(t * 2.2), sway = .015 * Math.sin(t * 1.1);
+    const fx = M.x + M.w / 2, fy = M.y + M.h;    // feet
+    ctx.save(); ctx.translate(fx, fy - hop); ctx.rotate(sway); ctx.scale(1, breathe);
+    ctx.drawImage(img, -w / 2, -h, w, h); ctx.restore();
   }
 
   /* ------------------------------------------------------------ symbols */
@@ -383,12 +399,24 @@
     uiText('AUTOPLAY', ab.x, ab.y + 1, 22, G.autoplay ? '#000' : '#fff', 'center', 700);
     // free spins: the special symbol card, bottom left over the clouds
     if (inFS && fs.special != null) {
-      const cx = 94, cy = 780;
-      ctx.save(); const gg = ctx.createLinearGradient(0, cy - 120, 0, cy + 120); gg.addColorStop(0, '#c2202a'); gg.addColorStop(1, '#6a0a12');
-      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(cx - 82, cy - 112, 164, 224, 18); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke(); ctx.restore();
-      uiText('EXPANDING', cx, cy - 88, 20, '#ffe9a8', 'center', 700);
-      const img = A.symbol(fs.special), k = Math.min(140 / img.width, 130 / img.height); ctx.drawImage(img, cx - img.width * k / 2, cy + 10 - img.height * k / 2, img.width * k, img.height * k);
-      uiText('SYMBOL', cx, cy + 92, 20, '#ffe9a8', 'center', 700);
+      // the special symbol card, top left (where the buy button sits in the base game)
+      const b = buyBtn, ch2 = 120;
+      ctx.save(); const gg = ctx.createLinearGradient(0, b.y, 0, b.y + ch2); gg.addColorStop(0, '#8a3a12'); gg.addColorStop(1, '#4a1a08');
+      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, ch2, 16); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke(); ctx.restore();
+      const img = A.symbol(fs.special), k = Math.min(130 / img.width, 100 / img.height); ctx.drawImage(img, b.x + 80 - img.width * k / 2, b.y + ch2 / 2 - img.height * k / 2, img.width * k, img.height * k);
+      uiText('EXPANDING SYMBOL', b.x + 300, b.y + 42, 24, '#ffe9a8', 'center', 700);
+      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + 300, b.y + 80, 30, '#fff', 'center', 700);
+    } else if (C.buy && C.buy.enabled) {
+      // feature buy: first click arms it, a second click within 3 s buys
+      const b = buyBtn, armed = performance.now() - G.buyArm < 3000, off = G.busy;
+      ctx.save(); ctx.globalAlpha = off ? .45 : 1;
+      const gg = ctx.createLinearGradient(0, b.y, 0, b.y + b.h); gg.addColorStop(0, armed ? '#e8b020' : '#b8401a'); gg.addColorStop(1, armed ? '#a86a08' : '#6a1a08');
+      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, b.h, 38); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke();
+      ctx.restore();
+      ctx.save(); ctx.globalAlpha = off ? .45 : 1;
+      uiText(armed ? 'TAP AGAIN TO BUY' : 'BUY FREE SPINS', b.x + b.w / 2, b.y + 28, 26, '#fff', 'center', 700);
+      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + 56, 24, '#ffe9a8', 'center', 700);
+      ctx.restore();
     }
   }
 
@@ -579,6 +607,7 @@
     ctx.save();
     if (G.camera !== 1) { ctx.translate(W / 2, H / 2); ctx.scale(G.camera, G.camera); ctx.translate(-W / 2, -H / 2); }
     drawEnvironment(t);
+    drawMascot(t);
     drawGrid(t);
     drawExpanded(t);
     drawFuses(t);
@@ -677,6 +706,7 @@
   function bigWinBanner(amount) {
     const tier = engine.tierOf(amount, bet());
     if (tier < 0) return Promise.resolve();
+    G.mascotHop = now();
     return new Promise(resolve => { G.banner = { tier, amount, t0: now(), tok: G.skip, resolve }; });
   }
   function modal(o) { return new Promise(resolve => { G.modal = Object.assign({ t0: now(), tok: G.skip, resolve }, o); }); }
@@ -684,14 +714,15 @@
 
   /* ------------------------------------------------------------ spin flow */
   async function spinOnce(item, inFS) {
-    const res = director.build(item || { type: 'random' }, { bet: bet(), inFreeSpins: inFS, special: G.fs.special });
+    const bought = inFS && G.fs.bought;
+    const res = director.build(item || { type: 'random' }, { bet: bet(), inFreeSpins: inFS, special: G.fs.special, bought });
     applySpeed();
     G.fx = newFx(); G.lines = null; G.labels = []; G.expanded = {}; G.fuses.forEach(f => { f.fade = f.fade || now(); });
-    if (!inFS) { G.balance = Math.round((G.balance - bet()) * 100) / 100; setWin(0, true); }
+    if (!inFS) { G.balance = Math.round((G.balance - spinCost(item)) * 100) / 100; setWin(0, true); }
     G.spinBaseWin = G.win;      // the HUD win box keeps the round total during free spins
     SND.play('sfx_spin_button_click'); SND.play('sfx_reel_spin');
     G.spinning = true; G.onChange();
-    await startReels(res.start, inFS, G.fs.special);
+    await startReels(res.start, inFS, G.fs.special, bought);
     G.spinning = false; G.onChange();
     await wait(.12 / G.speed);
     await playSteps(res.steps);
@@ -699,6 +730,8 @@
     await bigWinBanner(res.total);
     return res;
   }
+  // what a base spin costs: the bet, or the feature buy price
+  const spinCost = item => (item && item.type === 'buy' && C.buy ? C.buy.price : 1) * bet();
   function nextItem() {
     const it = G.queue.length ? G.queue.shift() : { type: 'random' };
     G.onChange(); return it;
@@ -715,14 +748,21 @@
     }
     G.onChange();
   }
-  async function play() {
+  async function play(opts = {}) {
     if (G.busy || G.info) return false;
-    ensureFunds();
+    let first;
+    if (opts.buy) {
+      if (!C.buy || !C.buy.enabled) return false;
+      first = { type: 'buy' };
+      if (G.balance < spinCost(first) - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return false; }
+    } else ensureFunds();
     G.busy = true; G.onChange(); SND.init(root.ASSET_MANIFEST); SND.playMusic('bgm_basegame_loop');
     try {
-      const base = await spinOnce(nextItem(), false);
+      first = first || nextItem();
+      if (first.type === 'buy' && G.balance < spinCost(first) - 1e-9) { first = { type: 'random' }; ensureFunds(); }   // a queued buy the balance can't cover plays as a spin
+      const base = await spinOnce(first, false);
       let roundWin = base.total;
-      if (base.freeSpins) roundWin = await freeSpins(base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial());
+      if (base.freeSpins) roundWin = await freeSpins(base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial(), first.type === 'buy');
       roundWin = Math.min(roundWin, C.maxWin * bet());
       G.balance = Math.round((G.balance + roundWin) * 100) / 100;
       setWin(roundWin, true);
@@ -730,14 +770,15 @@
       // an error mid-round must not leave the game stuck on a banner, modal, transition or the free-spins look
       console.error(e);
       G.spinning = false; G.banner = null; G.modal = null; G.trans = null; G.antic = null; G.fuses = []; G.expanded = {};
-      G.fs.active = false; G.fs.special = null; G.envTarget = 0; G.env = 0; G.autoplay = false; G.dimTarget = 0;
+      G.fs.active = false; G.fs.special = null; G.fs.bought = false; G.envTarget = 0; G.env = 0; G.autoplay = false; G.dimTarget = 0;
     }
     G.busy = false; G.onChange(); applySpeed();
     return true;
   }
-  async function freeSpins(count, roundWin, special) {
+  async function freeSpins(count, roundWin, special, bought) {
     const fs = G.fs, baseWin = roundWin;
-    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null });
+    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
+    G.mascotHop = now();
     await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
     await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
     await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });
@@ -757,7 +798,7 @@
       }
     }
     await wait(.4 / G.speed);
-    await modal({ kind: 'outro', amount: fs.total, spins: fs.played, capped: fs.capped, onOutro: () => { fs.active = false; fs.special = null; G.envTarget = 0; G.expanded = {}; } });
+    await modal({ kind: 'outro', amount: fs.total, spins: fs.played, capped: fs.capped, onOutro: () => { fs.active = false; fs.special = null; fs.bought = false; G.envTarget = 0; G.expanded = {}; } });
     await transition('toBase');
     SND.playMusic('bgm_basegame_loop');
     return roundWin;
@@ -787,6 +828,11 @@
     if (Math.abs(x - btn.auto.x) < 72 && Math.abs(y - btn.auto.y) < 20) { autoplayLoop(); return; }
     if (hit(btn.info)) { if (!G.busy) G.info = true; return; }
     if (hit(btn.sound)) { SND.setMuted(!SND.muted); return; }
+    if (x >= buyBtn.x && x <= buyBtn.x + buyBtn.w && y >= buyBtn.y && y <= buyBtn.y + buyBtn.h && C.buy && C.buy.enabled && !G.fs.active) {
+      if (G.busy) return;
+      if (performance.now() - G.buyArm < 3000) { G.buyArm = 0; play({ buy: true }); } else G.buyArm = performance.now();
+      return;
+    }
     if (hit(btn.minus)) { if (!G.busy) { G.betIndex = Math.max(0, G.betIndex - 1); G.onChange(); } return; }
     if (hit(btn.plus)) { if (!G.busy) { G.betIndex = Math.min(C.bets.length - 1, G.betIndex + 1); G.onChange(); } return; }
     G.skip++;
@@ -809,5 +855,5 @@
     if (splash) splash.finish();
   }
 
-  root.Game = { G, C, engine, director, setSpeed, play, playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
+  root.Game = { G, C, engine, director, setSpeed, play, buy: () => play({ buy: true }), playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
 })(window);
