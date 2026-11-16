@@ -147,8 +147,8 @@
     fps: 30,
     frames: {
       bgBaseLoop: 120,                  // background breathing
-      symWin: [10, 20, 15],             // winning symbol: pop, hold, settle
-      lineCycle: 45,                    // each line shown on its own after the all-lines view (one full 1.5 s symbol animation)
+      symWin: [15, 45, 15],             // winning symbol: pop, hold, settle = 75 frames, one full 2.5 s win animation (Darshan: 'too fast')
+      lineCycle: 75,                    // each line shown on its own after the all-lines view (one full 2.5 s symbol animation)
       scatterLand: 12,                  // scatter squash when it lands
       fuse: [24, 18, 18],               // trigger: fuse unrolls down the reel, crackers pop, settle
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold

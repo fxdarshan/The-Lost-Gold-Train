@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-16: slower, smoother win animations
+- Darshan: "animations are too fast. make it smoother". All nine win animations re-rendered from his key-pose sheets at **75 frames / 2.5 s** (were 45 / 1.5 s): about 4.7 in-between frames per key instead of 2.8. Loops still wrap seamlessly (step 0 to 0.1 out of 255).
+- The game holds every win for the whole loop: `frames.symWin` 10+20+15 → 15+45+15 and `lineCycle` 45 → 75 (measured 2.51 s in the browser). Static symbols' pop and settle are gentler too.
+- `anim_from_keys.py`: `--frames N` (loop length) and `--switch W` (width of the hard pose switch; tried, default kept). Sheets are 10×8 grids.
+- The single-file build grows by about 6 MB.
+
 ## 2026-11-16: full symbol set
 - Darshan: "I guess you used very less symbols… please check and update" and "try to accommodate all the symbols as much as possible". Every piece of the *Last Train Gold* sheet is now in the game: 15 pay symbols (The Outlaw, Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe, Lantern, A–10), a **Wild** (reels 2-4), a train-badge **Scatter** (no longer wild) and **Power Dynamite** ×2/×3/×5/×10 (a Wild on reels 2-4 whose multipliers add up on a line).
 - Engine: `evaluate` handles `WILD`, `POWER` and `SCATTER_IS_WILD`; each win carries `base`, `mult` and `wilds`. A line that starts with 2+ Wilds may pay as the Outlaw.

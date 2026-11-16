@@ -87,15 +87,15 @@ window.ASSET_MANIFEST = {
 
   // sprite sheet layout for each *_win image: frames left to right, top to bottom
   anims: {
-    sym_00_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_01_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_02_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_04_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_05_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_06_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_07_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_08_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
+    sym_00_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_01_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_02_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_03_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_04_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_05_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_06_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_07_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_08_win: { cols: 10, rows: 8, frames: 75, fps: 30 }
   },
 
   sounds: {

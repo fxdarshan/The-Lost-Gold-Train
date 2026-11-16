@@ -18,8 +18,11 @@ Turn a 4x4 sheet of 16 AI key poses (left-to-right, top-to-bottom, on white) int
 Output: <out>_sheet.webp (9 x 5 grid of 45 frames), <out>_frame00.png (frame 1, for the idle symbol),
 <out>_preview.gif (30 fps, for review), and a JSON line with the sheet layout.
 
-    python3 -I tools/asset-pipeline/anim_from_keys.py <sheet.png> <out_prefix> --mode light|motion [--width 320] [--strict] [--soft] [--settle K] [--glints [--glint-script tools/asset-pipeline/glints/<symbol>.json]]
+    python3 -I tools/asset-pipeline/anim_from_keys.py <sheet.png> <out_prefix> --mode light|motion [--frames 75] [--width 320] [--strict] [--soft] [--settle K] [--glints [--glint-script tools/asset-pipeline/glints/<symbol>.json]]
 
+  --frames N: loop length at 30 fps (default 45 = 1.5 s; 75 = 2.5 s, Darshan 2026-11-16: 'too fast').
+  --switch W (motion mode): where flow can't follow, switch poses over W of a key (default 0.2; 0.5 spreads it over
+  about 2 frames at --frames 75: smoother, with a faint overlap).
   --settle K: keys K..16 are neutral 'return' poses; use pose 1 for them so the loop lands exactly on the start.
   --soft (motion mode): where flow can't follow (smoke, explosions, muzzle flash) cross-fade instead of a hard switch.
   The smoothness report (stderr) lists every frame-to-frame step including the 45 -> 1 wrap.
@@ -37,9 +40,12 @@ W_OUT = int(sys.argv[sys.argv.index('--width') + 1]) if '--width' in sys.argv el
 STRICT = '--strict' in sys.argv or '--glints' in sys.argv
 GLINTS = '--glints' in sys.argv
 SOFT = '--soft' in sys.argv
+SWITCH = float(sys.argv[sys.argv.index('--switch') + 1]) if '--switch' in sys.argv else 0.2   # width of the hard pose switch (fraction of a key)
 SETTLE = int(sys.argv[sys.argv.index('--settle') + 1]) if '--settle' in sys.argv else 0
 SCRIPT = sys.argv[sys.argv.index('--glint-script') + 1] if '--glint-script' in sys.argv else None
-N_OUT, FPS, COLS = 45, 30, 9
+N_OUT = int(sys.argv[sys.argv.index('--frames') + 1]) if '--frames' in sys.argv else 45
+FPS = 30
+COLS = 9 if N_OUT == 45 else 10                # 45 -> 9 x 5 (as before); longer loops 10 wide
 
 sheet = np.asarray(Image.open(src).convert('RGB')).astype(np.float32)
 H, W = sheet.shape[:2]; cw, ch = W // 4, H // 4
@@ -177,7 +183,8 @@ else:
         err = np.abs(A - B).mean(-1)
         hard = cv2.GaussianBlur(np.clip((err - 25) / 25, 0, 1), (0, 0), 3)
         if SOFT: hard = hard * 0                    # --soft: smoke, fire, flashes dissolve (cross-fade) instead of switching
-        w = (1 - hard) * s + hard * np.clip((s - .4) / .2, 0, 1)
+        u = np.clip((s - (.5 - SWITCH / 2)) / SWITCH, 0, 1); u = u * u * (3 - 2 * u)
+        w = (1 - hard) * s + hard * u
         return (1 - w[..., None]) * A + w[..., None] * B
 
 # 5. render 45 frames on pose 1's silhouette, crop to it, scale

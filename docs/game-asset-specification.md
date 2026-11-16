@@ -25,7 +25,7 @@ Every asset ID in `assets/manifest.js`, where its art came from, and what is sti
 | `sym_00_expanded` | `24_full_body_outlaw_character.png` | cropped to the reel's tall shape |
 | `bg_base_main` | `basegame.png` (Darshan, 2026-11-16: sunset canyon, train on the curve, lantern post) | 1672×941 cover-scaled to 1920×1080 (about 15% up; edges cropped by a few px) |
 | `bg_freegame_main` | `freegame.png` (inside the gold wagon, GOVT. GOLD crates, lantern) | same |
-| `sym_00_win` … `sym_08_win` | Darshan's `*_spritesheet.png` sheets (16 key poses each) | 45-frame win animations at 30 fps (1.5 s), 9×5 sheets of 320×239 frames (`anim_from_keys.py`, see `docs/symbol-animation-prompt.md`). Renumbered on 2026-11-16 for the full symbol set: the train, poster, money bag and horseshoe animations are now in use |
+| `sym_00_win` … `sym_08_win` | Darshan's `*_spritesheet.png` sheets (16 key poses each) | 75-frame win animations at 30 fps (2.5 s; were 45 frames / 1.5 s until Darshan found them too fast), 10×8 sheets of 320×239 frames (`anim_from_keys.py`, see `docs/symbol-animation-prompt.md`). Renumbered on 2026-11-16 for the full symbol set: the train, poster, money bag and horseshoe animations are now in use |
 | `ui_splash_logo` | `The_Lost_Gold_Train.png` (Darshan, 2026-11-16; already transparent) | trimmed to 1200×763 WebP; shown top left of the game and on the loading screen |
 | `fx_scatter_full` | `18_scatter.png` | composed: the train badge at the top and a railway track down the reel with a headlight glow (made in the prototype; replace with painted art if wanted) |
 
