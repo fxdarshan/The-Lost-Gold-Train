@@ -1,7 +1,7 @@
 # The Lost Gold Train: Game Design Document (v0.1)
 
 ## 1. Concept
-A Wild West book-style slot in hand-painted watercolour. An outlaw gang chases the last gold train through the canyon at sunset. **The Outlaw** is the top symbol and the game's mascot, standing beside the reels. **Dynamite** is the "book": Wild and Scatter at once. Three or more blast open the strongbox for free spins with a randomly picked expanding symbol.
+A Wild West book-style slot in hand-painted watercolour. An outlaw gang chases the last gold train through the canyon at sunset. **The Outlaw** is the top symbol and the game's mascot, standing beside the reels. The full *Last Train Gold* symbol sheet is in play: 10 pictures and A to 10, a **Wild** and **Power Dynamite** (a Wild with a ×2 to ×10 multiplier) on the middle reels, and a train-badge **Scatter**. Three or more Scatters give free spins with a randomly picked expanding symbol.
 
 Features and maths follow Pragmatic Play's **John Hunter and the Book of Tut** (the original, not the Respin version): `docs/reference-game.md`. Look and symbols follow `docs/art-direction.md` and the art Darshan supplied (`assets/source/originals/last_train_gold/`).
 
@@ -10,41 +10,51 @@ Build a playable prototype that plays like the reference game, wearing the new t
 
 ## 3. Key numbers
 
-| Item | Target (reference) | Prototype (4 × 6M rounds) |
+| Item | Target (reference) | Prototype (4 × 5M rounds) |
 | --- | --- | --- |
 | Grid / lines | 5×3 / 10 | 5×3 / 10 |
-| RTP | 96.50% | 96.65% to 97.29% (average 96.9%, about ±0.4% run to run) |
-| Base / free spins share | about 50 / 50 (derived) | 49% / 48% |
-| Free spins frequency | 1 in 174 (published); 1 in 150 (measured) | 1 in 178 |
-| Free spins round | median 60×, mean 80.7× (measured) | median 59×, mean 85× |
-| Feature buy | 100×; return not published (101% measured over 100 buys) | 100×; 95.5% to 96.4% |
-| Hit frequency | 33.33% (published); 31% (measured) | **26.8%**: lower, see §7 |
+| RTP | 96.50% | 96.61% to 97.33% (average 97.0%, about ±0.4% run to run; earlier runs 1% lower on the share gave 95.7%, so the true figure is about 96.5 to 97%) |
+| Base / free spins share | about 50 / 50 (derived) | 53% / 44% |
+| Free spins frequency | 1 in 174 (published); 1 in 150 (measured) | 1 in 177 |
+| Free spins round | median 60×, mean 80.7× (measured) | median 50×, mean 78× |
+| Feature buy | 100×; return not published (101% measured over 100 buys) | 100×; 95.7% to 96.2% |
+| Hit frequency | 33.33% (published); 31% (measured) | **21.4%**: lower, see §7 |
 | Max win | 5,500× | 5,500× cap, reached about 1 in 5 million rounds (reference: 1 in 1 billion) |
 | Bet | 0.10 to 100 | 0.10 to 100, default 9.00 |
 
-Average free spins round by special symbol: the Outlaw about 220×, Sheriff's Star about 115×, Revolver and Gold Bars about 80×, A and K about 74×, Q, J and 10 about 61×.
+With 15 possible specials the round now depends more on which one is picked: the Outlaw is the rare dream special, the card ranks the common modest ones.
 
 ## 4. Symbols
-| Id | Symbol | Reference role | Art |
-| --- | --- | --- | --- |
-| 0 | The Outlaw | John Hunter | `01_character_portrait` |
-| 1 | Sheriff's Star | Tutankhamun mask | `04_sheriff_badge` |
-| 2 | Revolver | Golden cat | `07_revolver` (animated) |
-| 3 | Gold Bars | Scarab | `03_gold_bars` |
-| 4–8 | A, K, Q, J, 10 | card ranks | `11`–`15_royal_*` |
-| 9 | Dynamite (Wild + Scatter) | Book of Tut | `06_dynamite_timer` (animated; was `19_power_symbol_dynamite`) |
+| Id | Symbol | Role | Art (asset sheet) | Win animation |
+| --- | --- | --- | --- | --- |
+| 0 | The Outlaw | top symbol (REF John Hunter) | `01_character_portrait` | yes |
+| 1 | Steam Train | premium | `02_steam_train` | yes |
+| 2 | Gold Bars | premium | `03_gold_bars` | yes |
+| 3 | Sheriff's Star | premium | `04_sheriff_badge` | yes |
+| 4 | Wanted Poster | premium | `05_wanted_poster` | yes |
+| 5 | Dynamite | mid | `06_dynamite_timer` | yes |
+| 6 | Revolver | mid | `07_revolver` | yes |
+| 7 | Money Bag | mid | `08_money_bag` | yes |
+| 8 | Horseshoe | mid | `09_horseshoe` | yes |
+| 9 | Lantern | mid | `10_lantern` | not yet |
+| 10–14 | A, K, Q, J, 10 | card ranks | `11`–`15_royal_*` | not yet |
+| 15 | Wild (reels 2-4) | substitutes for 0-14 | `17_wild` | not yet |
+| 16 | Scatter | pays anywhere, triggers free spins (REF Book of Tut, minus the Wild) | `18_scatter` | not yet |
+| 17–20 | Power Dynamite ×2 / ×3 / ×5 / ×10 (reels 2-4) | Wild with a line multiplier | `19_power_symbol_dynamite` + plates `20`–`23` | not yet |
+
+Not used: `16_character_bust` (the portrait is the symbol) and `24_full_body_outlaw_character` (it is the mascot and the full-reel Outlaw).
 
 Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 
 ## 5. Flow
-1. **Base spin.** Reels stop left to right. Once two Dynamite are showing, the later reels spin longer under a glowing frame.
+1. **Base spin.** Reels stop left to right. Once two Scatters are showing, the later reels spin longer under a glowing frame.
 2. **Wins.** All winning lines show together with the total, then each line on its own (not in autoplay). Non-winning symbols dim. The Outlaw mascot hops on big wins.
-3. **Dynamite.** It pulses and pays. On 3 or more, each Dynamite's fuse runs down its reel and pops (`fx_scatter_full`).
+3. **Scatter.** It pulses and pays. On 3 or more, a railway track lays down each Scatter's reel from the train badge (`fx_scatter_full`). Wins with Power Dynamite show their multiplier next to the line amount.
 4. **Free spins intro:** "10 FREE SPINS".
-5. **Special symbol pick.** The symbols cycle in a card, slow down and stop. (Planned: the dynamite blasts open a strongbox; needs art.)
+5. **Special symbol pick.** The symbols cycle in a card, slow down and stop. (Planned: a strongbox opening; needs art.)
 6. **Transition** into the gold wagon (free spins background); the bar turns dark blue.
 7. **Free spins.** The message pill counts "FREE SPIN n OF m"; a card under the mascot shows the expanding symbol. When the special symbol expands, it flashes, each of its reels grows into a full column, and all 10 lines pay. The Outlaw's column shows his full-body art over a sunset panel.
-8. **Retrigger:** "MORE DYNAMITE! +10 FREE SPINS".
+8. **Retrigger:** "MORE SCATTERS! +10 FREE SPINS".
 9. **Summary** (total, spins, or "MAX WIN REACHED"), then back to the base game.
 10. **Feature buy.** BUY FREE SPINS (bottom left, under the mascot) shows the price at the current bet; tap twice to confirm. It's hidden during free spins, where the special symbol card takes its place.
 11. **Big win banners** at 10/20/50/100/250/500× (ASSUMED thresholds).
@@ -56,19 +66,20 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 
 ## 7. Decisions
 - **Original Book of Tut** maths and features, plus its feature buy (Darshan, 2026-11-16).
-- **Symbols** follow the reference's 4 premiums + 5 card ranks + Book, using Darshan's art (Darshan: "match symbols with the reference"). The pack's WILD, SCATTER, steam train, wanted poster, money bag, horseshoe, lantern and multiplier tiles aren't used: the reference has no separate Wild, no multipliers and no extra symbols.
-- **Reel weights** (TUNED): alternate reels favour different card ranks, and Dynamite is rarer on the left reels. This brings the base game down to the reference's share; the cost is a **hit rate of 26.8%** against the reference's 31–33%. Raising it means more small wins and a lower free spins share; that's for Darshan to call.
-- **Special symbol** gets a fixed per-symbol share of each reel in free spins (TUNED). Premiums get smaller shares but pay far more, so the Outlaw is the rare dream special and a typical round lands near the reference median. Bought free spins use slightly smaller shares, so the buy returns about 96.5%. This mirrors the reference's "own reel set per special symbol".
+- **Symbols:** every piece of Darshan's asset sheet (Darshan, 2026-11-16: "I guess you used very less symbols… please check and update"; on Wild and Scatter: "try to accommodate all the symbols as much as possible"). So the game now has 15 pay symbols, a separate Wild and Scatter, and Power Dynamite. ASSUMED, because he left the other questions open: the pays of the 6 new pictures (tiers between the reference's values), the Wild and Power Dynamite on reels 2-4 only, multipliers that add on a line, and Power Dynamite as a Wild rather than a separate feature. The first build kept the reference's 4 premiums + Book; that version is in git history (commit 8c3fe9d) if he prefers it.
+- **Wild substitution and the top symbol:** a line that starts with 2+ Wilds pays as the Outlaw when that pays more, so Wild-only lines still pay (ASSUMED; common practice).
+- **Reel weights** (TUNED): alternate reels favour different card ranks, and the Scatter is rarer on the left reels. With 15 pay symbols, lines are rarer than with 9, so the **hit rate is 21.4%** against the reference's 31–33% (26.8% in the 9-symbol build). Raising it means more small wins and a lower free spins share; that's for Darshan to call.
+- **Special symbol** gets a fixed per-symbol share of each reel in free spins (TUNED). Premiums get smaller shares but pay far more, so the Outlaw is the rare dream special and a typical round lands near the reference median. Bought free spins use 1.04× those shares, so the buy returns about 96%. This mirrors the reference's "own reel set per special symbol".
 - **Max win** 5,500× (official page). It's hit far more often than the reference's quoted 1 in 1 billion, because a full-screen Outlaw is reachable in free spins; lowering the Outlaw's share would bring it down at the cost of its dream value.
-- **Bought spin Dynamite weights** 3/4/5 = 85/13/2% (ASSUMED).
+- **Bought spin Scatter weights** 3/4/5 = 85/13/2% (ASSUMED).
 - **Line shapes:** classic 10-line book layout (ASSUMED).
 
 ## 8. Open questions
 1. Banner art is still needed (logo and both backgrounds arrived 2026-11-16; free spins take place inside the gold wagon rather than at night): prompts in `docs/art-direction.md` §4. The concept pack had none.
 2. Symbol art is about 280 px wide. That's fine on the 1920 stage, but soft on large screens; 2× versions would be better for final.
-3. Hit rate (26.8% against 31–33%): keep it or rebalance?
+3. Hit rate (21.4% against 31–33%): keep it, or drop some card ranks or pictures to raise it?
 4. Strongbox reveal for the special symbol pick: wanted? It needs a strongbox opening animation or frames.
-5. Use the pack's multiplier tiles (x2/x3/x5/x10) somewhere? That would be a new feature beyond the reference.
+5. Full symbol set (2026-11-16): are the assumed pays for the new pictures right, and should Power Dynamite stay a multiplier Wild on reels 2-4? Win animations for the Lantern, card ranks, Wild, Scatter and Power Dynamite would finish the set.
 
 ## Prototype implementation status
 Sections 3 to 7 are implemented. Section 8 is open.

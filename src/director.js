@@ -9,11 +9,12 @@
     nowin:     { label: 'No win',                           color: '#6c6a80' },
     small:     { label: 'Single line win',                  color: '#4fbf8a' },
     multi:     { label: 'Several line wins',                color: '#3fb6c9' },
-    wildwin:   { label: 'Win with the Dynamite as Wild',     color: '#e0794a' },
-    tease:     { label: '2 Dynamite (anticipation, no trigger)', color: '#b08a5a' },
-    trigger:   { label: '3 Dynamite → Free Spins',          color: '#e8423a' },
-    trigger4:  { label: '4 Dynamite → Free Spins (20×)',    color: '#d9302a' },
-    trigger5:  { label: '5 Dynamite → Free Spins (200×)',   color: '#c2101a' },
+    wildwin:   { label: 'Win with a Wild',                  color: '#e0794a' },
+    power:     { label: 'Win with Power Dynamite (multiplier)', color: '#ff7a2a' },
+    tease:     { label: '2 Scatters (anticipation, no trigger)', color: '#b08a5a' },
+    trigger:   { label: '3 Scatters → Free Spins',          color: '#e8423a' },
+    trigger4:  { label: '4 Scatters → Free Spins (20×)',    color: '#d9302a' },
+    trigger5:  { label: '5 Scatters → Free Spins (200×)',   color: '#c2101a' },
     buy:       { label: 'Feature buy (100× bet)',           color: '#d4a017' },
     nice:      { label: 'Nice win banner (10×+)',           color: '#d08a4a' },
     big:       { label: 'Big win banner (20×+)',            color: '#ff9a3c' },
@@ -32,6 +33,7 @@
     const C = CONFIG, S = C.SCATTER, R = C.rows, N = C.reels, NR = C.regular.length;
     // premiums = symbols that pay 2 of a kind (used to build big-win boards)
     const PREM = C.regular.filter(s => engine.minCount(s) === 2);
+    const MAXID = Math.max(S, C.WILD ?? 0, ...Object.keys(C.POWER || {}).map(Number));
     const rnd = n => Math.floor(Math.random() * n);
     const scCount = g => engine.scatters(g).length;
 
@@ -78,7 +80,14 @@
           return search(r => (noFeature(r) && stepOf(r, 'win') && stepOf(r, 'win').wins.length >= 3 && r.total / bet < C.winTiers[0].min) || (stepOf(r, 'win') ? stepOf(r, 'win').wins.length / 10 : 0), quiet);
         case 'wildwin':
           return search(r => { const w = stepOf(r, 'win'); return (w && w.wins.some(x => x.wilds > 0) && !stepOf(r, 'scatter')) || 0; },
-            () => { const g = rg(); g[1 + rnd(3)][1] = S; return { grid: g, opts: base }; });
+            () => { const g = rg(); g[1 + rnd(3)][1] = C.WILD != null ? C.WILD : S; return { grid: g, opts: base }; });
+        case 'power': {
+          // a line win that a Power Dynamite multiplies (any of x2 / x3 / x5 / x10)
+          const pids = Object.keys(C.POWER || {}).map(Number);
+          if (!pids.length) return build({ type: 'wildwin' }, ctx);
+          return search(r => { const w = stepOf(r, 'win'); return (w && w.wins.some(x => x.mult > 1) && !stepOf(r, 'scatter') && r.total / bet < C.winTiers[1].min) || 0; },
+            () => { const g = rg(); g[1 + rnd(3)][rnd(R)] = pids[rnd(pids.length)]; return { grid: g, opts: base }; });
+        }
         case 'tease':
           return search(r => (scCount(r.start) === 2 && !stepOf(r, 'expand')) || 0,
             () => ({ grid: placeScatters(rg(), 2, [0, 1, 2]), opts: base }));
@@ -129,7 +138,7 @@
           }, make, 4000);
         }
         case 'custom': {
-          const ok = Array.isArray(item.grid) && item.grid.length === N && item.grid.every(col => Array.isArray(col) && col.length === R && col.every(v => Number.isInteger(v) && v >= 0 && v <= S));
+          const ok = Array.isArray(item.grid) && item.grid.length === N && item.grid.every(col => Array.isArray(col) && col.length === R && col.every(v => Number.isInteger(v) && v >= 0 && v <= MAXID));
           if (!ok) return engine.resolveSpin(engine.randomGrid({ fs, special, bought }), base);   // a malformed grid plays as a normal spin
           return finish(engine.resolveSpin(item.grid.map(col => col.slice()), base));
         }

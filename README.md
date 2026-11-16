@@ -1,6 +1,6 @@
 # The Lost Gold Train (prototype)
 
-A Wild West book-style slot in hand-painted watercolour. **The Outlaw** is the top symbol and the mascot beside the reels; **Dynamite** is Wild and Scatter; three or more give 10 free spins with a random expanding symbol, and free spins can also be bought for 100× the bet. Features and maths follow Pragmatic Play's *John Hunter and the Book of Tut* (the original).
+A Wild West book-style slot in hand-painted watercolour. **The Outlaw** is the top symbol and the mascot beside the reels; every symbol of the *Last Train Gold* asset sheet is in play: 15 pay symbols, a Wild and **Power Dynamite** (a Wild with a ×2 to ×10 multiplier) on the middle reels, and a train-badge Scatter. Three or more Scatters give 10 free spins with a random expanding symbol, and free spins can also be bought for 100× the bet. Features and maths follow Pragmatic Play's *John Hunter and the Book of Tut* (the original); the separate Wild, Power Dynamite and the six extra pictures are additions (ASSUMED, GDD §7).
 
 Started 2026-11-16 from [`fxdarshan/slot-starter-template`](https://github.com/fxdarshan/slot-starter-template). Current state and next steps: [`HANDOFF.md`](HANDOFF.md).
 
@@ -20,25 +20,27 @@ Single file: [`dist/the-lost-gold-train-prototype.html`](dist/the-lost-gold-trai
 | Feature | Rule |
 | --- | --- |
 | Grid | 5×3, 10 fixed lines, left to right, highest win per line |
-| Symbols | The Outlaw (2/3/4/5 = 1/10/100/500×), Sheriff's Star, Revolver, Gold Bars (pay from 2), A, K, Q, J, 10 |
-| Dynamite | Wild for every symbol; 3/4/5 anywhere pay 2/20/200× and award 10 free spins |
-| Free spins | random special symbol; when on enough reels to win it fills them and pays on all 10 lines, adjacent or not; 3+ Dynamite add 10, no limit |
-| Feature buy | 100× the bet: a 3/4/5-Dynamite trigger spin, then bought free spins |
+| Symbols | The Outlaw (2/3/4/5 = 1/10/100/500×), Steam Train, Gold Bars, Sheriff's Star, Wanted Poster (pay from 2); Dynamite, Revolver, Money Bag, Horseshoe, Lantern, A, K, Q, J, 10 (from 3) |
+| Wild | reels 2-4; substitutes for every pay symbol |
+| Power Dynamite | reels 2-4; a Wild with ×2, ×3, ×5 or ×10; multipliers on a line add up and multiply its win |
+| Scatter | 3/4/5 anywhere pay 2/20/200× and award 10 free spins |
+| Free spins | random special symbol; when on enough reels to win it fills them and pays on all 10 lines, adjacent or not; 3+ Scatters add 10, no limit |
+| Feature buy | 100× the bet: a 3/4/5-Scatter trigger spin, then bought free spins |
 | Max win | 5,500× the bet per round |
 
-## Maths (`node tools/simulate.js 6000000 <seed>`, 4 seeds)
+## Maths (`node tools/simulate.js 5000000 <seed>`, 4 seeds)
 | | Prototype | Reference |
 | --- | --- | --- |
-| RTP | 96.65% to 97.29% (average 96.9%) | 96.50% |
-| Base / free spins | 49% / 48% | |
-| Free spins | 1 in 178; median round 59×, mean 85× | 1 in 150 to 174; median 60×, mean 80.7× |
-| Feature buy return | 95.5% to 96.4% | not published |
-| Hit rate | 26.8% | 31% to 33% |
+| RTP | 96.61% to 97.33% (average 97.0%, ±0.4% run to run) | 96.50% |
+| Base / free spins | 53% / 44% | |
+| Free spins | 1 in 177; median round 50×, mean 78× | 1 in 150 to 174; median 60×, mean 80.7× |
+| Feature buy return | 95.7% to 96.2% | not published |
+| Hit rate | 21.4% | 31% to 33% |
 | Max win | 5,500× cap, about 1 in 5 million | 1 in 1 billion |
 
 Decisions and open questions: GDD §7 and §8.
 
-Win animations (Outlaw, Sheriff's Star, Gold Bars): `docs/symbol-animation-prompt.md`.
+Win animations (the top 9 symbols): `docs/symbol-animation-prompt.md`.
 
 ## About the template
 

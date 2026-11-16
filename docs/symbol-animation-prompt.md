@@ -229,14 +229,17 @@ Tool: `tools/asset-pipeline/anim_from_keys.py` (sheets kept in `assets/source/or
 | Symbol | In game | Options | How the brief is met |
 | --- | --- | --- | --- |
 | The Outlaw (`sym_00_win`) | yes | `motion --settle 13` | Keys aligned to pose 1 on the tile frame; in-betweens follow dense optical flow (no cross-fade). The gun-to-grin change is too big for flow, so it switches in under a frame; a dissolve was tried and ghosted. |
-| Sheriff's Star (`sym_01_win`) | yes | `light --glints --glint-script glints/sheriff.json` | The keys redraw the badge at a slightly different scale, so the glint path is read from them and painted on pose 1. |
-| Revolver (`sym_02_win`) | yes | `motion --soft --settle 12` | Barrel heats, muzzle flash, fireball, smoke clears; smoke and fire dissolve (`--soft`). |
-| Gold Bars (`sym_03_win`) | yes | `light` | Pose 1 in all frames; the shine sweep and glints from the keys are lifted onto it. |
-| Dynamite (`sym_scatter_win`) | yes, now also the Scatter's art | `motion --soft --settle 13` | Clock ticks, explodes into fire and smoke, reassembles. |
-| Steam train (`train_win`) | no (not a symbol) | `motion --settle 13` | Smoke and steam build and clear. |
-| Wanted poster (`wanted_poster_win`) | no | `motion --settle 13` | Paper curls and flaps, settles flat. |
-| Money bag (`money_bag_win`) | no | `motion --settle 13` | Bag hops, flops, gold dust bursts. |
-| Horseshoe (`horseshoe_win`) | no | `light --glints --glint-script glints/horseshoe.json` | Warm glow, then star glints on the left arm and right tip. |
+| Steam Train (`sym_01_win`) | yes (since the full symbol set) | `motion --settle 13` | Smoke and steam build and clear. |
+| Gold Bars (`sym_02_win`) | yes | `light` | Pose 1 in all frames; the shine sweep and glints from the keys are lifted onto it. |
+| Sheriff's Star (`sym_03_win`) | yes | `light --glints --glint-script glints/sheriff.json` | The keys redraw the badge at a slightly different scale, so the glint path is read from them and painted on pose 1. |
+| Wanted Poster (`sym_04_win`) | yes (since the full symbol set) | `motion --settle 13` | Paper curls and flaps, settles flat. |
+| Dynamite (`sym_05_win`) | yes | `motion --soft --settle 13` | Clock ticks, explodes into fire and smoke, reassembles. |
+| Revolver (`sym_06_win`) | yes | `motion --soft --settle 12` | Barrel heats, muzzle flash, fireball, smoke clears; smoke and fire dissolve (`--soft`). |
+| Money Bag (`sym_07_win`) | yes (since the full symbol set) | `motion --settle 13` | Bag hops, flops, gold dust bursts. |
+| Horseshoe (`sym_08_win`) | yes (since the full symbol set) | `light --glints --glint-script glints/horseshoe.json` | Warm glow, then star glints on the left arm and right tip. |
+| Lantern, A–10, Wild, Scatter, Power Dynamite | no sheets yet | | Static art with the code-side pop and glow until sheets arrive. |
+
+Sheet ids were renumbered on 2026-11-16 when the full symbol set went in; the animations themselves didn't change.
 
 `--settle K`: the last poses of every sheet are "back to neutral" but redrawn slightly moved or bigger, which made the loop jump. Those keys use pose 1 instead, so frame 45 eases exactly into frame 1. The tool prints every frame-to-frame step; all nine loops now wrap with a step of 0 to 0.2 (out of 255).
 

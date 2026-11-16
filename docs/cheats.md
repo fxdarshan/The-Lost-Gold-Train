@@ -17,18 +17,19 @@ A chip at the bottom left shows the next forced spin.
 
 | Key | Next spin |
 | --- | --- |
-| F | 3 Dynamite → free spins, random special symbol |
-| P | 3 Dynamite → free spins, the Outlaw as special |
+| F | 3 Scatters → free spins, random special symbol |
+| P | 3 Scatters → free spins, the Outlaw as special |
 | B | feature buy (charges 100× the bet, like the BUY FREE SPINS button) |
-| 4 / 5 | 4 / 5 Dynamite (20× / 200×) → free spins |
+| 4 / 5 | 4 / 5 Scatters (20× / 200×) → free spins |
 | E | free spin: the special symbol expands on 3 reels |
 | T | free spin: the special symbol on all 5 reels |
 | R | free spin: retrigger (+10) |
 | 1 / 2 / 3 / 6 | NICE / BIG / MEGA / SUPERB banner |
-| A | 2 Dynamite with anticipation, no trigger |
+| A | 2 Scatters with anticipation, no trigger |
 | X | single line win |
 | M | several line wins |
-| W | a line win using the Dynamite as Wild |
+| W | a line win using a Wild |
+| G | a line win multiplied by Power Dynamite (×2 to ×10) |
 | N | no win |
 | 0 | clear forced spins |
 | Space | spin |
@@ -39,14 +40,14 @@ E, T and R only act inside free spins; outside them they play as a normal spin.
 
 | Id | What it plays |
 | --- | --- |
-| `free-spins` | 3 Dynamite, the special symbol pick, then 10 random free spins |
+| `free-spins` | 3 Scatters, the special symbol pick, then 10 random free spins |
 | `outlaw-free-spins` | the Outlaw as the special symbol; he expands on 3 reels, then on all 5 |
-| `expansions` | Sheriff's Star special: expands on 2, 3 and 5 reels, with a retrigger |
-| `buy` | feature buy: weighted 3/4/5 Dynamite trigger, then bought free spins |
-| `retrigger` | 3 Dynamite during free spins add 10 more |
-| `all-banners` | NICE, BIG, MEGA and SUPERB from real boards, then 5 Dynamite (200×) |
+| `expansions` | Steam Train special: expands on 2, 3 and 5 reels, with a retrigger |
+| `buy` | feature buy: weighted 3/4/5 Scatter trigger, then bought free spins |
+| `retrigger` | 3 Scatters during free spins add 10 more |
+| `all-banners` | NICE, BIG, MEGA and SUPERB from real boards, then 5 Scatters (200×) |
 | `max-win` | the Outlaw on all 5 reels every free spin until the 5,500× cap ends the round |
-| `base-tour` | no win, line win, several lines, Dynamite as Wild, 2-Dynamite tease, Big banner |
+| `base-tour` | no win, line win, several lines, a Wild, Power Dynamite, 2-Scatter tease, Big banner |
 
 Links: `index.html?scenario=<id>` or `index.html#scenario-<id>`. An unknown id shows a message.
 

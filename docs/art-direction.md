@@ -41,7 +41,7 @@ The reference game has 4 premiums, 5 card ranks, and the Book (Wild + Scatter). 
 | --- | --- |
 | `bg_base_main` | Canyon at sunset, mesas and dust; the steam train crossing behind the reels; reels framed in weathered timber with iron corner brackets and rivets (as in the watercolour reference). Reel area left plain (dark wood planks), reels centred. |
 | `bg_freegame_main` | Same frame, **night**: moonlit canyon, the train with lit windows on a trestle bridge, distant riders, cooler teal and indigo washes with warm lamp light. |
-| `fx_scatter_full` | Full-reel dynamite: a bundle at the top, fuse running down the reel, sparks; it reveals down the reel when free spins trigger. |
+| `fx_scatter_full` | Full-reel Scatter: the train badge at the top and a railway track down the reel; it reveals down the reel when free spins trigger. |
 | `fx_lantern` | Hanging railway lantern (anticipation lights, modal decoration). |
 | `banner_win_*` | Painted wooden signboards with gold Western lettering: NICE WIN, BIG WIN, MEGA WIN, SUPERB WIN, SENSATIONAL WIN, EPIC WIN; gold dust and coins around them. |
 | `ui_splash_logo` | "THE LOST GOLD TRAIN" logo: chunky gold Western letters on a red brush stroke, with a small locomotive. |
@@ -80,12 +80,13 @@ The base style line goes at the start of every prompt:
 Upload the files on GitHub (repo → `art/` → Add file → Upload files) named exactly as above, under 25 MB each.
 
 ## 5. Decisions (Darshan, 2026-11-16)
+0. Later the same day: use the **whole asset sheet** ("I guess you used very less symbols"). The game now has 15 pay symbols, a separate Wild and Scatter, and Power Dynamite; the §2 table below is the first proposal, kept for the record. Current set: GDD §4.
 1. Name: **The Lost Gold Train**.
 2. Symbols match the reference game's roles, using the art pack: the set in §2.
 3. The Outlaw is the game's **mascot**, standing left of the reels.
 
 ## Prototype implementation status
-- Delivered and in the game: all symbols, the Dynamite, the mascot and the full-reel Outlaw, from `Last_Train_Gold_Separated_Assets.zip` (see `docs/game-asset-specification.md`).
+- Delivered and in the game: every symbol of the asset sheet (15 pay symbols, Wild, Scatter, Power Dynamite with ×2/×3/×5/×10 plates), the mascot and the full-reel Outlaw, from `Last_Train_Gold_Separated_Assets.zip` (see `docs/game-asset-specification.md`).
 - The logo arrived on 2026-11-16 (`assets/source/originals/logo/`); it sits top left, above the mascot.
 - Backgrounds arrived on 2026-11-16 (`assets/source/originals/backgrounds/`): the base game is the sunset canyon with the train; free spins take place **inside the gold wagon** (instead of the night scene in §3). They have no reel frame, so the game draws one.
 - Still needed: the win banners and the hanging lantern (prompts in §4).

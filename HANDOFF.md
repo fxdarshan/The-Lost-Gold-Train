@@ -3,18 +3,20 @@
 The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **Read it first, update it last**, every session. Newest entry at the top; keep the last 5.
 
 ## Now
-- **State:** first playable build. Original *Book of Tut* maths + 100× feature buy; 9 symbols from Darshan's *Last Train Gold* art; the Outlaw mascot beside the reels. RTP 96.65–97.29% (4 × 6M), buy 95.5–96.4%. 22/22 edge cases. Logo and both backgrounds in (code-drawn timber reel frame over them). Banners, lantern and sounds are still placeholders.
-- **Next:** import the backgrounds when they arrive (set `CONFIG.window` to their reel frame); then banners and logo. Optional: strongbox reveal for the special symbol pick.
+- **State:** full symbol set from Darshan's *Last Train Gold* sheet: 15 pay symbols, Wild and Power Dynamite (×2/×3/×5/×10) on reels 2-4, a separate train-badge Scatter; Book of Tut free spins with the expanding symbol + 100× buy. RTP 96.6–97.3% (4 × 5M, average 97.0%), buy 95.7–96.2%, free spins 1 in 177, hit rate 21.4%. 22/22 edge cases. 9 symbols have 1.5 s win animations. Banners, lantern and sounds are still placeholders.
+- **Next:** Darshan's verdict on the assumed pays and Power Dynamite rules (below); then win animations for the remaining symbols; then banners.
 - **Waiting for Darshan** (GDD §8):
-  1. Win banners and a hanging lantern (backgrounds at 1920×1080 or larger would be sharper); prompts in `docs/art-direction.md` §4.
-  2. Higher-resolution symbols (about 2×) for final.
-  3. Hit rate 26.8% against the reference's 31–33%: keep or rebalance?
-  4. Strongbox reveal for the pick: wanted?
-  5. Use the pack's multiplier tiles anywhere (a new feature)?
-  6. Train, Wanted poster, Money bag and Horseshoe are animated but aren't symbols: keep the reference's 4 premiums, or add some (extra symbols change the maths: new pays and a re-tune)? Card letters have no animations yet.
-- **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, `cut_white_tiles.py`, mascot slot).
+  1. Full symbol set: are the ASSUMED pays for the six new pictures right? Keep Power Dynamite as a multiplier Wild on reels 2-4 (multipliers add)? The earlier 9-symbol version is commit 8c3fe9d.
+  2. Hit rate 21.4% against the reference's 31–33%: keep, or drop a few symbols to raise it?
+  3. Win banners and a hanging lantern; prompts in `docs/art-direction.md` §4.
+  4. Key-pose sheets for the Lantern, A–10, Wild, Scatter and Power Dynamite.
+  5. Higher-resolution symbols (about 2×) for final.
+  6. Strongbox reveal for the pick: wanted?
+- **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-16 · claude.ai chat (8)
+- Full symbol set: 15 pay symbols, Wild, Power Dynamite multipliers, separate Scatter; re-tuned; paytable, rules and docs rewritten.
 ### 2026-11-16 · claude.ai chat (7)
 - Revolver and Dynamite animated and in the game; poster, money bag, horseshoe, train animated but unused. Loops verified seamless (1.5 s).
 ### 2026-11-16 · claude.ai chat (6)
@@ -23,9 +25,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Darshan's base and free spins backgrounds added (cover crop); timber reel frame drawn in code.
 ### 2026-11-16 · claude.ai chat (4)
 - Darshan's logo added: top left above the mascot, and on the loading screen; buy button moved under the mascot.
-### 2026-11-16 · claude.ai chat (3)
-- Darshan chose: name The Lost Gold Train, symbols matched to the reference, the Outlaw as mascot, the original game. Built specs, maths, feature buy, mascot layout; imported the art pack; tuned; docs.
-### 2026-11-16 · claude.ai chat (2)
-- Art direction from Darshan's two images: `docs/art-direction.md`, references in `docs/art-reference/`.
-### 2026-11-16 · claude.ai chat
-- Repo created from the template; reference game research in `docs/reference-game.md`.

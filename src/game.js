@@ -256,6 +256,12 @@
     const w = img.width * k, h = img.height * k * (o.scaleY ?? 1);
     ctx.save(); ctx.globalAlpha = o.alpha ?? 1;
     ctx.drawImage(img, cx - w / 2, cy - h / 2 + (o.dy || 0) + img.height * k * (1 - (o.scaleY ?? 1)) / 2, w, h);
+    // Power Dynamite wears its multiplier plate on the lower right (ASSUMED placement)
+    const plate = A.multPlate(id);
+    if (plate) {
+      const ph = ch * .42 * (o.scale ?? 1), pw = plate.width * ph / plate.height;
+      ctx.drawImage(plate, cx + cw * .44 * (o.scale ?? 1) - pw, cy + ch * .47 * (o.scale ?? 1) - ph + (o.dy || 0), pw, ph);
+    }
     ctx.restore();
   }
   // winning symbol scale curve: pop to 1.12, hold with a small bob, settle back
@@ -331,7 +337,7 @@
       if (Math.random() < .5) emit('spark', x + Math.random() * cw, y0 + Math.random() * gh, 1, { angle: -Math.PI / 2, spread: 1, speed: 160, gravity: -40, life: .6, size: 8, color: ['#fff6b0', '#ffb84a'] });
     });
   }
-  // fuse: the Scatter's firecracker string unrolls down its reel (fx_scatter_full), then pops
+  // trigger: the Scatter badge's railway track lays down its reel (fx_scatter_full); the sparks are the headlight
   function drawFuses(t) {
     G.fuses = G.fuses.filter(f => !f.gone);
     const img = A.get('fx_scatter_full');
@@ -613,21 +619,35 @@
     dimmer(.88);
     ctx.save(); ctx.fillStyle = '#3a0a0e'; ctx.strokeStyle = '#ffd34a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(80, 36, W - 160, H - 72, 30); ctx.fill(); ctx.stroke(); ctx.restore();
     blockText(`${C.title.toUpperCase()}  ·  PAYTABLE`, W / 2, 86, 50, { maxW: W - 320 });
-    const b = bet(), syms = [SC, ...C.regular];
-    syms.forEach((s, i) => {
-      const col = i % 4, row = Math.floor(i / 4), x = 150 + col * 280, y = 200 + row * 205;
-      const img = A.symbol(s), k = Math.min(130 / img.width, 120 / img.height); ctx.drawImage(img, x - img.width * k / 2, y - img.height * k / 2, img.width * k, img.height * k);
-      const pays = s === SC ? C.scatterPays : C.paytable[s];
-      Object.keys(pays).map(Number).sort((a, b2) => b2 - a).forEach((n, j) => uiText(`${n}  ${fmt(pays[n] * b)}`, x + 76, y - 42 + j * 32, 24, '#fff', 'left', 600));
+    const b = bet(), PW = C.POWER || {}, pids = Object.keys(PW).map(Number);
+    const icon = (s, x, y, bw, bh) => { const img = A.symbol(s); if (!img) return; const k = Math.min(bw / img.width, bh / img.height); ctx.drawImage(img, x - img.width * k / 2, y - img.height * k / 2, img.width * k, img.height * k); };
+    // 15 pay symbols in 3 rows of 5, then Scatter, Wild and Power Dynamite
+    C.regular.forEach((s, i) => {
+      const x = 170 + (i % 5) * 216, y = 205 + Math.floor(i / 5) * 172;
+      icon(s, x - 8, y, 92, 88);
+      const pays = C.paytable[s];
+      Object.keys(pays).map(Number).sort((a, b2) => b2 - a).forEach((n, j) => uiText(`${n}  ${fmt(pays[n] * b)}`, x + 44, y - 36 + j * 25, 18, '#fff', 'left', 600));
     });
-    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.font = `500 21px ${UIF}`; ctx.fillStyle = 'rgba(255,240,220,.95)';
+    const y4 = 205 + 3 * 172 + 10;
+    icon(SC, 170, y4, 120, 112);
+    Object.keys(C.scatterPays).map(Number).sort((a, b2) => b2 - a).forEach((n, j) => uiText(`${n}  ${fmt(C.scatterPays[n] * b)}`, 240, y4 - 30 + j * 27, 20, '#fff', 'left', 600));
+    uiText('SCATTER', 170, y4 + 74, 18, '#ffe9a8', 'center', 700);
+    if (C.WILD != null) { icon(C.WILD, 470, y4, 120, 112); uiText('WILD · reels 2-4', 470, y4 + 74, 18, '#ffe9a8', 'center', 700); }
+    if (pids.length) {
+      icon(pids[0], 760, y4, 120, 112);
+      pids.forEach((id, j) => { const pl = A.multPlate(id); if (pl) { const ph = 52, pw = pl.width * ph / pl.height; ctx.drawImage(pl, 840 + j * 74, y4 - 44, pw, ph); } });
+      uiText('POWER DYNAMITE · Wild ×' + pids.map(id => PW[id]).join(' ×'), 760, y4 + 74, 18, '#ffe9a8', 'left', 700);
+    }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.font = `500 19px ${UIF}`; ctx.fillStyle = 'rgba(255,240,220,.95)';
+    const mults = pids.map(id => '×' + PW[id]).join(', ');
     const rules = [
-      `The ${C.symbolNames[SC]} is Wild and substitutes for all symbols. 3, 4 or 5 Scatters anywhere pay ${fmt(C.scatterPays[3] * b)}, ${fmt(C.scatterPays[4] * b)} or ${fmt(C.scatterPays[5] * b)} and award ${C.freeSpins} free spins.`,
-      `Before free spins start, one symbol is picked at random as the special expanding symbol. When it lands on enough reels for a win, it expands to fill those reels and pays on all ${C.paylines.length} lines, even on reels that are not next to each other.`,
-      `3 or more Scatters during free spins award ${C.freeSpinsRetrigger} more. Free spins use the bet of the spin that triggered them.`,
-      `Line wins pay left to right on adjacent reels; only the highest win per line is paid. Wins on different lines and scatter wins are added. Maximum win ${C.maxWin.toLocaleString('en-US')}× the total bet per round.`
-    ];
-    let yy = 172; rules.forEach(r => { yy = wrap(r, 1250, yy, 560, 30) + 48; });
+      C.WILD != null ? `The Wild appears on reels 2, 3 and 4 and substitutes for every symbol except the Scatter.` : `The ${C.symbolNames[SC]} is Wild and substitutes for all symbols.`,
+      pids.length ? `Power Dynamite is a Wild that carries a multiplier (${mults}). A line it completes is multiplied; several multipliers on one line add up.` : '',
+      `3, 4 or 5 Scatters anywhere pay ${fmt(C.scatterPays[3] * b)}, ${fmt(C.scatterPays[4] * b)} or ${fmt(C.scatterPays[5] * b)} and award ${C.freeSpins} free spins. 3 or more during free spins award ${C.freeSpinsRetrigger} more.`,
+      `Before free spins start, one pay symbol is picked as the special expanding symbol. When it lands on enough reels for a win, it fills those reels and pays on all ${C.paylines.length} lines, even on reels that are not next to each other.`,
+      `Line wins pay left to right on adjacent reels; only the highest win per line is paid. Maximum win ${C.maxWin.toLocaleString('en-US')}× the total bet per round.`
+    ].filter(Boolean);
+    let yy = 168; rules.forEach(r => { yy = wrap(r, 1250, yy, 560, 26) + 38; });
     // 10 payline thumbnails
     C.paylines.forEach((line, i) => {
       const bx = 1250 + (i % 5) * 112, by = 790 + Math.floor(i / 5) * 100, s = 18;
@@ -695,7 +715,7 @@
         clearLines(); unhighlight(); await wait(.02);
         t0 = now(); G.lines = { lines: [w.line], t0 }; highlight(w.positions, t0);
         const [lc, lr] = w.positions[w.positions.length - 1], [cx, cy] = cellCenter(lc, lr);
-        G.labels = [{ x: cx, y: cy + ch * .3, t0, text: fmt(w.amount), size: 44 }];
+        G.labels = [{ x: cx, y: cy + ch * .3, t0, text: fmt(w.amount) + (w.mult > 1 ? `  (×${w.mult})` : ''), size: 44 }];
         const tok = G.skip; await waitF(FR.lineCycle, true); if (G.skip !== tok) break;
       }
     }

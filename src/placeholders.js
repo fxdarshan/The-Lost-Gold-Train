@@ -20,6 +20,12 @@
     x.fillStyle = '#fff'; x.font = `bold ${name.length > 3 ? 70 : 200}px sans-serif`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(name, 300, 265, 520);
     return c;
   }
+  // a multiplier plate (x2 ...), 200 x 220
+  function plate(label) {
+    const c = mk(200, 220), x = c.getContext('2d');
+    x.fillStyle = '#b8541a'; x.beginPath(); x.roundRect(8, 8, 184, 204, 24); x.fill(); x.lineWidth = 10; x.strokeStyle = '#ffd34a'; x.stroke();
+    x.fillStyle = '#fff3c0'; x.font = 'bold 96px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(label, 100, 112, 170); return c;
+  }
   function background(W, H, free) {
     const c = mk(W, H), x = c.getContext('2d'), L = root.CONFIG.window;
     // sunset desert (base) or moonlit night (free spins), a timber frame and dark-wood reel panels
@@ -56,5 +62,5 @@
     x.fillStyle = 'rgba(255,255,255,.85)'; x.font = 'bold 28px sans-serif'; x.textAlign = 'center'; x.fillText('THE OUTLAW', 200, 420);
     return c;
   }
-  root.Placeholders = { symbol, background, scatterFull, lantern, mascot };
+  root.Placeholders = { symbol, background, scatterFull, lantern, mascot, plate };
 })(window);

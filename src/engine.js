@@ -36,8 +36,9 @@
       const key = fs ? (bought ? 'buy' : 'fs') + (special ?? '') : 'base';
       if (tables[key]) return tables[key];
       const w = (fs && C.weightsFreeSpins) || C.weights;
-      let share = bought && C.buy ? C.buy.specialShare : C.specialShare;
+      let share = C.specialShare;
       if (share && typeof share === 'object') share = share[special];   // per-symbol shares
+      if (share && bought && C.buy && C.buy.specialShare) share *= C.buy.specialShare;   // bought free spins: a fraction of it
       return (tables[key] = w.map(row => {
         const others = row.reduce((t, x, s) => t + (s === special ? 0 : x), 0);
         const sw = fs && special != null && share ? others * share / (1 - share) : null;
@@ -62,24 +63,40 @@
       return g;
     }
 
-    /** Line wins: highest win per line, left to right, adjacent reels; Scatters substitute. */
+    // Wilds: CONFIG.WILD, and the Power Dynamite ids in CONFIG.POWER ({ id: multiplier }), which are Wilds too.
+    // When CONFIG.SCATTER_IS_WILD is set (Book of Tut style), the Scatter also substitutes.
+    const POWER = C.POWER || {};
+    const isWild = s => s === C.WILD || POWER[s] != null || (C.SCATTER_IS_WILD && s === S);
+    const multOf = s => POWER[s] || 0;
+
+    /**
+     * Line wins: highest win per line, left to right, adjacent reels. Wilds substitute for pay symbols; a line that
+     * starts with 2+ Wilds may instead pay as the top symbol (whichever pays more). Power Dynamite multipliers on the
+     * winning part of a line are added together (x2 + x3 = x5) and multiply that line's win.
+     */
     function evaluate(grid) {
       const wins = [];
       C.paylines.forEach((line, li) => {
-        let sym = null, count = 0, wilds = 0;
+        let sym = null, count = 0, wp = 0, prefix = true;
         for (let c = 0; c < N; c++) {
           const s = grid[c][line[c]];
-          if (s === S) { count++; wilds++; continue; }
+          if (isWild(s)) { count++; if (prefix) wp++; continue; }
+          prefix = false;
+          if (s === S) break;
           if (sym === null) { sym = s; count++; continue; }
           if (s === sym) { count++; continue; }
           break;
         }
-        if (sym === null) return;                      // a line of Scatters only pays as scatter
-        const pay = C.paytable[sym][Math.min(count, 5)];
-        if (!pay) return;
+        const lineMult = n => { let m = 0; for (let c = 0; c < n; c++) m += multOf(grid[c][line[c]]); return m || 1; };
+        const cands = [];
+        if (sym !== null && C.paytable[sym][Math.min(count, 5)]) cands.push({ sym, count, base: C.paytable[sym][Math.min(count, 5)], mult: lineMult(count) });
+        if (wp >= 2 && C.paytable[0][Math.min(wp, 5)]) cands.push({ sym: 0, count: wp, base: C.paytable[0][Math.min(wp, 5)], mult: lineMult(wp) });
+        if (!cands.length) return;
+        const best = cands.reduce((a, b) => (b.base * b.mult > a.base * a.mult ? b : a));
         const positions = [];
-        for (let c = 0; c < count; c++) positions.push([c, line[c]]);
-        wins.push({ line: li, sym, count, pay, wilds, positions });
+        let wilds = 0;
+        for (let c = 0; c < best.count; c++) { positions.push([c, line[c]]); if (isWild(grid[c][line[c]])) wilds++; }
+        wins.push({ line: li, sym: best.sym, count: best.count, pay: best.base * best.mult, base: best.base, mult: best.mult, wilds, positions });
       });
       return wins;
     }
@@ -164,7 +181,7 @@
       return t;
     }
 
-    return { randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
+    return { isWild, multOf, randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
   }
 
   const Engine = { create };

@@ -2,6 +2,14 @@
 
 Newest first.
 
+## 2026-11-16: full symbol set
+- Darshan: "I guess you used very less symbols… please check and update" and "try to accommodate all the symbols as much as possible". Every piece of the *Last Train Gold* sheet is now in the game: 15 pay symbols (The Outlaw, Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe, Lantern, A–10), a **Wild** (reels 2-4), a train-badge **Scatter** (no longer wild) and **Power Dynamite** ×2/×3/×5/×10 (a Wild on reels 2-4 whose multipliers add up on a line).
+- Engine: `evaluate` handles `WILD`, `POWER` and `SCATTER_IS_WILD`; each win carries `base`, `mult` and `wilds`. A line that starts with 2+ Wilds may pay as the Outlaw.
+- Pays: the Outlaw and A–10 keep the reference values; the six new pictures are ASSUMED tiers (`docs/pay-table.md`). Weights and special shares re-tuned: RTP 96.6–97.3% (4 × 5M), free spins 1 in 177, buy 95.7–96.2%, hit rate 21.4% (was 26.8%).
+- Art: symbol files renumbered; the train, poster, money bag and horseshoe win animations are now used; the Lantern, Wild, Scatter, Power Dynamite and multiplier plates cut from the sheet; `fx_scatter_full` rebuilt as the train badge with a railway track.
+- Game: multiplier plate drawn on Power Dynamite; line labels show the multiplier; new paytable layout for 18 entries and new rules text. Cheats: `power` outcome (hotkey G), Wild and Power Dynamite in the grid editor, "Scatter" wording throughout.
+- `CONFIG.buy.specialShare` is now a factor on `specialShare` (1.04) rather than a second table.
+
 ## 2026-11-16: more win animations, smooth 1.5 s loops
 - Five more sheets from Darshan: Revolver and Dynamite are in the game (the Dynamite's art is now the timer tile; the fuse strip was rebuilt from it). Wanted poster, money bag and horseshoe are processed but not symbols.
 - `anim_from_keys.py`: `--settle` (neutral end keys use pose 1, so every loop lands exactly on its start), `--soft` (smoke and fire dissolve), stricter alignment, and a per-frame smoothness report. All nine loops re-made; wrap steps 0 to 0.2.

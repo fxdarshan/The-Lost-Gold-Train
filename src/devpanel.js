@@ -35,19 +35,19 @@
     });
   }
   const adds = $('#adds');
-  ['nowin', 'small', 'multi', 'wildwin', 'tease', 'nice', 'big', 'mega', 'superb', 'trigger', 'trigger4', 'trigger5', 'buy', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
+  ['nowin', 'small', 'multi', 'wildwin', 'power', 'tease', 'nice', 'big', 'mega', 'superb', 'trigger', 'trigger4', 'trigger5', 'buy', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
     const b = document.createElement('button'); b.innerHTML = `<span class="dot" style="background:${OUT[k].color}"></span>${OUT[k].label}`;
     b.onclick = () => { G.queue.push({ type: k }); renderQueue(); }; adds.appendChild(b);
   });
   // symbol win: pick a symbol and a line length from the dropdowns, add it to the list
-  $('#swSym').innerHTML = Object.entries(C.symbolNames).filter(([k]) => Number(k) !== C.SCATTER).sort((a, b) => a[0] - b[0]).map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
+  $('#swSym').innerHTML = Object.entries(C.symbolNames).filter(([k]) => C.regular.includes(Number(k))).sort((a, b) => a[0] - b[0]).map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
   $('#swAdd').onclick = () => { G.queue.push({ type: 'symwin', sym: Number($('#swSym').value), len: Number($('#swLen').value) }); renderQueue(); };
   $('#clearQueue').onclick = () => { G.queue = []; renderQueue(); };
   $('#playQueue').onclick = () => { if (G.autoplay) { G.autoplay = false; update(); } else if (!G.busy) root.Game.playQueue(); };
   $('#spin').onclick = () => root.Game.play();
 
   /* ---------- custom grid ---------- */
-  const ED_SYMS = [...C.regular, C.SCATTER];
+  const ED_SYMS = [...C.regular, ...(C.WILD != null ? [C.WILD] : []), C.SCATTER, ...Object.keys(C.POWER || {}).map(Number)];
   let pick = 2, edGrid = engine.randomGrid({ noScatter: true });
   const thumb = id => { const im = A.symbol(id, C); if (!im) return ''; if (im.src) return im.src; const c = document.createElement('canvas'); c.width = c.height = 72; c.getContext('2d').drawImage(im, 0, 0, 72, 72); return c.toDataURL(); };
   const thumbs = {};

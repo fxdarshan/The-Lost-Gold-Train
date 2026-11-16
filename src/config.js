@@ -23,7 +23,7 @@
     texts: {
       brand: 'All Aboard',                          // small line on the splash screen (ASSUMED)
       loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
-      retrigger: 'MORE DYNAMITE!',                 // retrigger modal title
+      retrigger: 'MORE SCATTERS!',                 // retrigger modal title
       expandedPanel: ['#f0a050', '#f6c98a', '#fbe8c8']   // sunset behind the Outlaw's full-reel art (top to bottom)
     },
 
@@ -31,16 +31,22 @@
     reels: 5,
     rows: 3,
 
-    // Symbol ids: 0 = highest paying. SCATTER is the "book": wild and scatter at once.
-    // The set follows docs/art-direction.md §2: the reference game's 4 premiums + 5 card ranks + the Book.
-    regular: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    SCATTER: 9,
+    // Symbol ids (Darshan's full asset sheet, 2026-11-16: "accommodate all the symbols"):
+    //   0-14 pay symbols, highest first (10 pictures + A-10)
+    //   WILD     substitutes for every pay symbol (reels 2-4)
+    //   SCATTER  pays anywhere, 3+ trigger free spins (the reference's Book, but not wild here)
+    //   POWER    Power Dynamite: a Wild carrying a multiplier (id -> x); multipliers on a line add up
+    regular: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    WILD: 15,
+    SCATTER: 16,
+    POWER: { 17: 2, 18: 3, 19: 5, 20: 10 },
+    SCATTER_IS_WILD: false,
     symbolNames: {
-      0: 'The Outlaw', 1: "Sheriff's Star", 2: 'Revolver', 3: 'Gold Bars',
-      4: 'A', 5: 'K', 6: 'Q', 7: 'J', 8: '10', 9: 'Dynamite'
+      0: 'The Outlaw', 1: 'Steam Train', 2: 'Gold Bars', 3: "Sheriff's Star", 4: 'Wanted Poster',
+      5: 'Dynamite', 6: 'Revolver', 7: 'Money Bag', 8: 'Horseshoe', 9: 'Lantern',
+      10: 'A', 11: 'K', 12: 'Q', 13: 'J', 14: '10',
+      15: 'Wild', 16: 'Scatter', 17: 'Power Dynamite x2', 18: 'Power Dynamite x3', 19: 'Power Dynamite x5', 20: 'Power Dynamite x10'
     },
-    // the reference game's symbol each one plays the part of
-    refSymbol: { 0: 'John Hunter', 1: 'Tutankhamun mask', 2: 'Golden cat', 3: 'Scarab', 4: 'A', 5: 'K', 6: 'Q', 7: 'J', 8: '10', 9: 'Book of Tut' },
 
     // ------------------------------------------------------------ paylines (REF: 10 fixed lines)
     // Row index per reel: 0 Top, 1 Middle, 2 Bottom. ASSUMED: the classic 10-line book-slot layout
@@ -60,43 +66,50 @@
 
     // ------------------------------------------------------------ paytable (REF, x TOTAL bet for one line)
     // Line wins pay left to right on adjacent reels, highest win per line.
+    // The Outlaw and the A-10 values are the reference's; the other pictures are ASSUMED tiers between them.
     paytable: {
-      0: { 2: 1,   3: 10,  4: 100, 5: 500 },  // The Outlaw     = John Hunter
-      1: { 2: 0.5, 3: 4,   4: 40,  5: 200 },  // Sheriff's Star = Tutankhamun mask
-      2: { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Revolver       = Golden cat
-      3: { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Gold Bars      = Scarab
-      4: { 3: 0.5, 4: 4,   5: 15 },           // A
-      5: { 3: 0.5, 4: 4,   5: 15 },           // K
-      6: { 3: 0.5, 4: 2.5, 5: 10 },           // Q
-      7: { 3: 0.5, 4: 2.5, 5: 10 },           // J
-      8: { 3: 0.5, 4: 2.5, 5: 10 }            // 10
+      0:  { 2: 1,   3: 10,  4: 100, 5: 500 },  // The Outlaw     (REF: John Hunter)
+      1:  { 2: 0.5, 3: 5,   4: 50,  5: 250 },  // Steam Train
+      2:  { 2: 0.5, 3: 4,   4: 40,  5: 200 },  // Gold Bars      (REF: Tutankhamun mask values)
+      3:  { 2: 0.5, 3: 3,   4: 20,  5: 100 },  // Sheriff's Star
+      4:  { 2: 0.5, 3: 3,   4: 10,  5: 75 },   // Wanted Poster  (REF: cat / scarab values)
+      5:  { 3: 2,   4: 10,  5: 50 },           // Dynamite
+      6:  { 3: 2,   4: 8,   5: 40 },           // Revolver
+      7:  { 3: 1.5, 4: 6,   5: 30 },           // Money Bag
+      8:  { 3: 1,   4: 5,   5: 25 },           // Horseshoe
+      9:  { 3: 1,   4: 5,   5: 25 },           // Lantern
+      10: { 3: 0.5, 4: 4,   5: 15 },           // A  (REF)
+      11: { 3: 0.5, 4: 4,   5: 15 },           // K  (REF)
+      12: { 3: 0.5, 4: 2.5, 5: 10 },           // Q  (REF)
+      13: { 3: 0.5, 4: 2.5, 5: 10 },           // J  (REF)
+      14: { 3: 0.5, 4: 2.5, 5: 10 }            // 10 (REF)
     },
     scatterPays: { 3: 2, 4: 20, 5: 200 },      // REF: 3 / 4 / 5 books pay 2x / 20x / 200x total bet, anywhere
 
     // Symbol weights per reel for random stops (TUNED). Each cell is drawn independently.
-    // Rows: reel 1..5. Columns: symbol id 0..9 (9 = Scatter). Odd and even reels favour different
-    // card ranks (fewer accidental lines), and the Scatter is rarer on the left reels, where as a Wild it
-    // starts lines, and commoner on the right: this keeps the base game near 49% of RTP while free
-    // spins trigger about 1 in 178 (reference: 1 in 150 to 174).
+    // Rows: reel 1..5. Columns: ids 0..20 (15 Wild, 16 Scatter, 17-20 Power Dynamite x2/x3/x5/x10).
+    // Wild and Power Dynamite only on reels 2-4 (ASSUMED). Odd and even reels favour different card ranks (fewer
+    // accidental lines) and the Scatter is commoner on the right. Measured (4 x 5M): RTP 96.6-97.3%, base 53%,
+    // free spins 1 in 177, hit rate 21.4%.
     weights: [
-      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 0.8],
-      [2.2, 3.2, 4.5, 4.5, 8, 8, 15, 15, 15, 1.0],
-      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 1.9],
-      [2.2, 3.2, 4.5, 4.5, 8, 8, 15, 15, 15, 2.7],
-      [2.2, 3.2, 4.5, 4.5, 17, 17, 8, 8, 8, 3.2]
+      [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 17, 17, 8, 8, 8, 0, 1.5, 0, 0, 0, 0],
+      [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 8, 8, 15, 15, 15, 3, 1.7, 0.55, 0.32, 0.13, 0.045],
+      [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 17, 17, 8, 8, 8, 3, 2.15, 0.55, 0.32, 0.13, 0.045],
+      [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 8, 8, 15, 15, 15, 3, 2.6, 0.55, 0.32, 0.13, 0.045],
+      [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 17, 17, 8, 8, 8, 0, 3, 0, 0, 0, 0]
     ],
     // Free spins use their own weights (TUNED): fewer scatters, so retriggers are rarer.
     weightsFreeSpins: null,                    // null = same as base
     // Free spins: the special symbol's share of every reel, per symbol (TUNED). Premiums get a smaller share
-    // than card ranks but pay far more, so the Outlaw is the rare dream special (about 200x average round)
-    // and a typical round lands near the reference's 60x median.
-    specialShare: { 0: 0.079, 1: 0.086, 2: 0.0965, 3: 0.0965, 4: 0.1625, 5: 0.1625, 6: 0.1725, 7: 0.1725, 8: 0.1725 },
+    // than card ranks but pay far more, so the Outlaw is the rare dream special; a round's median is about 50x
+    // (reference 60x), mean about 78x (reference 80.7x).
+    specialShare: { 0: 0.0764, 1: 0.0812, 2: 0.0859, 3: 0.0907, 4: 0.0955, 5: 0.1146, 6: 0.1193, 7: 0.1241, 8: 0.1289, 9: 0.1289, 10: 0.1528, 11: 0.1528, 12: 0.1623, 13: 0.1623, 14: 0.1623 },
 
     // ---------------------------------------------------------- free spins (REF)
     freeSpins: 10,                             // 3+ scatters award 10 free spins
     freeSpinsRetrigger: 10,                    // 3+ scatters during free spins add 10 more, no limit
     // Which symbol becomes the expanding symbol (TUNED weights; REF: "one regular symbol chosen at random")
-    specialWeights: { 0: 6, 1: 8, 2: 9, 3: 9, 4: 10, 5: 10, 6: 10, 7: 10, 8: 10 },
+    specialWeights: { 0: 5, 1: 6, 2: 6, 3: 7, 4: 7, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7, 10: 7, 11: 7, 12: 7, 13: 7, 14: 7 },
     // The special symbol expands when it is on enough reels to win (2 for symbols that pay 2 of a kind,
     // else 3), anywhere on those reels, and then pays on every line regardless of adjacency (REF).
     expandPaysAllLines: true,
@@ -108,7 +121,7 @@
       enabled: true,
       price: 100,                              // REF: 100x total bet
       scatterWeights: { 3: 85, 4: 13, 5: 2 },  // TUNED (REF: "weighted", values not published)
-      specialShare: { 0: 0.0770, 1: 0.0839, 2: 0.0941, 3: 0.0941, 4: 0.1584, 5: 0.1584, 6: 0.1682, 7: 0.1682, 8: 0.1682 }   // TUNED: bought free spins (97.5% of the natural shares, buy RTP 96.5%)
+      specialShare: 1.04                       // TUNED: bought free spins use 1.04x the natural specialShare (buy RTP about 96.5%)
     },
 
     maxWin: 5500,                              // REF (pragmaticplay.com): 5,500x per round. Reviews say 5,000x.

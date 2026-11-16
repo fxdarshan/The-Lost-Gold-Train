@@ -23,33 +23,51 @@ window.ASSET_MANIFEST = {
   fit: {
     // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
     default:          [0.96, 0.98],
-    sym_scatter_idle: [0.96, 0.98]
+    sym_wild_idle:    [0.98, 1.02],                 // round badges: a little larger, they have no panel
+    sym_scatter_idle: [0.98, 1.02],
+    sym_power_idle:   [0.98, 1.02]
   },
 
   images: {
     bg_base_main:           'assets/images/environment/bg_base_main.jpg',
     bg_freegame_main:       'assets/images/environment/bg_freegame_main.jpg',
 
-    // symbols (docs/art-direction.md §2), highest pay first
+    // symbols (Darshan's full asset sheet, docs/art-direction.md §2), highest pay first
     sym_00_idle:            'assets/images/symbols/sym_00_idle.webp',       // The Outlaw
     sym_00_expanded:        'assets/images/symbols/sym_00_expanded.webp',   // The Outlaw, full reel (on the train roof)
-    sym_01_idle:            'assets/images/symbols/sym_01_idle.webp',       // Sheriff's Star
-    sym_02_idle:            'assets/images/symbols/sym_02_idle.webp',       // Revolver
-    sym_03_idle:            'assets/images/symbols/sym_03_idle.webp',       // Gold Bars
-    sym_04_idle:            'assets/images/symbols/sym_04_idle.webp',       // A
-    sym_05_idle:            'assets/images/symbols/sym_05_idle.webp',       // K
-    sym_06_idle:            'assets/images/symbols/sym_06_idle.webp',       // Q
-    sym_07_idle:            'assets/images/symbols/sym_07_idle.webp',       // J
-    sym_08_idle:            'assets/images/symbols/sym_08_idle.webp',       // 10
-    sym_scatter_idle:       'assets/images/symbols/sym_scatter_idle.webp',  // Dynamite (Wild + Scatter)
+    sym_01_idle:            'assets/images/symbols/sym_01_idle.webp',       // Steam Train
+    sym_02_idle:            'assets/images/symbols/sym_02_idle.webp',       // Gold Bars
+    sym_03_idle:            'assets/images/symbols/sym_03_idle.webp',       // Sheriff's Star
+    sym_04_idle:            'assets/images/symbols/sym_04_idle.webp',       // Wanted Poster
+    sym_05_idle:            'assets/images/symbols/sym_05_idle.webp',       // Dynamite
+    sym_06_idle:            'assets/images/symbols/sym_06_idle.webp',       // Revolver
+    sym_07_idle:            'assets/images/symbols/sym_07_idle.webp',       // Money Bag
+    sym_08_idle:            'assets/images/symbols/sym_08_idle.webp',       // Horseshoe
+    sym_09_idle:            'assets/images/symbols/sym_09_idle.webp',       // Lantern
+    sym_10_idle:            'assets/images/symbols/sym_10_idle.webp',       // A
+    sym_11_idle:            'assets/images/symbols/sym_11_idle.webp',       // K
+    sym_12_idle:            'assets/images/symbols/sym_12_idle.webp',       // Q
+    sym_13_idle:            'assets/images/symbols/sym_13_idle.webp',       // J
+    sym_14_idle:            'assets/images/symbols/sym_14_idle.webp',       // 10
+    sym_wild_idle:          'assets/images/symbols/sym_wild_idle.webp',     // Wild (hat badge), reels 2-4
+    sym_scatter_idle:       'assets/images/symbols/sym_scatter_idle.webp',  // Scatter (train badge)
+    sym_power_idle:         'assets/images/symbols/sym_power_idle.webp',    // Power Dynamite: a Wild with a multiplier
+    mult_x2:                'assets/images/symbols/mult_x2.webp',           // multiplier plates worn by Power Dynamite
+    mult_x3:                'assets/images/symbols/mult_x3.webp',
+    mult_x5:                'assets/images/symbols/mult_x5.webp',
+    mult_x10:               'assets/images/symbols/mult_x10.webp',
 
     // win animations: 45 frames at 30 fps in a 9 x 5 sheet (see `anims` below), made from Darshan's 16-key-pose
     // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
     sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: draws, grins, holsters
-    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Sheriff's Star: glints travel round the badge
-    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Revolver: barrel heats, fires, smoke clears
-    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Gold Bars: shine sweep and glints
-    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Dynamite: ticks, explodes, reassembles
+    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: steam and wheels
+    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: shine sweep and glints
+    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: glints travel round the badge
+    sym_04_win:             'assets/images/anims/sym_04_win.webp',          // Wanted Poster: flutters
+    sym_05_win:             'assets/images/anims/sym_05_win.webp',          // Dynamite: ticks, explodes, reassembles
+    sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: barrel heats, fires, smoke clears
+    sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: bounces, coins glint
+    sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: glints
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
@@ -73,7 +91,11 @@ window.ASSET_MANIFEST = {
     sym_01_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_02_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_scatter_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
+    sym_04_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_05_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_06_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_07_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_08_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
   },
 
   sounds: {
