@@ -20,6 +20,7 @@ Output: <out>_sheet.webp (9 x 5 grid of 45 frames), <out>_frame00.png (frame 1, 
 
     python3 -I tools/asset-pipeline/anim_from_keys.py <sheet.png> <out_prefix> --mode light|motion [--frames 75] [--width 320] [--strict] [--soft] [--settle K] [--glints [--glint-script tools/asset-pipeline/glints/<symbol>.json]]
 
+  --timing a,b,...: 16 frame counts, one per key (timing chart); sets the loop length to their sum.
   --frames N: loop length at 30 fps (default 45 = 1.5 s; 75 = 2.5 s, Darshan 2026-11-16: 'too fast').
   --switch W (motion mode): where flow can't follow, switch poses over W of a key (default 0.2; 0.5 spreads it over
   about 2 frames at --frames 75: smoother, with a faint overlap).
@@ -106,7 +107,20 @@ if SETTLE:
     for k in range(SETTLE - 1, 16): aligned[k] = aligned[0].copy()
 
 # 4. key -> frame timing: 16 keys evenly around the loop, gentle global ease
+TIMING = [int(x) for x in sys.argv[sys.argv.index('--timing') + 1].split(',')] if '--timing' in sys.argv else None
+if TIMING:
+    # --timing: frames per key (an animator's timing chart). Each key holds, then moves into the next one over its
+    # last few frames: fast keys (2-3 frames) snap, long keys read as holds.
+    assert len(TIMING) == 16, '--timing needs 16 numbers'
+    N_OUT = sum(TIMING); COLS = 10
+    _slots = []
+    for _k, _d in enumerate(TIMING):
+        _t = max(1, min(3, _d // 2))                 # transition length inside this key's slot
+        for _i in range(_d):
+            _j = _i - (_d - _t)                      # position inside the transition (negative = holding)
+            _slots.append((_k, 0.0 if _j < 0 else (_j + 1) / (_t + 1)))
 def key_pos(f):
+    if TIMING: return _slots[f]
     p = f / N_OUT
     p = p - 0.035 * np.sin(2 * np.pi * p)          # slower near the neutral start/end
     k = p * 16

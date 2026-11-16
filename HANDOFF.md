@@ -9,12 +9,14 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
   1. Full symbol set: are the ASSUMED pays for the six new pictures right? Keep Power Dynamite as a multiplier Wild on reels 2-4 (multipliers add)? The earlier 9-symbol version is commit 8c3fe9d.
   2. Hit rate 21.4% against the reference's 31–33%: keep, or drop a few symbols to raise it?
   3. Win banners and a hanging lantern; prompts in `docs/art-direction.md` §4.
-  4. Key-pose sheets for the A and Power Dynamite. Darshan finds the current animations soulless: new acted key-pose prompt with a timing chart in `docs/keypose-prompt-outlaw.md`; waiting for the Outlaw sheet made from it, then add per-key timing to `anim_from_keys.py`.
+  4. Key-pose sheets for the A and Power Dynamite. Darshan finds the current animations soulless: new acted key-pose prompt with a timing chart in `docs/keypose-prompt-outlaw.md`; the Outlaw is done that way (with `--timing`); waiting for Darshan's verdict before redoing the other symbols.
   5. Higher-resolution symbols (about 2×) for final.
   6. Strongbox reveal for the pick: wanted?
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-16 · claude.ai chat (11)
+- Acted Outlaw animation from Darshan's Gemini sheet; `--timing` in anim_from_keys.py.
 ### 2026-11-16 · claude.ai chat (10)
 - Animations for Lantern, K, Q, J, 10, Wild, Scatter; WebP block-alignment fix (cells 320x240).
 ### 2026-11-16 · claude.ai chat (9)
@@ -23,5 +25,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Full symbol set: 15 pay symbols, Wild, Power Dynamite multipliers, separate Scatter; re-tuned; paytable, rules and docs rewritten.
 ### 2026-11-16 · claude.ai chat (7)
 - Revolver and Dynamite animated and in the game; poster, money bag, horseshoe, train animated but unused. Loops verified seamless (1.5 s).
-### 2026-11-16 · claude.ai chat (6)
-- Win animations for the Outlaw, Sheriff's Star and Gold Bars from Darshan's key-pose sheets; train processed but unused (question for Darshan).

@@ -50,5 +50,6 @@ Keep the structure: **idle, anticipation, wind-up, action (smear), extreme, impa
 - **Card ranks (A–10):** squash down → spring up taller → gold light sweeps left to right → sparkle on a corner → settle with a small bounce. Keep these short and simple (lower symbols).
 
 ## Prototype implementation status
-- Prompt written; no sheet made from it yet.
-- `anim_from_keys.py` still spaces keys evenly. Per-key timing from the chart above is to be added when the first sheet arrives.
+- 2026-11-16: Darshan generated the Outlaw sheet with this prompt in Gemini (`assets/source/originals/anims/v2/`). It is in the game as `sym_00_win`; its pose 1 is the new Outlaw idle art.
+- `anim_from_keys.py --timing 6,4,3,2,3,3,5,8,3,3,4,10,6,5,5,5 --mode motion --settle 16`: each key holds, then moves into the next over its last 1–3 frames (fast keys snap, long keys hold).
+- Known: poses 13–15 hide the revolver under the poncho, so the gun briefly disappears near the end of the loop; a few one-frame in-betweens between very different drawings (the draw, the holster) are slightly smeared, which reads as motion blur at speed.

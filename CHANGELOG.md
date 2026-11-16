@@ -2,6 +2,10 @@
 
 Newest first.
 
+## 2026-11-16: acted Outlaw animation
+- New Outlaw sheet ("quick draw", made by Darshan in Gemini from `docs/keypose-prompt-outlaw.md`) played with the timing chart: anticipation, fast draw and shot, smoke blow, gun spin, hat-tip grin, settle. Its pose 1 is the new Outlaw idle art.
+- `anim_from_keys.py --timing`: per-key frame counts (hold, then a 1–3 frame move into the next key).
+
 ## 2026-11-16: acted key-pose prompt
 - `docs/keypose-prompt-outlaw.md`: 16-key "quick draw" performance for the Outlaw with consistency rules and a per-key timing chart, plus the structure to reuse for other symbols.
 

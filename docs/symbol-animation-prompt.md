@@ -228,7 +228,8 @@ Tool: `tools/asset-pipeline/anim_from_keys.py` (sheets kept in `assets/source/or
 
 | Symbol | In game | Options | How the brief is met |
 | --- | --- | --- | --- |
-| The Outlaw (`sym_00_win`) | yes | `motion --settle 13` | Keys aligned to pose 1 on the tile frame; in-betweens follow dense optical flow (no cross-fade). The gun-to-grin change is too big for flow, so it switches in under a frame; a dissolve was tried and ghosted. |
+| The Outlaw (`sym_00_win`) | **replaced 2026-11-16** by the acted sheet and timing chart in `docs/keypose-prompt-outlaw.md`; the row below is the first version |
+| The Outlaw, first version | yes | `motion --settle 13` | Keys aligned to pose 1 on the tile frame; in-betweens follow dense optical flow (no cross-fade). The gun-to-grin change is too big for flow, so it switches in under a frame; a dissolve was tried and ghosted. |
 | Steam Train (`sym_01_win`) | yes (since the full symbol set) | `motion --settle 13` | Smoke and steam build and clear. |
 | Gold Bars (`sym_02_win`) | yes | `light` | Pose 1 in all frames; the shine sweep and glints from the keys are lifted onto it. |
 | Sheriff's Star (`sym_03_win`) | yes | `light --glints --glint-script glints/sheriff.json` | The keys redraw the badge at a slightly different scale, so the glint path is read from them and painted on pose 1. |
