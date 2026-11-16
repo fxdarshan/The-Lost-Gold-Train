@@ -1,6 +1,6 @@
 # The Lost Gold Train (prototype)
 
-> New game started 2026-11-16 from `fxdarshan/slot-starter-template`. Reference game: Pragmatic Play's *John Hunter and the Book of Tut* (research in [`docs/reference-game.md`](docs/reference-game.md)). Until the theme, art and remaining specs arrive, it plays the template's sample book-style game with placeholder art; current state in [`HANDOFF.md`](HANDOFF.md).
+> New game started 2026-11-16 from `fxdarshan/slot-starter-template`. Reference game: Pragmatic Play's *John Hunter and the Book of Tut* (research in [`docs/reference-game.md`](docs/reference-game.md)). Art direction: [`docs/art-direction.md`](docs/art-direction.md) (watercolour Western). Until the theme, art and remaining specs arrive, it plays the template's sample book-style game with placeholder art; current state in [`HANDOFF.md`](HANDOFF.md).
 
 ## About the template
 

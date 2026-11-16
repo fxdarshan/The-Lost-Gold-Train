@@ -2,6 +2,9 @@
 
 Newest first.
 
+## 2026-11-16: art direction
+- `docs/art-direction.md`: watercolour Western direction from Darshan's references (saved in `docs/art-reference/`), proposed symbol set in Book of Tut roles, free spins moments, prompts for every asset ID. No code changes.
+
 ## 2026-11-16: The Lost Gold Train started
 - New repo from `slot-starter-template`. Title set to The Lost Gold Train (`CONFIG.title`, `CONFIG.texts`).
 - `docs/reference-game.md`: research on *John Hunter and the Book of Tut* (rules, pay table, RTP variants, measured play stats, feature buy, the separate Respin version, unknowns), every fact with its source.
