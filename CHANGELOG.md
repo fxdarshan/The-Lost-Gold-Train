@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-16: win animations for the rest of the set
+- Darshan's new sheets: Lantern, K, Q, J, 10, Wild and Scatter now animate (75 frames / 2.5 s, seamless loops). 16 of 19 picture ids animate; the A and Power Dynamite stay static (no sheets yet).
+- Wild and Scatter idle art is now frame 1 of their sheets (framed tiles like the other symbols), so their badge-size fit was removed. The two files arrived with swapped names; mapped by picture.
+- Fixed a shimmer once every 10 frames in every animation: cells are now 320×240 (were 239), aligned to WebP's 16 px blocks. All sheets re-rendered.
+- Single-file build is now 44 MB.
+
 ## 2026-11-16: slower, smoother win animations
 - Darshan: "animations are too fast. make it smoother". All nine win animations re-rendered from his key-pose sheets at **75 frames / 2.5 s** (were 45 / 1.5 s): about 4.7 in-between frames per key instead of 2.8. Loops still wrap seamlessly (step 0 to 0.1 out of 255).
 - The game holds every win for the whole loop: `frames.symWin` 10+20+15 → 15+45+15 and `lineCycle` 45 → 75 (measured 2.51 s in the browser). Static symbols' pop and settle are gentler too.

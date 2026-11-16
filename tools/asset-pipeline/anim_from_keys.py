@@ -206,9 +206,14 @@ steps = [float(np.abs(arr[(i + 1) % N_OUT] - arr[i]).mean()) for i in range(N_OU
 med = float(np.median(steps)) or 1e-6
 print(json.dumps({'steps': [round(x, 1) for x in steps], 'wrap': round(steps[-1], 1), 'maxOverMedian': round(max(steps) / med, 1)}), file=sys.stderr)
 fw, fh = frames[0].size; rows = (N_OUT + COLS - 1) // COLS
+# WebP compresses in 16 px blocks: a cell height that isn't a multiple of 16 puts every sheet row on a different
+# block grid, so the compression noise changes at each row and static areas shimmer every COLS frames.
+if fh % 16 or fw % 16:
+    fw2, fh2 = -(-fw // 16) * 16, -(-fh // 16) * 16
+    frames = [fr.resize((fw2, fh2), Image.LANCZOS) for fr in frames]; fw, fh = fw2, fh2
 sheet_out = Image.new('RGBA', (fw * COLS, fh * rows), (0, 0, 0, 0))
 for i, fr in enumerate(frames): sheet_out.paste(fr, ((i % COLS) * fw, (i // COLS) * fh))
-sheet_out.save(out + '_sheet.webp', 'WEBP', quality=86, method=6)
+sheet_out.save(out + '_sheet.webp', 'WEBP', quality=88, method=6)
 frames[0].save(out + '_frame00.png')
 bg = (40, 28, 22)
 gif = [Image.alpha_composite(Image.new('RGBA', fr.size, bg + (255,)), fr).convert('P', palette=Image.ADAPTIVE) for fr in frames]

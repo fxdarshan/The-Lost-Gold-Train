@@ -40,7 +40,7 @@ Single file: [`dist/the-lost-gold-train-prototype.html`](dist/the-lost-gold-trai
 
 Decisions and open questions: GDD §7 and §8.
 
-Win animations (the top 9 symbols): `docs/symbol-animation-prompt.md`.
+Win animations (every symbol except the A and Power Dynamite): `docs/symbol-animation-prompt.md`.
 
 ## About the template
 

@@ -237,9 +237,13 @@ Tool: `tools/asset-pipeline/anim_from_keys.py` (sheets kept in `assets/source/or
 | Revolver (`sym_06_win`) | yes | `motion --soft --settle 12` | Barrel heats, muzzle flash, fireball, smoke clears; smoke and fire dissolve (`--soft`). |
 | Money Bag (`sym_07_win`) | yes (since the full symbol set) | `motion --settle 13` | Bag hops, flops, gold dust bursts. |
 | Horseshoe (`sym_08_win`) | yes (since the full symbol set) | `light --glints --glint-script glints/horseshoe.json` | Warm glow, then star glints on the left arm and right tip. |
-| Lantern, A–10, Wild, Scatter, Power Dynamite | no sheets yet | | Static art with the code-side pop and glow until sheets arrive. |
+| Lantern (`sym_09_win`) | yes (2026-11-16) | `motion --soft --settle 13` | Sways, flame flares; the flare dissolves (`--soft`). |
+| K, Q, J, 10 (`sym_11`–`sym_14_win`) | yes (2026-11-16) | `light --settle 13` | Pose 1 in all frames with the sheet's sweep and sparkles lifted onto it. |
+| Wild (`sym_wild_win`) | yes (2026-11-16) | `motion --soft --settle 13` | Badge glows, revolvers flash; the burst dissolves. Darshan's file names had Wild and Scatter swapped; mapped by picture. |
+| Scatter (`sym_scatter_win`) | yes (2026-11-16) | `motion --soft --settle 13` | Train bursts out in steam with a headlight flash. |
+| A, Power Dynamite | no sheets yet | | Static art with the code-side pop and glow. |
 
-Sheet ids were renumbered on 2026-11-16 when the full symbol set went in; the animations themselves didn't change.
+Sheets are now 320×240 cells (was 239): WebP compresses in 16 px blocks, and 239 put every sheet row on a different block grid, so still areas shimmered once every 10 frames. Sheet ids were renumbered on 2026-11-16 when the full symbol set went in; the animations themselves didn't change.
 
 `--settle K`: the last poses of every sheet are "back to neutral" but redrawn slightly moved or bigger, which made the loop jump. Those keys use pose 1 instead, so frame 45 eases exactly into frame 1. The tool prints every frame-to-frame step; all nine loops now wrap with a step of 0 to 0.2 (out of 255).
 

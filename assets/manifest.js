@@ -23,9 +23,7 @@ window.ASSET_MANIFEST = {
   fit: {
     // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
     default:          [0.96, 0.98],
-    sym_wild_idle:    [0.98, 1.02],                 // round badges: a little larger, they have no panel
-    sym_scatter_idle: [0.98, 1.02],
-    sym_power_idle:   [0.98, 1.02]
+    sym_power_idle:   [0.98, 1.02]                  // round badge with no panel: a little larger
   },
 
   images: {
@@ -68,6 +66,13 @@ window.ASSET_MANIFEST = {
     sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: barrel heats, fires, smoke clears
     sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: bounces, coins glint
     sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: glints
+    sym_09_win:             'assets/images/anims/sym_09_win.webp',          // Lantern: sways, flame flares
+    sym_11_win:             'assets/images/anims/sym_11_win.webp',          // K: glints
+    sym_12_win:             'assets/images/anims/sym_12_win.webp',          // Q: glints
+    sym_13_win:             'assets/images/anims/sym_13_win.webp',          // J: glints
+    sym_14_win:             'assets/images/anims/sym_14_win.webp',          // 10: glints
+    sym_wild_win:           'assets/images/anims/sym_wild_win.webp',        // Wild: badge flares, crossed revolvers flash
+    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Scatter: train bursts out in steam, headlight flash
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
@@ -95,7 +100,14 @@ window.ASSET_MANIFEST = {
     sym_05_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_06_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_07_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
-    sym_08_win: { cols: 10, rows: 8, frames: 75, fps: 30 }
+    sym_08_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_09_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_11_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_12_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_13_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_14_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_wild_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_scatter_win: { cols: 10, rows: 8, frames: 75, fps: 30 }
   },
 
   sounds: {

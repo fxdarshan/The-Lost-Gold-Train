@@ -36,10 +36,10 @@ With 15 possible specials the round now depends more on which one is picked: the
 | 6 | Revolver | mid | `07_revolver` | yes |
 | 7 | Money Bag | mid | `08_money_bag` | yes |
 | 8 | Horseshoe | mid | `09_horseshoe` | yes |
-| 9 | Lantern | mid | `10_lantern` | not yet |
-| 10–14 | A, K, Q, J, 10 | card ranks | `11`–`15_royal_*` | not yet |
-| 15 | Wild (reels 2-4) | substitutes for 0-14 | `17_wild` | not yet |
-| 16 | Scatter | pays anywhere, triggers free spins (REF Book of Tut, minus the Wild) | `18_scatter` | not yet |
+| 9 | Lantern | mid | `10_lantern` | yes |
+| 10–14 | A, K, Q, J, 10 | card ranks | `11`–`15_royal_*` | K, Q, J, 10 yes; A not yet |
+| 15 | Wild (reels 2-4) | substitutes for 0-14 | `17_wild` | yes |
+| 16 | Scatter | pays anywhere, triggers free spins (REF Book of Tut, minus the Wild) | `18_scatter` | yes |
 | 17–20 | Power Dynamite ×2 / ×3 / ×5 / ×10 (reels 2-4) | Wild with a line multiplier | `19_power_symbol_dynamite` + plates `20`–`23` | not yet |
 
 Not used: `16_character_bust` (the portrait is the symbol) and `24_full_body_outlaw_character` (it is the mascot and the full-reel Outlaw).
@@ -79,7 +79,7 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 2. Symbol art is about 280 px wide. That's fine on the 1920 stage, but soft on large screens; 2× versions would be better for final.
 3. Hit rate (21.4% against 31–33%): keep it, or drop some card ranks or pictures to raise it?
 4. Strongbox reveal for the special symbol pick: wanted? It needs a strongbox opening animation or frames.
-5. Full symbol set (2026-11-16): are the assumed pays for the new pictures right, and should Power Dynamite stay a multiplier Wild on reels 2-4? Win animations for the Lantern, card ranks, Wild, Scatter and Power Dynamite would finish the set.
+5. Full symbol set (2026-11-16): are the assumed pays for the new pictures right, and should Power Dynamite stay a multiplier Wild on reels 2-4? Win animations for the A and Power Dynamite would finish the set.
 
 ## Prototype implementation status
 Sections 3 to 7 are implemented. Section 8 is open.
