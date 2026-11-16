@@ -1,0 +1,87 @@
+{
+ "note": "Sheriff's Star glints, read from Darshan's 16 key poses (04_sheriff_badge_spritesheet.png). Coordinates are in pose 1's 600x448 cell. Each entry: [x, y, radius, strength, rays]. Keys not listed are neutral.",
+ "4": [
+  [
+   78,
+   360,
+   18,
+   1.35,
+   true
+  ]
+ ],
+ "5": [
+  [
+   150,
+   318,
+   55,
+   0.94,
+   false
+  ],
+  [
+   78,
+   360,
+   13,
+   0.81,
+   true
+  ]
+ ],
+ "6": [
+  [
+   300,
+   250,
+   91,
+   0.74,
+   false
+  ]
+ ],
+ "7": [
+  [
+   420,
+   190,
+   57,
+   0.88,
+   false
+  ],
+  [
+   518,
+   135,
+   12,
+   0.68,
+   true
+  ]
+ ],
+ "8": [
+  [
+   518,
+   135,
+   20,
+   1.35,
+   true
+  ],
+  [
+   300,
+   22,
+   12,
+   0.68,
+   true
+  ]
+ ],
+ "9": [
+  [
+   300,
+   22,
+   34,
+   1.35,
+   true
+  ]
+ ],
+ "10": [
+  [
+   300,
+   22,
+   17,
+   0.94,
+   true
+  ]
+ ]
+}

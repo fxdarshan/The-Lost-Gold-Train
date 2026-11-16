@@ -51,6 +51,13 @@
   };
 
   Assets.get = key => Assets.img[key] || null;
+  // win animation for a symbol id: { img, cols, rows, frames, fps, fw, fh } when its sheet loaded, else null
+  Assets.anim = id => {
+    const key = (SYM_KEYS[id] || '').replace('_idle', '_win'), meta = (root.ASSET_MANIFEST.anims || {})[key];
+    if (!meta || !Assets.real[key]) return null;
+    const img = Assets.img[key];
+    return Object.assign({ img, fw: img.width / meta.cols, fh: img.height / meta.rows }, meta);
+  };
   Assets.symbol = id => Assets.img[SYM_KEYS[id]] || null;
   // [width, height] of the box a symbol is fitted into, as a fraction of the cell (manifest.fit)
   Assets.fit = id => Assets.fits[SYM_KEYS[id]] || Assets.fits.default || [.98, 1.06];

@@ -38,6 +38,8 @@ Single file: [`dist/the-lost-gold-train-prototype.html`](dist/the-lost-gold-trai
 
 Decisions and open questions: GDD §7 and §8.
 
+Win animations (Outlaw, Sheriff's Star, Gold Bars): `docs/symbol-animation-prompt.md`.
+
 ## About the template
 
 A ready-to-run HTML5 slot prototype to start every new game from. It ships with a working sample game, **Starter Slot**: book-style, 5×3, 10 lines, the features and maths of *John Hunter and the Book of Tut*, and code-drawn placeholder art. A new game replaces the specs, the values and the art; the engine, demo tools, checks and build stay.

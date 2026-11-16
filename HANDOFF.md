@@ -11,9 +11,12 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
   3. Hit rate 26.8% against the reference's 31–33%: keep or rebalance?
   4. Strongbox reveal for the pick: wanted?
   5. Use the pack's multiplier tiles anywhere (a new feature)?
+  6. Steam train animation is ready but the train isn't a symbol: swap it in for the Revolver (same maths), or keep it for something else (e.g. the free spins intro)? Revolver and card ranks have no animations yet.
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, `cut_white_tiles.py`, mascot slot).
 
 ## Log
+### 2026-11-16 · claude.ai chat (6)
+- Win animations for the Outlaw, Sheriff's Star and Gold Bars from Darshan's key-pose sheets; train processed but unused (question for Darshan).
 ### 2026-11-16 · claude.ai chat (5)
 - Darshan's base and free spins backgrounds added (cover crop); timber reel frame drawn in code.
 ### 2026-11-16 · claude.ai chat (4)

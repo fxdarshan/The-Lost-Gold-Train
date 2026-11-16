@@ -2,6 +2,11 @@
 
 Newest first.
 
+## 2026-11-16: symbol win animations
+- Darshan's 16-key-pose sheets for the Outlaw, Sheriff's Star and Gold Bars turned into 45-frame, 30 fps loops following his brief (`docs/symbol-animation-prompt.md`): new tool `tools/asset-pipeline/anim_from_keys.py` (light mode for the gold and badge, optical-flow motion for the Outlaw, position/border lock, watermark removal). Frame 1 is now each symbol's idle art.
+- Game: winning symbols play their sheet (`anims` in `assets/manifest.js`, `Assets.anim`); animated symbols skip the pop/scale.
+- The steam train sheet is processed (`assets/images/anims/train_win.webp`) but not used: the train isn't a game symbol.
+
 ## 2026-11-16: backgrounds
 - Darshan's backgrounds imported: `bg_base_main` (sunset canyon with the train) and `bg_freegame_main` (inside the gold wagon), cover-cropped to 1920×1080 (sources 1672×941, scaled about 15% up). Originals in `assets/source/originals/backgrounds/`.
 - The art has no reel frame, so the game now draws a timber frame with rivets and dark plank panels behind the reels (`CONFIG.reelFrame`), cooler in free spins.

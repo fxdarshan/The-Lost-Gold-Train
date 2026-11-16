@@ -266,17 +266,27 @@
     if (f < a + b + c) return 1.12 - .12 * ease.inOut((f - a - b) / c);
     return 1;
   }
+  // one frame of a symbol's win sheet, fitted exactly like its idle art (frame 1 = the idle art)
+  function drawAnimFrame(id, an, frame, cx, cy, alpha) {
+    const f = A.fit(id), bw = cw * f[0], bh = ch * f[1], k = Math.min(bw / an.fw, bh / an.fh), w = an.fw * k, h = an.fh * k;
+    const i = Math.max(0, Math.min(an.frames - 1, frame));
+    ctx.save(); ctx.globalAlpha = alpha;
+    ctx.drawImage(an.img, (i % an.cols) * an.fw, Math.floor(i / an.cols) * an.fh, an.fw, an.fh, cx - w / 2, cy - h / 2, w, h);
+    ctx.restore();
+  }
   function drawCell(c, r, s, cx, cy, t) {
     const fx = G.fx[c][r] || {}, F = x => (t - x) * C.fps * G.speed;
     let scale = 1, sy = 1, alpha = 1;
+    const an = fx.win != null ? A.anim(s) : null;
     if (fx.win != null) {
-      const f = F(fx.win); scale = winScale(f);
+      const f = F(fx.win); scale = an ? 1 : winScale(f);      // animated symbols keep their position and size (position lock)
       // glow behind a winning symbol
       const a = Math.sin(clamp(f / (FR.symWin[0] + FR.symWin[1] + FR.symWin[2]), 0, 1) * Math.PI);
       ctx.save(); ctx.globalAlpha = a * .85; const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, cw * .6); g.addColorStop(0, 'rgba(255,230,140,.95)'); g.addColorStop(1, 'rgba(255,200,60,0)'); ctx.fillStyle = g; ctx.fillRect(cx - cw * .6, cy - ch * .6, cw * 1.2, ch * 1.2); ctx.restore();
     } else if (G.dim && !fx.keep) alpha = 1 - .55 * G.dim;
     if (s === SC && fx.land != null) { const f = F(fx.land); if (f < FR.scatterLand) sy = .82 + .18 * ease.back(f / FR.scatterLand, 2.5); }
     if (fx.pulse != null) scale *= 1 + .06 * Math.sin((t - fx.pulse) * 9);
+    if (an) { drawAnimFrame(s, an, Math.floor(F(fx.win) * an.fps / C.fps) % an.frames, cx, cy, alpha); return; }
     drawSym(s, cx, cy, { scale, scaleY: sy, alpha });
   }
   function drawGrid(t) {

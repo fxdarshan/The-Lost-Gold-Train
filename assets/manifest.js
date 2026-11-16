@@ -43,6 +43,12 @@ window.ASSET_MANIFEST = {
     sym_08_idle:            'assets/images/symbols/sym_08_idle.webp',       // 10
     sym_scatter_idle:       'assets/images/symbols/sym_scatter_idle.webp',  // Dynamite (Wild + Scatter)
 
+    // win animations: 45 frames at 30 fps in a 9 x 5 sheet (see `anims` below), made from Darshan's 16-key-pose
+    // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
+    sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: draws, grins, holsters
+    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Sheriff's Star: glints travel round the badge
+    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Gold Bars: shine sweep and glints
+
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
 
@@ -57,6 +63,13 @@ window.ASSET_MANIFEST = {
     banner_win_epic:        'assets/images/banners/banner_win_epic.webp',
 
     ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp'
+  },
+
+  // sprite sheet layout for each *_win image: frames left to right, top to bottom
+  anims: {
+    sym_00_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_01_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 }
   },
 
   sounds: {
