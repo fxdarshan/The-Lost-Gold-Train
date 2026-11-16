@@ -87,4 +87,5 @@ Upload the files on GitHub (repo → `art/` → Add file → Upload files) named
 ## Prototype implementation status
 - Delivered and in the game: all symbols, the Dynamite, the mascot and the full-reel Outlaw, from `Last_Train_Gold_Separated_Assets.zip` (see `docs/game-asset-specification.md`).
 - The logo arrived on 2026-11-16 (`assets/source/originals/logo/`); it sits top left, above the mascot.
-- Still needed: both backgrounds, the win banners and the hanging lantern (prompts in §4).
+- Backgrounds arrived on 2026-11-16 (`assets/source/originals/backgrounds/`): the base game is the sunset canyon with the train; free spins take place **inside the gold wagon** (instead of the night scene in §3). They have no reel frame, so the game draws one.
+- Still needed: the win banners and the hanging lantern (prompts in §4).

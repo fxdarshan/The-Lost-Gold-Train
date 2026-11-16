@@ -160,7 +160,10 @@
     window: { x: 540, y: 150, w: 1300, h: 690 },
     // left column, as in the art references: the logo on top, the Outlaw mascot below, the buy button at the bottom
     logo: { x: 15, y: 4, w: 510, h: 255 },       // box the logo (ui_splash_logo) is fitted into
-    mascot: { x: 30, y: 250, w: 480, h: 612 },   // box the mascot art is fitted into (feet on the bottom edge)
+    mascot: { x: 30, y: 250, w: 480, h: 612 },
+    // the supplied backgrounds are open scenery with no reel frame painted in, so the game draws a
+    // weathered timber frame and dark plank panels behind the reels (ASSUMED look, matches the symbol tiles)
+    reelFrame: true,   // box the mascot art is fitted into (feet on the bottom edge)
     buyButton: { x: 50, y: 868, w: 440, h: 68 },
     hudTop: 944,                        // the bottom bar starts here (mockup y 1940)
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar

@@ -2,6 +2,10 @@
 
 Newest first.
 
+## 2026-11-16: backgrounds
+- Darshan's backgrounds imported: `bg_base_main` (sunset canyon with the train) and `bg_freegame_main` (inside the gold wagon), cover-cropped to 1920×1080 (sources 1672×941, scaled about 15% up). Originals in `assets/source/originals/backgrounds/`.
+- The art has no reel frame, so the game now draws a timber frame with rivets and dark plank panels behind the reels (`CONFIG.reelFrame`), cooler in free spins.
+
 ## 2026-11-16: logo
 - Darshan's logo (`assets/source/originals/logo/The_Lost_Gold_Train.png`, already transparent) imported as `ui_splash_logo`. It's shown top left above the Outlaw, as in the art references, with a slow shimmer, and on the loading screen. Without logo art, the title is drawn in text above the reels.
 - Left column re-laid out: logo, mascot, then BUY FREE SPINS at the bottom (the free spins card takes its place). Positions are in `CONFIG.logo`, `CONFIG.mascot` and `CONFIG.buyButton`.

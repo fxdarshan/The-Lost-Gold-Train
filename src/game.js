@@ -219,6 +219,35 @@
     ctx.drawImage(img, L2.x + L2.w / 2 - w / 2, L2.y + L2.h / 2 - h / 2, w, h);
   }
 
+  // timber reel frame with iron rivets and dark plank panels; cooler and darker in free spins
+  function drawReelFrame() {
+    if (!C.reelFrame) return;
+    const pad = 22, fx2 = x0 - pad, fy = y0 - pad, fw = gw + pad * 2, fh = gh + pad * 2, e = G.env;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 10;
+    const wood = ctx.createLinearGradient(0, fy, 0, fy + fh); wood.addColorStop(0, '#8a5a32'); wood.addColorStop(.5, '#6a4224'); wood.addColorStop(1, '#4a2c16');
+    ctx.fillStyle = wood; ctx.beginPath(); ctx.roundRect(fx2, fy, fw, fh, 14); ctx.fill();
+    ctx.shadowColor = 'transparent';
+    // plank grain on the frame
+    ctx.strokeStyle = 'rgba(40,20,8,.35)'; ctx.lineWidth = 2;
+    for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(fx2 + 6, fy + i * pad / 4); ctx.lineTo(fx2 + fw - 6, fy + i * pad / 4); ctx.stroke(); ctx.beginPath(); ctx.moveTo(fx2 + 6, fy + fh - i * pad / 4); ctx.lineTo(fx2 + fw - 6, fy + fh - i * pad / 4); ctx.stroke(); }
+    ctx.lineWidth = 4; ctx.strokeStyle = '#2a170a'; ctx.beginPath(); ctx.roundRect(fx2, fy, fw, fh, 14); ctx.stroke();
+    // reel panels: dark planks, slightly see-through so the scene still breathes behind
+    for (let c = 0; c < C.reels; c++) {
+      const px = x0 + c * cw + 3, pw = cw - 6;
+      const g = ctx.createLinearGradient(0, y0, 0, y0 + gh);
+      g.addColorStop(0, `rgba(${lerp(46, 20, e)},${lerp(26, 22, e)},${lerp(14, 40, e)},.86)`); g.addColorStop(1, `rgba(${lerp(30, 12, e)},${lerp(16, 14, e)},${lerp(8, 28, e)},.9)`);
+      ctx.fillStyle = g; ctx.fillRect(px, y0, pw, gh);
+      ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1;
+      for (let k = 1; k < 3; k++) { ctx.beginPath(); ctx.moveTo(px + pw * k / 3, y0); ctx.lineTo(px + pw * k / 3, y0 + gh); ctx.stroke(); }
+    }
+    // iron corner brackets and rivets
+    ctx.fillStyle = '#3a3a3e';
+    [[fx2, fy], [fx2 + fw, fy], [fx2, fy + fh], [fx2 + fw, fy + fh]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x + (x > fx2 ? -16 : 16), y + (y > fy ? -11 : 11), 6, 0, 7); ctx.fill(); });
+    for (let i = 1; i < C.reels; i++) { const rx = x0 + i * cw; [fy + 11, fy + fh - 11].forEach(ry => { ctx.fillStyle = '#3a3a3e'; ctx.beginPath(); ctx.arc(rx, ry, 5, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.beginPath(); ctx.arc(rx - 1.5, ry - 1.5, 2, 0, 7); ctx.fill(); }); }
+    ctx.restore();
+  }
+
   /* ------------------------------------------------------------ symbols */
   // draw a symbol image fitted into its cell box (manifest.fit scales the box per symbol)
   function drawSym(id, cx, cy, o = {}) {
@@ -617,6 +646,7 @@
     drawEnvironment(t);
     drawMascot(t);
     drawLogo(t);
+    drawReelFrame();
     drawGrid(t);
     drawExpanded(t);
     drawFuses(t);

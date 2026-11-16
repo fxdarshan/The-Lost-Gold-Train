@@ -42,7 +42,7 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 3. **Dynamite.** It pulses and pays. On 3 or more, each Dynamite's fuse runs down its reel and pops (`fx_scatter_full`).
 4. **Free spins intro:** "10 FREE SPINS".
 5. **Special symbol pick.** The symbols cycle in a card, slow down and stop. (Planned: the dynamite blasts open a strongbox; needs art.)
-6. **Transition** to night: the free spins background, and the bar turns dark blue.
+6. **Transition** into the gold wagon (free spins background); the bar turns dark blue.
 7. **Free spins.** The message pill counts "FREE SPIN n OF m"; a card under the mascot shows the expanding symbol. When the special symbol expands, it flashes, each of its reels grows into a full column, and all 10 lines pay. The Outlaw's column shows his full-body art over a sunset panel.
 8. **Retrigger:** "MORE DYNAMITE! +10 FREE SPINS".
 9. **Summary** (total, spins, or "MAX WIN REACHED"), then back to the base game.
@@ -64,7 +64,7 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 - **Line shapes:** classic 10-line book layout (ASSUMED).
 
 ## 8. Open questions
-1. Backgrounds (base sunset and free spins night) and banner art are still needed (the logo arrived 2026-11-16): prompts in `docs/art-direction.md` §4. The concept pack had none.
+1. Banner art is still needed (logo and both backgrounds arrived 2026-11-16; free spins take place inside the gold wagon rather than at night): prompts in `docs/art-direction.md` §4. The concept pack had none.
 2. Symbol art is about 280 px wide. That's fine on the 1920 stage, but soft on large screens; 2× versions would be better for final.
 3. Hit rate (26.8% against 31–33%): keep it or rebalance?
 4. Strongbox reveal for the special symbol pick: wanted? It needs a strongbox opening animation or frames.
