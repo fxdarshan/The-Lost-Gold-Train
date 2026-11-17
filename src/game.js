@@ -37,7 +37,7 @@
     banner: null, modal: null, trans: null, info: false,
     env: 0, envTarget: 0, camera: 1, message: null,
     fs: { active: false, left: 0, played: 0, total: 0, awarded: 0, special: null, bought: false },
-    buyArm: 0, mascotHop: 0, shots: [], shotFx: 0,
+    buyArm: 0, mascotHop: 0, shots: [], shotFx: 0, mascotAnim: null, mascotIdleAt: 6,
     queue: [], onChange: () => {}
   };
   const bet = () => C.bets[G.betIndex];
@@ -224,12 +224,24 @@
     if (frame !== r.last || sk !== r.sk) { r.last = frame; r.sk = sk; r.c2.clearRect(0, 0, r.cv.width, r.cv.height); r.rig.render(r.c2, k, frame / 30, st); }
     return r;
   }
+  // the mascot's animations: idle 1 runs all the time; idle 2 (wind gust) plays every 8-12 s while nothing
+  // else happens; "win" (quick draw, three shots) plays on wins, banners and free-spins triggers
   function mascotState(t) {
+    const ma = G.mascotAnim, A2 = root.Rig && root.Rig.ANIMS;
+    if (ma && t - ma.t0 > ma.dur) G.mascotAnim = null;
+    if (!G.mascotAnim && t > G.mascotIdleAt) { G.mascotAnim = { name: 'idle2', t0: t, dur: 4.2 }; G.mascotIdleAt = t + 4.2 + 8 + Math.random() * 4; }
     const last = G.shots.filter(s => s <= t).pop();
     const fire = last == null || t - last > 1.2 ? null : t - last;
-    return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0 };
+    const a = G.mascotAnim ? { name: G.mascotAnim.name, u: Math.round((t - G.mascotAnim.t0) * 30) / 30 } : null;
+    return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0, anim: a };
   }
-  function shoot(n = 1) { const t = now(); for (let i = 0; i < n; i++) G.shots.push(t + i * .38); G.shots = G.shots.filter(s => s > t - 3); }
+  function shoot() {
+    const t = now(), ma = G.mascotAnim;
+    if (ma && ma.name === 'win' && t - ma.t0 < 1.4) return;          // already drawing: let the shots play out
+    G.mascotAnim = { name: 'win', t0: t, dur: 3.2 }; G.mascotIdleAt = t + 3.2 + 6;
+    for (const d of [.55, .9, 1.25]) G.shots.push(t + d);
+    G.shots = G.shots.filter(s => s > t - 3);
+  }
   function drawMascot(t) {
     const img = A.get('char_mascot'); if (!img || !M) return;
     const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
@@ -861,7 +873,7 @@
 
   // all winning lines together, then each line on its own once (only when more than one line won)
   async function showWin(step) {
-    if (C.mascotRig && C.mascotRig.fireOn === 'win') shoot(1);
+    if (C.mascotRig && C.mascotRig.fireOn === 'win') shoot();
     clearLines(); await wait(.02);
     let t0 = now();
     G.lines = { lines: step.wins.map(w => w.line), t0 };
@@ -938,7 +950,7 @@
   function bigWinBanner(amount) {
     const tier = engine.tierOf(amount, bet());
     if (tier < 0) return Promise.resolve();
-    shoot(2);
+    shoot();
     return new Promise(resolve => { G.banner = { tier, amount, t0: now(), tok: G.skip, resolve }; });
   }
   function modal(o) { return new Promise(resolve => { G.modal = Object.assign({ t0: now(), tok: G.skip, resolve }, o); }); }
@@ -1012,7 +1024,7 @@
   async function freeSpins(count, roundWin, special, bought) {
     const fs = G.fs, baseWin = roundWin;
     Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
-    shoot(2);
+    shoot();
     await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
     await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
     await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });

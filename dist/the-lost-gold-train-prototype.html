@@ -1365,6 +1365,28 @@ window.ASSET_MANIFEST = {
     }
     return 0;
   }
+  // keyframed animations: each track is [[seconds, value], ...], eased between keys (smoothstep)
+  const ANIMS = {
+    // idle 1 "watchful": always running underneath (breathing, poncho in the wind, aim drift, head looks round)
+    // idle 2 "wind gust": he lowers the gun and squints into a gust that lifts the poncho, then snaps back to aim
+    idle2: { dur: 4.2, tracks: {
+      armDrop: [[0, 0], [.7, .3], [2.9, .3], [3.25, -.05], [3.6, 0]],
+      head:    [[0, 0], [.9, .07], [2.0, .07], [2.6, -.03], [3.4, 0]],
+      gust:    [[0, 0], [.6, 1.8], [2.6, 1.8], [3.8, 0]],
+      dip:     [[0, 0], [.7, .01], [2.9, .01], [3.3, -.006], [3.7, 0]] } },
+    // win "quick draw": crouch and dip the gun (anticipation), snap up, three shots, stand tall with the poncho flaring, settle
+    win: { dur: 3.2, shots: [.55, .9, 1.25], tracks: {
+      armDrop: [[0, 0], [.28, .3], [.45, -.06], [.55, 0], [1.6, 0], [2.0, -.05], [2.6, 0]],
+      dip:     [[0, 0], [.28, .03], [.45, -.02], [.6, 0], [1.6, 0], [1.95, -.018], [2.8, 0]],
+      head:    [[0, 0], [.28, .06], [.45, -.03], [.6, 0], [1.6, 0], [2.0, -.05], [2.8, 0]],
+      gust:    [[0, 0], [.45, 2.4], [1.8, 1.6], [3.2, 0]] } }
+  };
+  function track(keys, u) {
+    if (!keys) return 0;
+    if (u <= keys[0][0]) return keys[0][1];
+    for (let i = 1; i < keys.length; i++) if (u < keys[i][0]) { const [t0, v0] = keys[i - 1], [t1, v1] = keys[i], q = smooth(0, 1, (u - t0) / (t1 - t0)); return v0 + (v1 - v0) * q; }
+    return keys[keys.length - 1][1];
+  }
   const rot = (x, y, cx, cy, a) => { const c = Math.cos(a), s = Math.sin(a), dx = x - cx, dy = y - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
 
   function create(img, cfg) {
@@ -1388,13 +1410,14 @@ window.ASSET_MANIFEST = {
     // the pose at time t: cloth wave, breathing, head turn, arm aim and recoil
     function pose(t, st) {
       st = st || {};
-      const f = st.fire, gust = 1 + (st.gust || 0) * 1.5;
+      const f = st.fire, an = st.anim && ANIMS[st.anim.name], u = st.anim ? st.anim.u : 0, k = n => an ? track(an.tracks[n], u) : 0;
+      const gust = 1 + (st.gust || 0) * 1.5 + k('gust');
       const kick = f == null || f < 0 ? 0 : (f < .05 ? f / .05 : Math.exp(-(f - .05) / .16));
       return {
         breathe: Math.sin(t * 2.2),
-        head: .022 * Math.sin(t * .8) + .012 * Math.sin(t * 1.9) - .05 * kick,
-        arm: .018 * Math.sin(t * 1.3) - .34 * kick,
-        recoil: 16 * kick, gust, t
+        head: .022 * Math.sin(t * .8) + .012 * Math.sin(t * 1.9) - .05 * kick + k('head'),
+        arm: .018 * Math.sin(t * 1.3) - .34 * kick + k('armDrop'),
+        recoil: 16 * kick, gust, t, dip: k('dip')
       };
     }
     function deform(x, y, n, p, w) {
@@ -1404,6 +1427,8 @@ window.ASSET_MANIFEST = {
         x += d * (20 * Math.sin(T * 1.6 - y * .007) + 7 * Math.sin(T * 2.9 - y * .017 + x * .01));
         y += d * 6 * Math.sin(T * 1.6 - y * .007 + 1.2);
       }
+      // 1b. whole-body crouch (dip > 0) or stretch (dip < 0) about the feet; boots stay planted
+      if (p.dip) y = IH - (IH - y) * (1 - p.dip);
       // 2. breathing: chest and everything above it rise and fall around the waist
       const wb = Math.max(w.torso, w.head, w.arm);
       if (wb) y -= wb * Math.max(0, A.waist[1] - y) * .012 * p.breathe;
@@ -1457,9 +1482,9 @@ window.ASSET_MANIFEST = {
     }
     // where an anchor point (e.g. the gun muzzle) is after deformation, in image pixels
     function point(name, t, st) { const [x, y] = A[name]; return deform(x, y, -1, pose(t, st), weightsAt(x, y)); }
-    return { render, point, width: IW, height: IH };
+    return { render, point, width: IW, height: IH, anims: ANIMS };
   }
-  root.Rig = { create };
+  root.Rig = { create, ANIMS };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -1504,7 +1529,7 @@ window.ASSET_MANIFEST = {
     banner: null, modal: null, trans: null, info: false,
     env: 0, envTarget: 0, camera: 1, message: null,
     fs: { active: false, left: 0, played: 0, total: 0, awarded: 0, special: null, bought: false },
-    buyArm: 0, mascotHop: 0, shots: [], shotFx: 0,
+    buyArm: 0, mascotHop: 0, shots: [], shotFx: 0, mascotAnim: null, mascotIdleAt: 6,
     queue: [], onChange: () => {}
   };
   const bet = () => C.bets[G.betIndex];
@@ -1691,12 +1716,24 @@ window.ASSET_MANIFEST = {
     if (frame !== r.last || sk !== r.sk) { r.last = frame; r.sk = sk; r.c2.clearRect(0, 0, r.cv.width, r.cv.height); r.rig.render(r.c2, k, frame / 30, st); }
     return r;
   }
+  // the mascot's animations: idle 1 runs all the time; idle 2 (wind gust) plays every 8-12 s while nothing
+  // else happens; "win" (quick draw, three shots) plays on wins, banners and free-spins triggers
   function mascotState(t) {
+    const ma = G.mascotAnim, A2 = root.Rig && root.Rig.ANIMS;
+    if (ma && t - ma.t0 > ma.dur) G.mascotAnim = null;
+    if (!G.mascotAnim && t > G.mascotIdleAt) { G.mascotAnim = { name: 'idle2', t0: t, dur: 4.2 }; G.mascotIdleAt = t + 4.2 + 8 + Math.random() * 4; }
     const last = G.shots.filter(s => s <= t).pop();
     const fire = last == null || t - last > 1.2 ? null : t - last;
-    return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0 };
+    const a = G.mascotAnim ? { name: G.mascotAnim.name, u: Math.round((t - G.mascotAnim.t0) * 30) / 30 } : null;
+    return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0, anim: a };
   }
-  function shoot(n = 1) { const t = now(); for (let i = 0; i < n; i++) G.shots.push(t + i * .38); G.shots = G.shots.filter(s => s > t - 3); }
+  function shoot() {
+    const t = now(), ma = G.mascotAnim;
+    if (ma && ma.name === 'win' && t - ma.t0 < 1.4) return;          // already drawing: let the shots play out
+    G.mascotAnim = { name: 'win', t0: t, dur: 3.2 }; G.mascotIdleAt = t + 3.2 + 6;
+    for (const d of [.55, .9, 1.25]) G.shots.push(t + d);
+    G.shots = G.shots.filter(s => s > t - 3);
+  }
   function drawMascot(t) {
     const img = A.get('char_mascot'); if (!img || !M) return;
     const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
@@ -2328,7 +2365,7 @@ window.ASSET_MANIFEST = {
 
   // all winning lines together, then each line on its own once (only when more than one line won)
   async function showWin(step) {
-    if (C.mascotRig && C.mascotRig.fireOn === 'win') shoot(1);
+    if (C.mascotRig && C.mascotRig.fireOn === 'win') shoot();
     clearLines(); await wait(.02);
     let t0 = now();
     G.lines = { lines: step.wins.map(w => w.line), t0 };
@@ -2405,7 +2442,7 @@ window.ASSET_MANIFEST = {
   function bigWinBanner(amount) {
     const tier = engine.tierOf(amount, bet());
     if (tier < 0) return Promise.resolve();
-    shoot(2);
+    shoot();
     return new Promise(resolve => { G.banner = { tier, amount, t0: now(), tok: G.skip, resolve }; });
   }
   function modal(o) { return new Promise(resolve => { G.modal = Object.assign({ t0: now(), tok: G.skip, resolve }, o); }); }
@@ -2479,7 +2516,7 @@ window.ASSET_MANIFEST = {
   async function freeSpins(count, roundWin, special, bought) {
     const fs = G.fs, baseWin = roundWin;
     Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
-    shoot(2);
+    shoot();
     await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
     await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
     await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });

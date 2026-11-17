@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-17: three mascot animations
+- `src/rig.js` gets keyframed animations (eased tracks for arm, head, whole-body crouch or stretch, poncho gust; `Rig.ANIMS`):
+  - **Idle 1 "watchful"** (always running): breathing, poncho in the wind, aim drift, head looking round.
+  - **Idle 2 "wind gust"** (4.2 s, every 8–12 s when idle): lowers the gun and squints into a gust that lifts the poncho, then snaps back to aim with a small overshoot.
+  - **Win "quick draw"** (3.2 s): crouch and dip the gun, snap up, three shots with recoil, flash, sparks and smoke, stand tall with the poncho flaring, settle. Plays on line wins, banners and free-spins triggers (not restarted while already shooting).
+
 ## 2026-11-17: spine-mcp wired in
 - `.mcp.json`: the spine-mcp server (MIT) for Claude Code at home; setup and the review of the other suggested tools in `docs/ai-tools.md`.
 

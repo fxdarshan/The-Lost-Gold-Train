@@ -33,6 +33,28 @@
     }
     return 0;
   }
+  // keyframed animations: each track is [[seconds, value], ...], eased between keys (smoothstep)
+  const ANIMS = {
+    // idle 1 "watchful": always running underneath (breathing, poncho in the wind, aim drift, head looks round)
+    // idle 2 "wind gust": he lowers the gun and squints into a gust that lifts the poncho, then snaps back to aim
+    idle2: { dur: 4.2, tracks: {
+      armDrop: [[0, 0], [.7, .3], [2.9, .3], [3.25, -.05], [3.6, 0]],
+      head:    [[0, 0], [.9, .07], [2.0, .07], [2.6, -.03], [3.4, 0]],
+      gust:    [[0, 0], [.6, 1.8], [2.6, 1.8], [3.8, 0]],
+      dip:     [[0, 0], [.7, .01], [2.9, .01], [3.3, -.006], [3.7, 0]] } },
+    // win "quick draw": crouch and dip the gun (anticipation), snap up, three shots, stand tall with the poncho flaring, settle
+    win: { dur: 3.2, shots: [.55, .9, 1.25], tracks: {
+      armDrop: [[0, 0], [.28, .3], [.45, -.06], [.55, 0], [1.6, 0], [2.0, -.05], [2.6, 0]],
+      dip:     [[0, 0], [.28, .03], [.45, -.02], [.6, 0], [1.6, 0], [1.95, -.018], [2.8, 0]],
+      head:    [[0, 0], [.28, .06], [.45, -.03], [.6, 0], [1.6, 0], [2.0, -.05], [2.8, 0]],
+      gust:    [[0, 0], [.45, 2.4], [1.8, 1.6], [3.2, 0]] } }
+  };
+  function track(keys, u) {
+    if (!keys) return 0;
+    if (u <= keys[0][0]) return keys[0][1];
+    for (let i = 1; i < keys.length; i++) if (u < keys[i][0]) { const [t0, v0] = keys[i - 1], [t1, v1] = keys[i], q = smooth(0, 1, (u - t0) / (t1 - t0)); return v0 + (v1 - v0) * q; }
+    return keys[keys.length - 1][1];
+  }
   const rot = (x, y, cx, cy, a) => { const c = Math.cos(a), s = Math.sin(a), dx = x - cx, dy = y - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
 
   function create(img, cfg) {
@@ -56,13 +78,14 @@
     // the pose at time t: cloth wave, breathing, head turn, arm aim and recoil
     function pose(t, st) {
       st = st || {};
-      const f = st.fire, gust = 1 + (st.gust || 0) * 1.5;
+      const f = st.fire, an = st.anim && ANIMS[st.anim.name], u = st.anim ? st.anim.u : 0, k = n => an ? track(an.tracks[n], u) : 0;
+      const gust = 1 + (st.gust || 0) * 1.5 + k('gust');
       const kick = f == null || f < 0 ? 0 : (f < .05 ? f / .05 : Math.exp(-(f - .05) / .16));
       return {
         breathe: Math.sin(t * 2.2),
-        head: .022 * Math.sin(t * .8) + .012 * Math.sin(t * 1.9) - .05 * kick,
-        arm: .018 * Math.sin(t * 1.3) - .34 * kick,
-        recoil: 16 * kick, gust, t
+        head: .022 * Math.sin(t * .8) + .012 * Math.sin(t * 1.9) - .05 * kick + k('head'),
+        arm: .018 * Math.sin(t * 1.3) - .34 * kick + k('armDrop'),
+        recoil: 16 * kick, gust, t, dip: k('dip')
       };
     }
     function deform(x, y, n, p, w) {
@@ -72,6 +95,8 @@
         x += d * (20 * Math.sin(T * 1.6 - y * .007) + 7 * Math.sin(T * 2.9 - y * .017 + x * .01));
         y += d * 6 * Math.sin(T * 1.6 - y * .007 + 1.2);
       }
+      // 1b. whole-body crouch (dip > 0) or stretch (dip < 0) about the feet; boots stay planted
+      if (p.dip) y = IH - (IH - y) * (1 - p.dip);
       // 2. breathing: chest and everything above it rise and fall around the waist
       const wb = Math.max(w.torso, w.head, w.arm);
       if (wb) y -= wb * Math.max(0, A.waist[1] - y) * .012 * p.breathe;
@@ -125,7 +150,7 @@
     }
     // where an anchor point (e.g. the gun muzzle) is after deformation, in image pixels
     function point(name, t, st) { const [x, y] = A[name]; return deform(x, y, -1, pose(t, st), weightsAt(x, y)); }
-    return { render, point, width: IW, height: IH };
+    return { render, point, width: IW, height: IH, anims: ANIMS };
   }
-  root.Rig = { create };
+  root.Rig = { create, ANIMS };
 })(typeof window !== 'undefined' ? window : globalThis);
