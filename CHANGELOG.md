@@ -2,6 +2,9 @@
 
 Newest first.
 
+## 2026-11-17: acted win animations for 8 symbols
+- Darshan's Gemini sheets from `docs/symbol-keypose-prompts.md` for the Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag and Horseshoe, built with each symbol's timing row (`--mode motion --settle 16 --timing …`; `--soft` for all but the poster). 75 frames / 2.5 s, seamless loops. Each sheet's pose 1 is the symbol's new idle art. Sources in `assets/source/originals/anims/v2/`.
+
 ## 2026-11-17: no win lines, Western anticipation
 - Win lines are no longer drawn (`CONFIG.showPaylines: false`); winning symbols animate and the others dim more (to 35%). Line shapes are still shown in the paytable.
 - Anticipation: the waiting reel now eases down from full speed to 30% (`anticSlow`) over a 1.8 s window (`frames.anticipation` 54, was 45) instead of spinning at full speed and stopping. Two lit fuse sparks race round its frame with burning trails, warm light pulses inside like a heartbeat, steam rises from below; the stopped reels sink into shadow while the Scatters already showing stay lit and pulse; a burst of sparks if the third Scatter lands.

@@ -341,6 +341,6 @@ for s in S:
     out.append(f"## {s['name']} (`sym_{s['id']}`) — attach `{s['file']}`\n")
     out.append("```text\n" + body.strip() + "\n```\n")
     out.append("Timing (frames per panel): `" + ",".join(map(str, s["timing"])) + "`\n")
-out.append("## Prototype implementation status\n- Prompts written 2026-11-17; sheets not yet generated. Each sheet will be built with `anim_from_keys.py --timing <row above> --settle 16`.\n")
+out.append("## Prototype implementation status\n- 2026-11-17: sheets in the game for the Outlaw, Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe (built with the timing rows below). Still to generate: Lantern, Wild, Scatter, Power Dynamite, A, K, Q, J, 10.\n- Prompts written 2026-11-17; sheets not yet generated. Each sheet will be built with `anim_from_keys.py --timing <row above> --settle 16`.\n")
 open(__import__("os").path.join(__import__("os").path.dirname(__file__), "..", "..", "docs", "symbol-keypose-prompts.md"),"w").write("\n".join(out))
 print(len(S))

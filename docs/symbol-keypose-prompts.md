@@ -885,4 +885,5 @@ GUARDRAILS (follow every one):
 Timing (frames per panel): `6,4,3,4,4,3,3,3,4,7,5,5,6,5,6,7`
 
 ## Prototype implementation status
-- Prompts written 2026-11-17; sheets not yet generated. Each sheet will be built with `anim_from_keys.py --timing <row above> --settle 16`.
+- 2026-11-17: sheets in the game for the Outlaw, Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe (built with the timing rows below). Still to generate: Lantern, Wild, Scatter, Power Dynamite, A, K, Q, J, 10.
+- Prompts written 2026-11-17. Each sheet will be built with `anim_from_keys.py --timing <row above> --settle 16`.
