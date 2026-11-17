@@ -38,6 +38,7 @@ The `slot-project-sync` skill is this checklist; run it at the end of every chan
 | `slot-project-sync` | finishing every change: docs, checks, build, handoff, push |
 
 ## Working style
+- Re-use before adding (Darshan, 2026-11-17): build FX, transitions and UI from art already in the game and shared code effects; add a new asset only when nothing existing can do it.
 - Darshan reviews on screenshots and the single-file build; say plainly what is placeholder, ASSUMED or untested.
 - Ask before changing game probabilities or pays that came from a spec.
 - Art travels through GitHub: files in `art/` are committed, so a chat session can import art added at home and the other way round. Keep each file under 25 MB (GitHub's web upload limit); see `art/README.md`.

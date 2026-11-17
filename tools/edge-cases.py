@@ -121,7 +121,7 @@ async def main():
         # 11 retrigger on the last free spin still plays the 10 extra spins
         n = await pg.evaluate("""(async () => { Game.G.queue = [{type:'trigger'}, ...Array(9).fill({type:'nowin'}), {type:'retrigger'}];
             await Game.play(); return [Game.G.fs.played, Game.G.fs.awarded]; })()""")
-        check('retrigger on the last free spin: 20 spins played', n == [20, 20], str(n))
+        check('retrigger on the last free spin: 20 spins played', n[0] == n[1] and n[0] >= 20 and n[0] % 10 == 0, str(n))   # random later spins may retrigger again
         # 12 max win cap: the round stops at 5,500x and the summary says so
         r = await pg.evaluate("""(async () => { Game.G.balance = 100000; const bet = Game.bet(), b0 = Game.G.balance;
             Game.G.queue = [{type:'trigger', special:0}, ...Array(10).fill({type:'expand5'})];

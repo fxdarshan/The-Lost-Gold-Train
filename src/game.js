@@ -125,7 +125,7 @@
           r.landed = true; SND.play('sfx_reel_stop_0' + (i + 1));
           const sc = G.spinGrid[i];
           sc.forEach((s, rr) => { if (s === SC) { G.fx[i][rr].land = t; SND.play('sfx_scatter_land');
-            if (r.antic) { const [bx, by] = cellCenter(i, rr); emit('spark', bx, by, 40, { angle: 0, spread: 7, speed: 650, gravity: 300, life: .9, size: 11, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); G.anticHit = t; } } });
+            if (r.antic) { const [bx, by] = cellCenter(i, rr); emit('spark', bx, by, 34, { angle: 0, spread: 7, speed: 520, drag: 6, gravity: 120, life: .7, size: 10, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); G.anticHit = t; } } });
         }
         if (u >= 1) { r.state = 'idle'; G.board[i] = G.spinGrid[i].slice(); return; }
       }
@@ -141,7 +141,7 @@
       const a = (o.angle ?? -Math.PI / 2) + (Math.random() - .5) * (o.spread ?? 1.6), sp = (o.speed ?? 500) * (.5 + Math.random());
       G.particles.push({ type, x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: o.gravity ?? 900, life: 0, max: (o.life ?? 1.4) * (.8 + Math.random() * .4),
         rot: Math.random() * 6, vr: (Math.random() - .5) * 8, size: (o.size ?? 22) * (.7 + Math.random() * .6),
-        color: Array.isArray(o.color) ? o.color[Math.floor(Math.random() * o.color.length)] : (o.color || '#fff'), burst: o.burst });
+        color: Array.isArray(o.color) ? o.color[Math.floor(Math.random() * o.color.length)] : (o.color || '#fff'), burst: o.burst, drag: o.drag || 0 });
     }
   }
   function drawParticles(dt) {
@@ -150,7 +150,8 @@
       return true;
     });
     for (const p of G.particles) {
-      p.life += dt; p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+      p.life += dt; if (p.drag) { const k = Math.exp(-p.drag * dt); p.vx *= k; p.vy *= k; }   // drag keeps event sparks close to their source
+      p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
       const a = 1 - Math.pow(p.life / p.max, 2);
       ctx.save(); ctx.globalAlpha = clamp(a, 0, 1); ctx.translate(p.x, p.y);
       if (p.type === 'coin') {
@@ -172,8 +173,8 @@
     const x = x0 + c * cw + cw / 2;
     for (let i = 0; i < n; i++) setTimeout(() => {
       const y = y0 + Math.random() * gh;
-      emit('spark', x + (Math.random() - .5) * cw * .5, y, 14, { angle: 0, spread: 7, speed: 420, gravity: 300, life: .6, size: 9, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] });
-      emit('spark', x, y, 6, { angle: -Math.PI / 2, spread: 1.2, speed: 260, gravity: -60, life: 1.1, size: 22, color: ['rgba(235,222,205,.55)', 'rgba(200,185,170,.45)'] });   // a puff of steam
+      emit('spark', x + (Math.random() - .5) * cw * .5, y, 14, { angle: 0, spread: 7, speed: 380, drag: 6, gravity: 150, life: .55, size: 8, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] });
+      emit('spark', x, y, 6, { angle: -Math.PI / 2, spread: 1.2, speed: 180, drag: 3, gravity: -40, life: 1, size: 22, color: ['rgba(235,222,205,.55)', 'rgba(200,185,170,.45)'] });   // a puff of steam
       SND.play('sfx_cracker_pop');
     }, i * 70 / G.speed);
   }
@@ -309,6 +310,20 @@
     if (fx.pulse != null) scale *= 1 + .06 * Math.sin((t - fx.pulse) * 9);
     if (an) { drawAnimFrame(s, an, Math.floor(F(fx.win) * an.fps / C.fps) % an.frames, cx, cy, alpha); return; }
     drawSym(s, cx, cy, { scale, scaleY: sy, alpha });
+    if (fx.win != null) shineFx(F(fx.win), cx, cy, scale);
+  }
+  // shared win FX for symbols without their own sheet (re-used, no extra asset): a light band sweeps across the
+  // tile and a star sparkle pops on its corner, once per 75-frame loop like the sheet animations
+  function shineFx(f, cx, cy, scale) {
+    const u = (f % 75) / 75, w = cw * .98 * scale, h = ch * .98 * scale;
+    ctx.save(); ctx.beginPath(); ctx.roundRect(cx - w / 2, cy - h / 2, w, h, 12); ctx.clip(); ctx.globalCompositeOperation = 'lighter';
+    const bx = cx - w * .9 + w * 1.8 * clamp(u / .45, 0, 1);
+    if (u < .45) { const g = ctx.createLinearGradient(bx - 70, 0, bx + 70, 0); g.addColorStop(0, 'rgba(255,230,160,0)'); g.addColorStop(.5, 'rgba(255,240,190,.55)'); g.addColorStop(1, 'rgba(255,230,160,0)');
+      ctx.fillStyle = g; ctx.save(); ctx.translate(bx, cy); ctx.rotate(-.35); ctx.fillRect(-70, -h, 140, h * 2); ctx.restore(); }
+    ctx.restore();
+    const sp = clamp(1 - Math.abs(u - .55) / .12, 0, 1);
+    if (sp > 0) { const sx = cx + w * .3, sy2 = cy - h * .3, r = 34 * sp; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(255,246,210,${sp})`;
+      ctx.beginPath(); for (let k = 0; k < 8; k++) { const q = k * Math.PI / 4, rr = k % 2 ? r * .22 : r; ctx.lineTo(sx + Math.cos(q) * rr, sy2 + Math.sin(q) * rr); } ctx.closePath(); ctx.fill(); ctx.restore(); }
   }
   function drawGrid(t) {
     // spinning reels are clipped to the window; stopped symbols may overflow it slightly, as in the mockup
@@ -376,11 +391,11 @@
         const hg = ctx.createRadialGradient(hx, hy2, 0, hx, hy2, 48); hg.addColorStop(0, 'rgba(255,255,230,1)'); hg.addColorStop(.3, 'rgba(255,200,80,.85)'); hg.addColorStop(1, 'rgba(255,120,0,0)');
         ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy2, 48, 0, 7); ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
-        if (Math.random() < .7) emit('spark', hx, hy2, 1, { angle: 0, spread: 7, speed: 220, gravity: 500, life: .45, size: 6, color: ['#fff6b0', '#ffb84a', '#ff6a1a'] });
+        if (Math.random() < .7) emit('spark', hx, hy2, 1, { angle: 0, spread: 7, speed: 200, drag: 7, gravity: 160, life: .4, size: 6, color: ['#fff6b0', '#ffb84a', '#ff6a1a'] });
       }
       ctx.restore();
       // steam rising from the bottom of the reel
-      if (Math.random() < .35 * a) emit('spark', x + Math.random() * w, y0 + gh - 10, 1, { angle: -Math.PI / 2, spread: .5, speed: 90, gravity: -30, life: 1.6, size: 26, color: ['rgba(240,228,214,.22)', 'rgba(220,205,190,.18)'] });
+      if (Math.random() < .35 * a) emit('spark', x + Math.random() * w, y0 + gh - 10, 1, { angle: -Math.PI / 2, spread: .4, speed: 70, drag: 1.2, gravity: -20, life: 1.5, size: 24, color: ['rgba(240,228,214,.22)', 'rgba(220,205,190,.18)'] });
     });
   }
   // trigger: the Scatter badge's railway track lays down its reel (fx_scatter_full); the sparks are the headlight
@@ -398,7 +413,7 @@
       // the Scatter tiles stay on top of their track, wherever they landed on the reel
       for (let r = 0; r < C.rows; r++) if (G.board[f.c][r] === SC) { const [cx, cy] = cellCenter(f.c, r); drawCell(f.c, r, SC, cx, cy, t); }
       // burning fuse tip
-      if (u < 1) { const yy = y0 + gh * reveal; emit('spark', x + cw / 2, yy, 2, { angle: Math.PI / 2, spread: 3, speed: 200, gravity: 300, life: .4, size: 8, color: ['#fff6c8', '#ffb000'] }); }
+      if (u < 1) { const yy = y0 + gh * reveal; emit('spark', x + cw / 2, yy, 2, { angle: Math.PI / 2, spread: 3, speed: 200, drag: 6, gravity: 150, life: .35, size: 8, color: ['#fff6c8', '#ffb000'] }); }
     });
   }
   // expanded special symbol: grows from its cells to fill the reel
@@ -609,7 +624,7 @@
       const fp = clamp(f - fi, 0, FR.pick[0]), u = fp / FR.pick[0], n = C.regular.length;
       const steps = 3 * n + ((m.special - m.start + n) % n), idx = (m.start + Math.floor(steps * (1 - Math.pow(1 - u, 2.2)) + (u >= 1 ? 0 : 0))) % n;
       const shown = u >= 1 ? m.special : idx;
-      if (shown !== m.last) { m.last = shown; SND.play(u >= 1 ? 'sfx_pick_stop' : 'sfx_pick_tick'); if (u >= 1) for (let i = 0; i < 30; i++) emit('spark', W / 2, H * .45, 1, { angle: 0, spread: 7, speed: 600, gravity: 300, life: .9, size: 10, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] }); }
+      if (shown !== m.last) { m.last = shown; SND.play(u >= 1 ? 'sfx_pick_stop' : 'sfx_pick_tick'); if (u >= 1) for (let i = 0; i < 30; i++) emit('spark', W / 2, H * .45, 1, { angle: 0, spread: 7, drag: 3.5, speed: 600, gravity: 300, life: .9, size: 10, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] }); }
       ctx.save(); ctx.fillStyle = 'rgba(40,0,0,.55)'; ctx.beginPath(); ctx.roundRect(-210, -195, 420, 340, 24); ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = u >= 1 ? '#fff3a0' : '#ffd34a'; if (u >= 1) { ctx.shadowColor = '#ffd34a'; ctx.shadowBlur = 30; } ctx.stroke(); ctx.restore();
       const img = A.symbol(shown), k = Math.min(380 / img.width, 300 / img.height) * (u >= 1 ? 1 + .06 * Math.sin(t * 6) : 1);
       ctx.drawImage(img, -img.width * k / 2, -25 - img.height * k / 2, img.width * k, img.height * k);
@@ -641,43 +656,63 @@
     const tr = G.trans; if (!tr) return;
     const f = (t - tr.t0) * C.fps * G.speed;
     if (tr.kind === 'toFree') {
-      // locomotive steam rolls across the screen from the right, FREE SPINS shows through it, then it clears
-      const [a, b, c] = FR.transToFree;
+      // reuses the Steam Train symbol art (no extra asset): the locomotive charges at the camera headlamp-first,
+      // the lamp blinds the screen, its steam fills it, FREE SPINS stamps in, then the steam lifts off the carriage
+      const [a, b, c] = FR.transToFree, inU = clamp(f / a, 0, 1), outU = clamp((f - a - b) / c, 0, 1);
       if (!tr.puffs) {
-        let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-        tr.puffs = [];
-        for (let i = 0; i < 120; i++) tr.puffs.push({ x: rnd() * 1.1 - .05, y: rnd() * 1.1 - .05, r: 110 + rnd() * 230, d: rnd() * .25, sh: .8 + rnd() * .2 });
+        let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        tr.puffs = []; for (let i = 0; i < 80; i++) { const q = rnd() * 7; tr.puffs.push({ q, ts: .45 + rnd() * .5, d: .2 + rnd() * .9, r: 160 + rnd() * 240, sh: .82 + rnd() * .18, o: rnd() }); }
       }
-      const inU = clamp(f / a, 0, 1), outU = clamp((f - a - b) / c, 0, 1);
       if (f >= a && !tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
-      // solid backing once the puffs have closed the gap, so nothing shows through mid-transition
-      const solid = clamp((inU - .75) / .2, 0, 1) * (1 - clamp(outU / .45, 0, 1));
-      if (solid > 0) { ctx.save(); ctx.globalAlpha = solid; ctx.fillStyle = '#d9c8b4'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-      for (const p of tr.puffs) {
-        // in: each puff rolls in from the right, the leading edge first; out: puffs swell, lift and fade
-        const k = clamp((inU * 1.35 - (1 - p.x) * .35 - p.d * .5) / .55, 0, 1), e = ease.out(k);
-        const o = ease.inOut(clamp((outU - p.d) / (1 - p.d * .8), 0, 1));
-        const x = (p.x + (1 - e) * 1.1) * W - o * 160, y = p.y * H - o * 220, r = p.r * (.55 + .45 * e) * (1 + o * .6);
-        const al = e * (1 - o); if (al <= 0) continue;
-        // soft, low-contrast puffs (no hard highlight) so they read as steam, not bubbles
-        const g = ctx.createRadialGradient(x - r * .12, y - r * .15, 0, x, y, r);
-        const c1 = `${Math.round(240 * p.sh)},${Math.round(228 * p.sh)},${Math.round(214 * p.sh)}`;
-        g.addColorStop(0, `rgba(${c1},${al * .95})`); g.addColorStop(.6, `rgba(${c1},${al * .7})`); g.addColorStop(1, `rgba(${c1},0)`);
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      const img = A.symbol(1), lampX = .78, lampY = .44, cx = W / 2, cy = H * .45;
+      // darken the reels behind as the train approaches
+      if (inU < 1) { ctx.save(); ctx.globalAlpha = ease.inOut(inU) * .7; ctx.fillStyle = '#100804'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      if (img && inU < 1) {
+        const z = .45 * Math.pow(9, inU * inU), w = img.width * z * 2.2, h = img.height * z * 2.2;
+        const shake = inU > .5 ? (inU - .5) * 14 : 0;
+        ctx.save(); ctx.globalAlpha = clamp(inU * 5, 0, 1) * (1 - clamp((inU - .85) / .15, 0, 1));
+        ctx.drawImage(img, cx - w * lampX + (Math.random() - .5) * shake, cy - h * lampY + (Math.random() - .5) * shake, w, h); ctx.restore();
       }
-      // sunset light through the steam: warm from below, cooler at the top
-      const wa = ease.out(inU) * (1 - outU);
-      if (wa > 0) { ctx.save(); ctx.globalAlpha = wa * .45; const lg = ctx.createLinearGradient(0, 0, 0, H); lg.addColorStop(0, 'rgba(120,90,80,.5)'); lg.addColorStop(.6, 'rgba(255,170,90,.35)'); lg.addColorStop(1, 'rgba(230,90,40,.75)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-      const ta = clamp((inU - .8) / .2, 0, 1) * (1 - clamp(outU / .3, 0, 1));
-      if (ta > 0) { ctx.save(); ctx.globalAlpha = ta; blockText('FREE SPINS', W / 2, H * .45, 170); ctx.restore(); }
+      // the headlamp: grows from a point to a blinding warm flash at the end of the charge
+      const lampA = (inU < 1 ? Math.pow(inU, 1.6) : 1) * (1 - clamp(outU * 3, 0, 1)), lr = 60 + 1400 * Math.pow(inU, 2.4);
+      if (lampA > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const lg = ctx.createRadialGradient(cx, cy, 0, cx, cy, lr);
+        lg.addColorStop(0, `rgba(255,250,225,${lampA})`); lg.addColorStop(.25, `rgba(255,214,130,${lampA * .8})`); lg.addColorStop(1, 'rgba(255,140,50,0)');
+        ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      // steam: a warm backing, then puffs bursting outward from the lamp and drifting up on the way out
+      const solid = clamp((inU - .8) / .2, 0, 1) * (1 - clamp(outU / .45, 0, 1));
+      if (solid > 0) { ctx.save(); ctx.globalAlpha = solid; const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * .7); bg.addColorStop(0, '#f2e4cc'); bg.addColorStop(1, '#c9b49c'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      for (const p of tr.puffs) {
+        const age = inU - p.ts; if (age <= 0) continue;
+        const g = 1 - Math.exp(-age * 6), o = ease.inOut(clamp((outU - p.o * .3) / .7, 0, 1));
+        const dist = (p.d * W * .55) * g, x = cx + Math.cos(p.q) * dist + o * 260, y = cy + Math.sin(p.q) * dist * .7 - o * 300, r = p.r * (.4 + .8 * g) * (1 + o * .5);
+        const al = clamp(age * 8, 0, 1) * (1 - o); if (al <= 0) continue;
+        const c1 = `${Math.round(240 * p.sh)},${Math.round(228 * p.sh)},${Math.round(214 * p.sh)}`;
+        const gr = ctx.createRadialGradient(x - r * .15, y - r * .2, 0, x, y, r); gr.addColorStop(0, `rgba(${c1},${al * .95})`); gr.addColorStop(.55, `rgba(${c1},${al * .7})`); gr.addColorStop(1, `rgba(${c1},0)`);
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+      }
+      // FREE SPINS stamps in once the screen is covered
+      const sf = f - a;
+      if (sf > 0 && outU < .35) {
+        const k = ease.back(clamp(sf / 12, 0, 1), 2.2), sc = 1.7 - .7 * k, ta = clamp(sf / 5, 0, 1) * (1 - clamp(outU / .35, 0, 1));
+        ctx.save(); ctx.globalAlpha = ta; ctx.translate(W / 2, H * .45); ctx.scale(sc, sc); blockText('FREE SPINS', 0, 0, 170); ctx.restore();
+        if (!tr.stamped && sf > 10) { tr.stamped = true; SND.play('banner_hit'); emit('spark', W / 2, H * .5, 40, { angle: 0, spread: 7, speed: 700, drag: 4, gravity: 200, life: .8, size: 10, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); }
+      }
       if (f >= a + b + c) { G.trans = null; tr.resolve(); }
     } else {
       const u = clamp(f / FR.transToBase, 0, 1);
       G.camera = 1.08 - .08 * ease.out(u);
+      // steam rolls off the screen to the left as the base game settles back
+      if (!tr.puffs) { let seed = 5; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647; tr.puffs = []; for (let i = 0; i < 50; i++) tr.puffs.push({ x: rnd(), y: rnd(), r: 140 + rnd() * 200, d: rnd() * .3 }); }
+      for (const p of tr.puffs) {
+        const k = ease.inOut(clamp((u - p.d) / .7, 0, 1)), al = 1 - k; if (al <= 0) continue;
+        const x = (p.x - k * 1.3) * W, y = p.y * H - k * 120, r = p.r * (1 + k * .4);
+        const gr = ctx.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, `rgba(236,224,210,${al * .9})`); gr.addColorStop(1, 'rgba(236,224,210,0)');
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+      }
       if (u >= 1) { G.camera = 1; G.trans = null; tr.resolve(); }
     }
   }
-  function popAt(x, y) { emit('spark', x, y, 18, { angle: 0, spread: 7, speed: 420, gravity: 250, life: .8, size: 9, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] }); SND.play('sfx_cracker_pop'); }
+  function popAt(x, y) { emit('spark', x, y, 18, { angle: 0, spread: 7, speed: 400, drag: 5, gravity: 150, life: .7, size: 9, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] }); SND.play('sfx_cracker_pop'); }
 
   /* ------------------------------------------------------------ paytable / rules (info button) */
   function drawInfo() {
@@ -818,7 +853,7 @@
       const rows = step.cells.filter(p => p[0] === c).map(p => p[1]);
       G.expanded[c] = { sym: step.sym, y0: y0 + Math.min(...rows) * ch, y1: y0 + (Math.max(...rows) + 1) * ch, t1: now() };
       SND.play('sfx_expand');
-      const [cx] = cellCenter(c, 1); emit('spark', cx, y0 + gh / 2, 22, { angle: 0, spread: 7, speed: 500, gravity: 200, life: .7, size: 10, color: ['#fff6c8', '#ffd34a'] });
+      const [cx] = cellCenter(c, 1); emit('spark', cx, y0 + gh / 2, 22, { angle: 0, spread: 7, speed: 460, drag: 6, gravity: 120, life: .6, size: 10, color: ['#fff6c8', '#ffd34a'] });
       await waitF(gr * .6);
     }
     await waitF(gr * .4 + st);

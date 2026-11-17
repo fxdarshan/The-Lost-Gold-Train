@@ -2,6 +2,14 @@
 
 Newest first.
 
+## 2026-11-17: two-loop wins, train transition, tighter particles, asset reuse
+- Every win animation plays at least two full loops: `frames.symWin` 15+126+15 = 156 frames (5.2 s), `lineCycle` 156 (measured 4.99 s of highlight in the browser).
+- Transition to free spins re-made with existing art (no new asset): the Steam Train symbol charges at the camera headlamp-first, the lamp flares, its steam bursts out and covers the screen, FREE SPINS stamps in with sparks, the steam lifts off the gold carriage (`transToFree` 30/36/30). Back to base: steam rolls off to the left with the zoom (`transToBase` 45).
+- Particles: new `drag` option; event sparks (anticipation fuse, Scatter landing, trigger track, expansion, pick, pops) slowed by drag and lower gravity so they stay within about one reel of their source.
+- Reuse: a shared code "shine" win FX (light sweep and star sparkle each loop) for symbols without their own sheet (A, Power Dynamite), instead of extra sheets.
+- Fixed: `art/backgrounds/` still held the old backgrounds, so the last art import put them back in the game; the new ones are now in `art/backgrounds/`.
+- Edge case 11 accepts extra natural retriggers on the random spins.
+
 ## 2026-11-17: acted win animations for 8 symbols
 - Darshan's Gemini sheets from `docs/symbol-keypose-prompts.md` for the Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag and Horseshoe, built with each symbol's timing row (`--mode motion --settle 16 --timing …`; `--soft` for all but the poster). 75 frames / 2.5 s, seamless loops. Each sheet's pose 1 is the symbol's new idle art. Sources in `assets/source/originals/anims/v2/`.
 

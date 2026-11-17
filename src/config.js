@@ -147,8 +147,8 @@
     fps: 30,
     frames: {
       bgBaseLoop: 120,                  // background breathing
-      symWin: [15, 45, 15],             // winning symbol: pop, hold, settle = 75 frames, one full 2.5 s win animation (Darshan: 'too fast')
-      lineCycle: 75,                    // each line shown on its own after the all-lines view (one full 2.5 s symbol animation)
+      symWin: [15, 126, 15],            // winning symbol: pop, hold, settle = 156 frames (two full loops + margin) = two full 2.5 s loops of the win animation (Darshan 2026-11-17: at least two loops)
+      lineCycle: 156,                   // each line shown on its own after the all-lines view (two full loops + margin)
       scatterLand: 12,                  // scatter squash when it lands
       fuse: [24, 18, 18],               // trigger: fuse unrolls down the reel, crackers pop, settle
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold
@@ -158,8 +158,8 @@
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
       summaryTally: 75,
-      transToFree: [20, 40, 30],     // steam rolls in, holds, clears
-      transToBase: 60
+      transToFree: [30, 36, 30],     // locomotive charges across and its steam covers the screen, FREE SPINS stamps in, steam lifts
+      transToBase: 45
     },
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing
     anticSlow: 0.3,                     // ASSUMED: speed at the end of the anticipation window, as a fraction of full speed
