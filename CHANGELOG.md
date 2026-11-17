@@ -2,6 +2,9 @@
 
 Newest first.
 
+## 2026-11-17: spine-mcp wired in
+- `.mcp.json`: the spine-mcp server (MIT) for Claude Code at home; setup and the review of the other suggested tools in `docs/ai-tools.md`.
+
 ## 2026-11-17: rigged Outlaw mascot
 - `src/rig.js`: a small mesh rig (Spine-style mesh deform) that animates the single mascot image, no extra art. Soft-edged bones traced on the art (`CONFIG.mascotRig`): the poncho waves in a travelling wind (stronger in free spins), the chest breathes, the head turns, the gun arm drifts as he aims.
 - He fires on every line win, and twice on win banners and free-spins triggers: the arm kicks up and back, head jolt, muzzle flash, sparks and a smoke curl from the barrel. Replaces the old hop.

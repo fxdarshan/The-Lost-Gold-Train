@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-17 · claude.ai chat (21)
+- spine-mcp added as project MCP server (.mcp.json, also in the template); see docs/ai-tools.md. Darshan: install uv at home and approve the server.
 ### 2026-11-17 · claude.ai chat (20)
 - Rigged mascot (src/rig.js mesh deform, CONFIG.mascotRig); fires on wins; used in the gunfight. Generic: backport rig.js to the template.
 ### 2026-11-17 · claude.ai chat (19)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Two-loop wins, train transition (reuses sym_01 art), particle drag, shared shine FX; restored new backgrounds (art/ had old ones). Reuse rule: prefer existing art and code FX over new assets.
 ### 2026-11-17 · claude.ai chat (17)
 - 8 acted animations from Darshan's Gemini sheets with the prompt timings. Remaining sheets: Lantern, Wild, Scatter, Power Dynamite, A–10.
-### 2026-11-17 · claude.ai chat (16)
-- Win lines removed; new anticipation (slow-down, fuse sparks round the reel, veil, steam).
