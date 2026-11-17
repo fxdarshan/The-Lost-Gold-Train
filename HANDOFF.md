@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-17 · claude.ai chat (19)
+- Gunfight transition (two mirrored Outlaw mascots); expanded reels animate two loops.
 ### 2026-11-17 · claude.ai chat (18)
 - Two-loop wins, train transition (reuses sym_01 art), particle drag, shared shine FX; restored new backgrounds (art/ had old ones). Reuse rule: prefer existing art and code FX over new assets.
 ### 2026-11-17 · claude.ai chat (17)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Win lines removed; new anticipation (slow-down, fuse sparks round the reel, veil, steam).
 ### 2026-11-17 · claude.ai chat (15)
 - Key-pose prompts for all 18 symbols (`docs/symbol-keypose-prompts.md`); waiting for Darshan's Gemini sheets, then build each with its timing row.
-### 2026-11-17 · claude.ai chat (14)
-- New layout (logo on top, bigger reels, Outlaw right, buy panel left, slim bar). Ante bet slot reserved; ask Darshan whether to add an ante bet (new maths).

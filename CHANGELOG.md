@@ -2,6 +2,11 @@
 
 Newest first.
 
+## 2026-11-17: gunfight transition, animated expansions
+- Transition to free spins is now a gunfight, re-using the Outlaw mascot art (no new asset): an Outlaw slides in on each side, they fire at each other (muzzle flashes, recoil, tracers), the bullets meet in a flash and spark burst, gunsmoke rolls out and covers the scene, FREE SPINS stamps in, and the smoke thins slowly over 3 s (`transToFree` 40/30/90). Replaces the train charge.
+- Expanded reels play the symbol's win animation on every tile, two loops (`frames.expandLines` 45 → 156); symbols without a sheet get the shared shine. The Outlaw's full-reel art (`sym_00_expanded`) is used only if he has no win animation.
+- Expanded reel panels are dark timber (were New Year Crackers red).
+
 ## 2026-11-17: two-loop wins, train transition, tighter particles, asset reuse
 - Every win animation plays at least two full loops: `frames.symWin` 15+126+15 = 156 frames (5.2 s), `lineCycle` 156 (measured 4.99 s of highlight in the browser).
 - Transition to free spins re-made with existing art (no new asset): the Steam Train symbol charges at the camera headlamp-first, the lamp flares, its steam bursts out and covers the screen, FREE SPINS stamps in with sparks, the steam lifts off the gold carriage (`transToFree` 30/36/30). Back to base: steam rolls off to the left with the zoom (`transToBase` 45).

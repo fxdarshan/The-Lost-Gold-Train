@@ -426,7 +426,8 @@
       const top = lerp(e.y0, y0 - 4, u), bot = lerp(e.y1, y0 + gh + 4, u);
       ctx.save();
       ctx.beginPath(); ctx.roundRect(x + 3, top, cw - 6, bot - top, 14); ctx.clip();
-      if (e.sym === 0 && bigArt) {
+      const anE = A.anim(e.sym);
+      if (e.sym === 0 && bigArt && !anE) {
         // symbol 0 has its own full-reel art (sym_00_expanded), drawn over a panel in CONFIG.texts.expandedPanel colours
         const pc = (C.texts && C.texts.expandedPanel) || ['#7fd0ff', '#bfe9ff', '#ffffff'];
         const g = ctx.createLinearGradient(0, y0, 0, y0 + gh); g.addColorStop(0, pc[0]); g.addColorStop(.7, pc[1]); g.addColorStop(1, pc[2]);
@@ -434,9 +435,14 @@
         const k = Math.min((cw - 14) / bigArt.width, (gh - 6) / bigArt.height), w = bigArt.width * k, h = bigArt.height * k;
         ctx.drawImage(bigArt, x + cw / 2 - w / 2, y0 + gh - h + 2, w, h);
       } else {
-        const g = ctx.createLinearGradient(0, y0, 0, y0 + gh); g.addColorStop(0, 'rgba(120,10,20,.92)'); g.addColorStop(1, 'rgba(70,5,15,.92)');
+        const g = ctx.createLinearGradient(0, y0, 0, y0 + gh); g.addColorStop(0, 'rgba(50,28,14,.94)'); g.addColorStop(1, 'rgba(28,15,8,.94)');   // dark timber, like the reel panels
         ctx.fillStyle = g; ctx.fillRect(x, y0 - 6, cw, gh + 12);
-        for (let r = 0; r < C.rows; r++) { const [cx, cy] = cellCenter(c, r); drawSym(e.sym, cx, cy, { scale: .96 }); }
+        // once the expanded reels pay, every tile plays the symbol's win animation (or the shared shine), like a normal win
+        for (let r = 0; r < C.rows; r++) {
+          const [cx, cy] = cellCenter(c, r), fA = e.tA ? (t - e.tA) * C.fps * G.speed : -1;
+          if (fA >= 0 && anE) drawAnimFrame(e.sym, anE, Math.floor(fA * anE.fps / C.fps) % anE.frames, cx, cy, 1);
+          else { drawSym(e.sym, cx, cy, { scale: .96 }); if (fA >= 0) shineFx(fA, cx, cy, .96); }
+        }
       }
       ctx.restore();
       // gold frame with a pulse
@@ -656,46 +662,66 @@
     const tr = G.trans; if (!tr) return;
     const f = (t - tr.t0) * C.fps * G.speed;
     if (tr.kind === 'toFree') {
-      // reuses the Steam Train symbol art (no extra asset): the locomotive charges at the camera headlamp-first,
-      // the lamp blinds the screen, its steam fills it, FREE SPINS stamps in, then the steam lifts off the carriage
-      const [a, b, c] = FR.transToFree, inU = clamp(f / a, 0, 1), outU = clamp((f - a - b) / c, 0, 1);
+      // gunfight (re-uses the Outlaw mascot art, no extra asset): an Outlaw slides in on each side, they fire at each
+      // other, the bullets meet in a spark burst, gunsmoke fills the scene, FREE SPINS stamps in, the smoke clears slowly
+      const [a, b, c] = FR.transToFree, outU = clamp((f - a - b) / c, 0, 1);
+      const img = A.get('char_mascot'), FIRE = [14, 18], MEET = 23;
+      const k = H * 1.55 / (img ? img.height : 1200), tipX = 525, tipY = 187;      // muzzle position in the mascot art
+      const tip = side => [side ? W * .70 : W * .30, H * .40];
       if (!tr.puffs) {
-        let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-        tr.puffs = []; for (let i = 0; i < 80; i++) { const q = rnd() * 7; tr.puffs.push({ q, ts: .45 + rnd() * .5, d: .2 + rnd() * .9, r: 160 + rnd() * 240, sh: .82 + rnd() * .18, o: rnd() }); }
+        let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        tr.puffs = [];
+        // gunsmoke from each muzzle (rolling toward the middle) and from the bullet collision
+        for (const side of [0, 1]) for (let i = 0; i < 26; i++) { const [mx, my] = tip(side); tr.puffs.push({ f0: FIRE[side] + rnd() * 14, x: mx, y: my, dx: (side ? -1 : 1) * (80 + rnd() * 520), dy: (rnd() - .5) * 360, r: 130 + rnd() * 200, d: rnd(), sh: .78 + rnd() * .22 }); }
+        for (let i = 0; i < 40; i++) { const q = rnd() * 7, dd = 150 + rnd() * 750; tr.puffs.push({ f0: MEET + rnd() * 14, x: W / 2, y: H * .40, dx: Math.cos(q) * dd, dy: Math.sin(q) * dd * .7, r: 160 + rnd() * 240, d: rnd(), sh: .8 + rnd() * .2 }); }
       }
       if (f >= a && !tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
-      const img = A.symbol(1), lampX = .78, lampY = .44, cx = W / 2, cy = H * .45;
-      // darken the reels behind as the train approaches
-      if (inU < 1) { ctx.save(); ctx.globalAlpha = ease.inOut(inU) * .7; ctx.fillStyle = '#100804'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-      if (img && inU < 1) {
-        const z = .45 * Math.pow(9, inU * inU), w = img.width * z * 2.2, h = img.height * z * 2.2;
-        const shake = inU > .5 ? (inU - .5) * 14 : 0;
-        ctx.save(); ctx.globalAlpha = clamp(inU * 5, 0, 1) * (1 - clamp((inU - .85) / .15, 0, 1));
-        ctx.drawImage(img, cx - w * lampX + (Math.random() - .5) * shake, cy - h * lampY + (Math.random() - .5) * shake, w, h); ctx.restore();
+      // dusk dims the scene as the duel starts
+      const dimA = clamp(f / 10, 0, 1) * (1 - outU);
+      if (dimA > 0) { ctx.save(); ctx.globalAlpha = dimA * .6; ctx.fillStyle = '#120804'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      // the two Outlaws slide in, recoil when they fire, and vanish into the smoke
+      const showA = clamp((a + 4 - f) / 8, 0, 1);
+      if (img && showA > 0) for (const side of [0, 1]) {
+        const slide = 1 - ease.out(clamp(f / 12, 0, 1)), rec = f >= FIRE[side] ? Math.exp(-(f - FIRE[side]) / 4) : 0;
+        const [mx, my] = tip(side), dir = side ? -1 : 1;
+        ctx.save(); ctx.globalAlpha = showA; ctx.translate(mx - dir * (slide * 600 + rec * 30), my - rec * 18); ctx.rotate(-dir * rec * .08); ctx.scale(dir * k, k);
+        ctx.drawImage(img, -tipX, -tipY); ctx.restore();
       }
-      // the headlamp: grows from a point to a blinding warm flash at the end of the charge
-      const lampA = (inU < 1 ? Math.pow(inU, 1.6) : 1) * (1 - clamp(outU * 3, 0, 1)), lr = 60 + 1400 * Math.pow(inU, 2.4);
-      if (lampA > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const lg = ctx.createRadialGradient(cx, cy, 0, cx, cy, lr);
-        lg.addColorStop(0, `rgba(255,250,225,${lampA})`); lg.addColorStop(.25, `rgba(255,214,130,${lampA * .8})`); lg.addColorStop(1, 'rgba(255,140,50,0)');
-        ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
-      // steam: a warm backing, then puffs bursting outward from the lamp and drifting up on the way out
-      const solid = clamp((inU - .8) / .2, 0, 1) * (1 - clamp(outU / .45, 0, 1));
-      if (solid > 0) { ctx.save(); ctx.globalAlpha = solid; const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * .7); bg.addColorStop(0, '#f2e4cc'); bg.addColorStop(1, '#c9b49c'); ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      // muzzle flashes and bullet tracers
+      for (const side of [0, 1]) {
+        const df = f - FIRE[side], [mx, my] = tip(side), dir = side ? -1 : 1;
+        if (df >= 0 && df < 5) { const r = 150 * (1 - df / 5) + 40; ctx.save(); ctx.globalCompositeOperation = 'lighter';
+          const g = ctx.createRadialGradient(mx, my, 0, mx, my, r); g.addColorStop(0, 'rgba(255,255,230,1)'); g.addColorStop(.3, 'rgba(255,200,90,.9)'); g.addColorStop(1, 'rgba(255,120,30,0)');
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(mx, my, r, 0, 7); ctx.fill(); ctx.restore();
+          if (df < 1) { SND.play('sfx_cracker_pop'); emit('spark', mx, my, 18, { angle: dir > 0 ? 0 : Math.PI, spread: 1.2, speed: 600, drag: 6, gravity: 100, life: .4, size: 8, color: ['#fff6c8', '#ffd34a'] }); } }
+        const bu = clamp((f - FIRE[side]) / (MEET - FIRE[side]), 0, 1);
+        if (df >= 0 && bu < 1) { const bx = mx + (W / 2 - mx) * bu, by = my; ctx.save(); ctx.globalCompositeOperation = 'lighter';
+          const g = ctx.createLinearGradient(bx - dir * 160, by, bx, by); g.addColorStop(0, 'rgba(255,200,100,0)'); g.addColorStop(1, 'rgba(255,245,200,1)');
+          ctx.strokeStyle = g; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(bx - dir * 160, by); ctx.lineTo(bx, by); ctx.stroke(); ctx.restore(); }
+      }
+      // the bullets meet: flash and a burst of sparks
+      const dm = f - MEET;
+      if (dm >= 0 && dm < 8) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const r = 80 + dm * 70, al = 1 - dm / 8;
+        const g = ctx.createRadialGradient(W / 2, H * .4, 0, W / 2, H * .4, r); g.addColorStop(0, `rgba(255,255,235,${al})`); g.addColorStop(.4, `rgba(255,190,80,${al * .8})`); g.addColorStop(1, 'rgba(255,120,30,0)');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
+        if (!tr.met) { tr.met = true; SND.play('banner_hit'); emit('spark', W / 2, H * .4, 50, { angle: 0, spread: 7, speed: 800, drag: 4.5, gravity: 200, life: .7, size: 9, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); } }
+      // gunsmoke: puffs roll out, a solid haze closes the last gaps, then everything thins slowly (each puff on its own clock)
+      const haze = clamp((f - (a - 10)) / 10, 0, 1) * (1 - ease.inOut(clamp(outU / .8, 0, 1)));
+      if (haze > 0) { ctx.save(); ctx.globalAlpha = haze; const hg = ctx.createRadialGradient(W / 2, H * .45, 0, W / 2, H * .45, W * .75); hg.addColorStop(0, '#d8d0c6'); hg.addColorStop(1, '#a89a8c'); ctx.fillStyle = hg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
       for (const p of tr.puffs) {
-        const age = inU - p.ts; if (age <= 0) continue;
-        const g = 1 - Math.exp(-age * 6), o = ease.inOut(clamp((outU - p.o * .3) / .7, 0, 1));
-        const dist = (p.d * W * .55) * g, x = cx + Math.cos(p.q) * dist + o * 260, y = cy + Math.sin(p.q) * dist * .7 - o * 300, r = p.r * (.4 + .8 * g) * (1 + o * .5);
-        const al = clamp(age * 8, 0, 1) * (1 - o); if (al <= 0) continue;
-        const c1 = `${Math.round(240 * p.sh)},${Math.round(228 * p.sh)},${Math.round(214 * p.sh)}`;
+        const age = (f - p.f0) / C.fps; if (age <= 0) continue;
+        const g2 = 1 - Math.exp(-age * 2.2), o = ease.inOut(clamp((outU - p.d * .35) / .65, 0, 1));
+        const x = p.x + p.dx * g2 + Math.sin(t * .7 + p.d * 9) * 30 * o, y = p.y + p.dy * g2 - o * 200, r = p.r * (.3 + .9 * g2) * (1 + o * .6);
+        const al = clamp(age * 6, 0, 1) * (1 - o); if (al <= 0) continue;
+        const c1 = `${Math.round(220 * p.sh)},${Math.round(212 * p.sh)},${Math.round(202 * p.sh)}`;
         const gr = ctx.createRadialGradient(x - r * .15, y - r * .2, 0, x, y, r); gr.addColorStop(0, `rgba(${c1},${al * .95})`); gr.addColorStop(.55, `rgba(${c1},${al * .7})`); gr.addColorStop(1, `rgba(${c1},0)`);
         ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
       }
-      // FREE SPINS stamps in once the screen is covered
+      // FREE SPINS stamps in once the smoke has covered the scene
       const sf = f - a;
-      if (sf > 0 && outU < .35) {
-        const k = ease.back(clamp(sf / 12, 0, 1), 2.2), sc = 1.7 - .7 * k, ta = clamp(sf / 5, 0, 1) * (1 - clamp(outU / .35, 0, 1));
+      if (sf > 0 && outU < .3) {
+        const kk = ease.back(clamp(sf / 12, 0, 1), 2.2), sc = 1.7 - .7 * kk, ta = clamp(sf / 5, 0, 1) * (1 - clamp(outU / .3, 0, 1));
         ctx.save(); ctx.globalAlpha = ta; ctx.translate(W / 2, H * .45); ctx.scale(sc, sc); blockText('FREE SPINS', 0, 0, 170); ctx.restore();
-        if (!tr.stamped && sf > 10) { tr.stamped = true; SND.play('banner_hit'); emit('spark', W / 2, H * .5, 40, { angle: 0, spread: 7, speed: 700, drag: 4, gravity: 200, life: .8, size: 10, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); }
       }
       if (f >= a + b + c) { G.trans = null; tr.resolve(); }
     } else {
@@ -860,6 +886,7 @@
     for (let c = 0; c < C.reels; c++) if (step.reels.includes(c)) for (let r = 0; r < C.rows; r++) G.board[c][r] = step.sym;
     // 3. all lines pay
     const t2 = now(); G.lines = { lines: C.paylines.map((_, i) => i), t0: t2 };
+    step.reels.forEach(c => { if (G.expanded[c]) G.expanded[c].tA = t2; });
     G.labels = [{ x: x0 + gw / 2, y: y0 + gh / 2, t0: t2, text: fmt(step.amount), size: 84 }];
     SND.play('sfx_symbol_win_line'); setWin(G.win + step.amount);
     await waitF(FR.expandLines, true);

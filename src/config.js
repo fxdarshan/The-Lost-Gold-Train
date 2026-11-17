@@ -153,12 +153,12 @@
       fuse: [24, 18, 18],               // trigger: fuse unrolls down the reel, crackers pop, settle
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold
       expand: [12, 24, 12],             // expanding symbol: flash, grow to the full reel, settle
-      expandLines: 45,                  // all 10 lines shown over the expanded reels
+      expandLines: 156,                 // the expanded reels pay: their tiles play the win animation twice (two loops + margin)
       anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
       summaryTally: 75,
-      transToFree: [30, 36, 30],     // locomotive charges across and its steam covers the screen, FREE SPINS stamps in, steam lifts
+      transToFree: [40, 30, 90],     // gunfight: Outlaws fire, bullets meet, smoke covers (40); FREE SPINS (30); smoke clears slowly (90 = 3 s)
       transToBase: 45
     },
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing
