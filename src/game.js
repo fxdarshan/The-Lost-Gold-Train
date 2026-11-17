@@ -237,9 +237,10 @@
   }
   function shoot() {
     const t = now(), ma = G.mascotAnim;
-    if (ma && ma.name === 'win' && t - ma.t0 < 1.4) return;          // already drawing: let the shots play out
-    G.mascotAnim = { name: 'win', t0: t, dur: 3.2 }; G.mascotIdleAt = t + 3.2 + 6;
-    for (const d of [.55, .9, 1.25]) G.shots.push(t + d);
+    const W2 = root.Rig.ANIMS.win;
+    if (ma && ma.name === 'win' && t - ma.t0 < W2.dur - .6) return;     // already playing: let it finish
+    G.mascotAnim = { name: 'win', t0: t, dur: W2.dur }; G.mascotIdleAt = t + W2.dur + 6;
+    for (const d of W2.shots) G.shots.push(t + d);
     G.shots = G.shots.filter(s => s > t - 3);
   }
   function drawMascot(t) {
@@ -250,6 +251,13 @@
     ctx.save(); ctx.translate(fx, fy); ctx.scale(dir, 1);
     if (r) ctx.drawImage(r.cv, -w / 2, -h); else ctx.drawImage(img, -w / 2, -h, w, h);
     ctx.restore();
+    // blowing the smoke off the barrel: a soft stream of smoke drifts off the muzzle, away from his face
+    const blow = root.Rig && root.Rig.ANIMS.win.blow;
+    if (r && st.anim && st.anim.name === 'win' && blow && st.anim.u > blow[0] && st.anim.u < blow[1]) {
+      const [tx, ty] = r.rig.point('tip', Math.floor(t * 30) / 30, st), sx = fx + dir * (tx * k - w / 2), sy = fy - h + ty * k;
+      const q = (st.anim.u - blow[0]) / (blow[1] - blow[0]);
+      if (Math.random() < .9 - q * .5) emit('spark', sx + dir * 6, sy - 4, 1, { angle: dir > 0 ? -.35 : Math.PI + .35, spread: .35, speed: 140 + 60 * (1 - q), drag: 1.6, gravity: -50, life: 1.4, size: 16 + 14 * q, color: ['rgba(232,224,214,.45)', 'rgba(210,200,190,.38)'] });
+    }
     // muzzle flash and smoke at the gun tip when he fires
     if (r && st.fire != null) {
       const [tx, ty] = r.rig.point('tip', Math.floor(t * 30) / 30, st), sx = fx + dir * (tx * k - w / 2), sy = fy - h + ty * k;

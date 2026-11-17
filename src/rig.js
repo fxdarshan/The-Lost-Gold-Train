@@ -43,11 +43,14 @@
       gust:    [[0, 0], [.6, 1.8], [2.6, 1.8], [3.8, 0]],
       dip:     [[0, 0], [.7, .01], [2.9, .01], [3.3, -.006], [3.7, 0]] } },
     // win "quick draw": crouch and dip the gun (anticipation), snap up, three shots, stand tall with the poncho flaring, settle
-    win: { dur: 3.2, shots: [.55, .9, 1.25], tracks: {
-      armDrop: [[0, 0], [.28, .3], [.45, -.06], [.55, 0], [1.6, 0], [2.0, -.05], [2.6, 0]],
-      dip:     [[0, 0], [.28, .03], [.45, -.02], [.6, 0], [1.6, 0], [1.95, -.018], [2.8, 0]],
-      head:    [[0, 0], [.28, .06], [.45, -.03], [.6, 0], [1.6, 0], [2.0, -.05], [2.8, 0]],
-      gust:    [[0, 0], [.45, 2.4], [1.8, 1.6], [3.2, 0]] } }
+    // win "quick draw": crouch and dip the gun to the holster (anticipation), whip it up (the draw), three shots,
+    // bring the barrel up to his lips and blow the smoke away, then back to aim with a small overshoot
+    win: { dur: 4.6, shots: [.6, .92, 1.24], blow: [2.2, 3.3], tracks: {
+      armDrop: [[0, 0], [.3, .42], [.46, -.08], [.56, 0], [1.45, 0], [1.95, -.04], [3.5, -.04], [3.95, .03], [4.25, 0]],
+      bend:    [[0, 0], [1.45, 0], [2.05, 1], [3.45, 1], [3.95, 0]],
+      dip:     [[0, 0], [.3, .035], [.46, -.02], [.62, 0], [1.45, 0], [2.0, -.012], [3.4, -.012], [3.95, .006], [4.3, 0]],
+      head:    [[0, 0], [.3, .07], [.46, -.03], [.62, 0], [1.45, 0], [2.0, .03], [3.4, .03], [3.9, -.02], [4.3, 0]],
+      gust:    [[0, 0], [.46, 2.2], [1.6, 1.4], [2.4, .6], [3.0, 1.6], [4.6, 0]] } }
   };
   function track(keys, u) {
     if (!keys) return 0;
@@ -62,14 +65,14 @@
     const rx = new Float32Array(N), ry = new Float32Array(N);
     for (let j = 0; j <= rows; j++) for (let i = 0; i <= cols; i++) { const n = j * (cols + 1) + i; rx[n] = i * IW / cols; ry[n] = j * IH / rows; }
     const W = {};
-    for (const name of ['cloth', 'head', 'torso', 'arm']) {
+    for (const name of ['cloth', 'head', 'torso', 'arm', 'fore']) {
       W[name] = new Float32Array(N);
       if (cfg[name]) for (let n = 0; n < N; n++) W[name][n] = shapeWeight(cfg[name], rx[n], ry[n]);
     }
     // cells no bone touches are drawn as plain rectangles
     const moving = new Uint8Array(cols * rows);
     for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
-      let s = 0; for (const n of [j * (cols + 1) + i, j * (cols + 1) + i + 1, (j + 1) * (cols + 1) + i, (j + 1) * (cols + 1) + i + 1]) s += W.cloth[n] + W.head[n] + W.torso[n] + W.arm[n];
+      let s = 0; for (const n of [j * (cols + 1) + i, j * (cols + 1) + i + 1, (j + 1) * (cols + 1) + i, (j + 1) * (cols + 1) + i + 1]) s += W.cloth[n] + W.head[n] + W.torso[n] + W.arm[n] + W.fore[n];
       moving[j * cols + i] = s > 1e-3 ? 1 : 0;
     }
     const px = new Float32Array(N), py = new Float32Array(N);
@@ -85,7 +88,7 @@
         breathe: Math.sin(t * 2.2),
         head: .022 * Math.sin(t * .8) + .012 * Math.sin(t * 1.9) - .05 * kick + k('head'),
         arm: .018 * Math.sin(t * 1.3) - .34 * kick + k('armDrop'),
-        recoil: 16 * kick, gust, t, dip: k('dip')
+        recoil: 16 * kick, gust, t, dip: k('dip'), bend: k('bend')
       };
     }
     function deform(x, y, n, p, w) {
@@ -109,10 +112,20 @@
         ax2 -= dx / L * p.recoil; ay2 -= dy / L * p.recoil;
         x += (ax2 - x) * w.arm; y += (ay2 - y) * w.arm;
       }
+      // 5. forearm bend (bend 0..1): the forearm and gun fold up at the elbow and slide in toward the face, so
+      //    the barrel comes up to his lips (anchors.mouth)
+      if (w.fore && p.bend) {
+        const [ex, ey] = rot(A.elbow[0], A.elbow[1], A.shoulder[0], A.shoulder[1], p.arm);
+        const B = cfg.bend || {}, ang = (B.angle ?? -.66) * p.bend, sl = (B.slide ?? 70) * p.bend;
+        let [fx, fy] = rot(x, y, ex, ey, ang);
+        const tdx = A.tip[0] - A.elbow[0], tdy = A.tip[1] - A.elbow[1], [rdx, rdy] = rot(tdx, tdy, 0, 0, ang), L = Math.hypot(rdx, rdy);
+        fx -= rdx / L * sl; fy -= rdy / L * sl;
+        x += (fx - x) * w.fore; y += (fy - y) * w.fore;
+      }
       return [x, y];
     }
-    const wAt = n => ({ cloth: W.cloth[n], head: W.head[n], torso: W.torso[n], arm: W.arm[n] });
-    function weightsAt(x, y) { return { cloth: cfg.cloth ? shapeWeight(cfg.cloth, x, y) : 0, head: cfg.head ? shapeWeight(cfg.head, x, y) : 0, torso: cfg.torso ? shapeWeight(cfg.torso, x, y) : 0, arm: cfg.arm ? shapeWeight(cfg.arm, x, y) : 0 }; }
+    const wAt = n => ({ cloth: W.cloth[n], head: W.head[n], torso: W.torso[n], arm: W.arm[n], fore: W.fore[n] });
+    function weightsAt(x, y) { return { cloth: cfg.cloth ? shapeWeight(cfg.cloth, x, y) : 0, head: cfg.head ? shapeWeight(cfg.head, x, y) : 0, torso: cfg.torso ? shapeWeight(cfg.torso, x, y) : 0, arm: cfg.arm ? shapeWeight(cfg.arm, x, y) : 0, fore: cfg.fore ? shapeWeight(cfg.fore, x, y) : 0 }; }
 
     function render(c, k, t, st) {
       const p = pose(t, st);

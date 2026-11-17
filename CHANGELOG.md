@@ -2,6 +2,10 @@
 
 Newest first.
 
+## 2026-11-17: better win animation for the Outlaw
+- Win "quick draw" (4.6 s): crouch and dip the gun to the holster, whip it up, three shots, then he folds his forearm up and brings the barrel to his lips and blows the smoke away (a stream of smoke drifts off the muzzle, away from his face), then back to aim with a small overshoot.
+- `src/rig.js`: new forearm bone (`fore`, folds at `anchors.elbow`, `CONFIG.mascotRig.bend` angle and slide), `bend` track; the game reads shot times and length from `Rig.ANIMS.win`.
+
 ## 2026-11-17: three mascot animations
 - `src/rig.js` gets keyframed animations (eased tracks for arm, head, whole-body crouch or stretch, poncho gust; `Rig.ANIMS`):
   - **Idle 1 "watchful"** (always running): breathing, poncho in the wind, aim drift, head looking round.

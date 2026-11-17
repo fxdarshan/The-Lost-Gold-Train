@@ -185,11 +185,13 @@
     // the poncho waves, the chest breathes, the head turns, the gun arm aims and recoils when he fires.
     mascotRig: {
       cols: 18, rows: 34,
-      anchors: { clothRoot: [330, 200], waist: [420, 520], neck: [420, 190], shoulder: [330, 300], tip: [560, 162] },
+      anchors: { clothRoot: [330, 200], waist: [420, 520], neck: [420, 190], shoulder: [330, 300], elbow: [400, 322], tip: [560, 162], mouth: [425, 168] },
       cloth: { poly: [[305, 165], [250, 175], [195, 230], [120, 330], [55, 430], [5, 600], [20, 720], [60, 900], [105, 1010], [160, 960], [225, 900], [255, 800], [285, 560], [300, 330]], soft: 45 },
       head: { ellipse: [400, 105, 160, 115], soft: 45 },
       torso: { ellipse: [430, 360, 170, 210], soft: 70 },
       arm: { capsule: [330, 300, 570, 160, 78], soft: 40 },
+      fore: { capsule: [440, 300, 562, 163, 50], soft: 26 },   // forearm + revolver: folds at the elbow to bring the barrel to his lips
+      bend: { angle: -0.36, slide: 58 },          // muzzle ends just in front of his lips (anchors.mouth)
       fireOn: 'win'                     // the Outlaw fires on every win; double tap on banners and free spins
     },                        // the slim bottom bar starts here
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar

@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-17 · claude.ai chat (23)
+- Mascot win: draw, 3 shots, barrel to lips, blow the smoke (forearm bone in rig.js).
 ### 2026-11-17 · claude.ai chat (22)
 - Mascot: idle 1, idle 2 (wind gust), win (quick draw, 3 shots) as keyframed rig animations.
 ### 2026-11-17 · claude.ai chat (21)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Rigged mascot (src/rig.js mesh deform, CONFIG.mascotRig); fires on wins; used in the gunfight. Generic: backport rig.js to the template.
 ### 2026-11-17 · claude.ai chat (19)
 - Gunfight transition (two mirrored Outlaw mascots); expanded reels animate two loops.
-### 2026-11-17 · claude.ai chat (18)
-- Two-loop wins, train transition (reuses sym_01 art), particle drag, shared shine FX; restored new backgrounds (art/ had old ones). Reuse rule: prefer existing art and code FX over new assets.
