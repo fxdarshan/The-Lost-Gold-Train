@@ -216,7 +216,9 @@
   // the mascot is animated by the mesh rig (src/rig.js): poncho in the wind, breathing, head turn, and he fires his
   // revolver on wins (G.shots holds the shot times). Rendered into its own canvas at 30 fps, then placed.
   const rigs = {};
+  const puppetOn = () => root.RIGS && root.RIGS.outlaw && A.real.char_outlaw_parts && root.Rig.createPuppet;
   function rigCanvas(key, k, t, st) {
+    if (puppetOn()) return puppetCanvas(key, k, t, st);
     const img = A.get('char_mascot'); if (!img || !C.mascotRig || !root.Rig) return null;
     let r = rigs[key];
     if (!r || r.k !== k || r.img !== img) { const cv = document.createElement('canvas'); cv.width = Math.ceil(img.width * k); cv.height = Math.ceil(img.height * k); r = rigs[key] = { k, img, cv, c2: cv.getContext('2d'), rig: root.Rig.create(img, C.mascotRig), last: -1 }; }
@@ -226,6 +228,18 @@
   }
   // the mascot's animations: idle 1 runs all the time; idle 2 (wind gust) plays every 8-12 s while nothing
   // else happens; "win" (quick draw, three shots) plays on wins, banners and free-spins triggers
+  // the cutout puppet (assets/rigs/outlaw.js) drawn into its own canvas the size of the reference art, 30 fps
+  function puppetCanvas(key, k, t, st) {
+    const def = root.RIGS.outlaw, F = def.frame, mk = img => ({ width: F[2] - F[0], height: F[3] - F[1] });
+    let r = rigs[key];
+    if (!r || r.k !== k || !r.pup) { const cv = document.createElement('canvas'); cv.width = Math.ceil((F[2] - F[0]) * k); cv.height = Math.ceil((F[3] - F[1]) * k);
+      const pup = root.Rig.createPuppet(A.get('char_outlaw_parts'), def);
+      r = rigs[key] = { k, cv, c2: cv.getContext('2d'), pup, last: -1, rig: { point: (n, tt, s2) => { const [x, y] = pup.point(n, tt, s2); return [x - F[0], y - F[1]]; } } }; }
+    const frame = Math.floor(t * 30), sk = JSON.stringify(st);
+    if (frame !== r.last || sk !== r.sk) { r.last = frame; r.sk = sk; r.c2.setTransform(1, 0, 0, 1, 0, 0); r.c2.clearRect(0, 0, r.cv.width, r.cv.height); r.pup.render(r.c2, k, frame / 30, st); }
+    return r;
+  }
+  const mascotSize = () => { if (puppetOn()) { const F = root.RIGS.outlaw.frame; return [F[2] - F[0], F[3] - F[1]]; } const img = A.get('char_mascot'); return img ? [img.width, img.height] : null; };
   function mascotState(t) {
     const ma = G.mascotAnim, A2 = root.Rig && root.Rig.ANIMS;
     if (ma && t - ma.t0 > ma.dur) G.mascotAnim = null;
@@ -237,22 +251,22 @@
   }
   function shoot() {
     const t = now(), ma = G.mascotAnim;
-    const W2 = root.Rig.ANIMS.win;
+    const W2 = (puppetOn() ? root.Rig.PANIMS : root.Rig.ANIMS).win;
     if (ma && ma.name === 'win' && t - ma.t0 < W2.dur - .6) return;     // already playing: let it finish
     G.mascotAnim = { name: 'win', t0: t, dur: W2.dur }; G.mascotIdleAt = t + W2.dur + 6;
     for (const d of W2.shots) G.shots.push(t + d);
     G.shots = G.shots.filter(s => s > t - 3);
   }
   function drawMascot(t) {
-    const img = A.get('char_mascot'); if (!img || !M) return;
-    const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
+    const img = A.get('char_mascot'), sz = mascotSize(); if (!sz || !M) return;
+    const k = Math.min(M.w / sz[0], M.h / sz[1]), w = sz[0] * k, h = sz[1] * k;
     const fx = M.x + M.w / 2, fy = M.y + M.h, dir = M.flip ? -1 : 1, st = mascotState(t);
     const r = rigCanvas('mascot', k, t, st);
     ctx.save(); ctx.translate(fx, fy); ctx.scale(dir, 1);
     if (r) ctx.drawImage(r.cv, -w / 2, -h); else ctx.drawImage(img, -w / 2, -h, w, h);
     ctx.restore();
     // blowing the smoke off the barrel: a soft stream of smoke drifts off the muzzle, away from his face
-    const blow = root.Rig && root.Rig.ANIMS.win.blow;
+    const blow = root.Rig && (puppetOn() ? root.Rig.PANIMS : root.Rig.ANIMS).win.blow;
     if (r && st.anim && st.anim.name === 'win' && blow && st.anim.u > blow[0] && st.anim.u < blow[1]) {
       const [tx, ty] = r.rig.point('tip', Math.floor(t * 30) / 30, st), sx = fx + dir * (tx * k - w / 2), sy = fy - h + ty * k;
       const q = (st.anim.u - blow[0]) / (blow[1] - blow[0]);
@@ -716,7 +730,9 @@
       // other, the bullets meet in a spark burst, gunsmoke fills the scene, FREE SPINS stamps in, the smoke clears slowly
       const [a, b, c] = FR.transToFree, outU = clamp((f - a - b) / c, 0, 1);
       const img = A.get('char_mascot'), FIRE = [15, 15], MEET = 22;
-      const k = H * 1.55 / (img ? img.height : 1200), tipX = 525, tipY = 187;      // muzzle position in the mascot art
+      const sz = mascotSize() || [639, 1200], k = H * 1.55 / sz[1];
+      // muzzle in the mascot's own pixels (puppet: its rest pose), so the guns line up with the flashes
+      const tip0 = puppetOn() ? (() => { const r0 = rigCanvas('duel', k, 0, { gust: 1 }); return r0.rig.point('tip', 0, { gust: 1 }); })() : [525, 187], tipX = tip0[0], tipY = tip0[1];
       const tip = side => [side ? W * .70 : W * .30, H * .40];
       if (!tr.puffs) {
         let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;

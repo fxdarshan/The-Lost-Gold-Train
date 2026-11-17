@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-17: Outlaw as a cutout puppet
+- Built from Darshan's second parts atlas (`Gritty_Outlaw_Sprite_Part_Atlas.png`, manifest v2): hat, head, collar, torso, gun arm (forearm, hand, revolver) and relaxed arm (upper, forearm, hand) as rigid parts on bones; legs, belt and holster, and the poncho (back flap, right tail, shoulder drape) cut from the original art (options 2+3). Parts placed by SIFT matching against the original where possible, by hand elsewhere.
+- `assets/rigs/outlaw.js` + `assets/images/characters/char_outlaw_parts.webp` (one 2048×832 atlas), built by `tools/asset-pipeline/puppet/build_puppet.py`.
+- `src/rig.js` `createPuppet`: bones (rotation about pivots, parent-first), rigid layers, mesh bending only on the poncho (wind wave), keyframed animations (`PANIMS`): idle 1 (breathing, head and arm drift, poncho), idle 2 (lowers the gun into a gust, snaps back), win (crouch and draw, 3 shots with recoil, barrel up to his lips and blow the smoke, back to aim). No stretching of face, limbs, hat or gun.
+- The game uses the puppet when its rig and atlas load (mascot and the gunfight transition), and falls back to the mesh-deformed single image otherwise.
+
 ## 2026-11-17: better win animation for the Outlaw
 - Win "quick draw" (4.6 s): crouch and dip the gun to the holster, whip it up, three shots, then he folds his forearm up and brings the barrel to his lips and blows the smoke away (a stream of smoke drifts off the muzzle, away from his face), then back to aim with a small overshoot.
 - `src/rig.js`: new forearm bone (`fore`, folds at `anchors.elbow`, `CONFIG.mascotRig.bend` angle and slide), `bend` track; the game reads shot times and length from `Rig.ANIMS.win`.

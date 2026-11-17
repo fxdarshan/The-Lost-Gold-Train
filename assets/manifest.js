@@ -76,6 +76,7 @@ window.ASSET_MANIFEST = {
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
+    char_outlaw_parts:      'assets/images/characters/char_outlaw_parts.webp',   // cutout puppet atlas (assets/rigs/outlaw.js)
 
     fx_scatter_full:        'assets/images/fx/fx_scatter_full.webp',
     fx_lantern:             'assets/images/fx/fx_lantern.webp',
