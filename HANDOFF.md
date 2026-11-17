@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-17 · claude.ai chat (16)
+- Win lines removed; new anticipation (slow-down, fuse sparks round the reel, veil, steam).
 ### 2026-11-17 · claude.ai chat (15)
 - Key-pose prompts for all 18 symbols (`docs/symbol-keypose-prompts.md`); waiting for Darshan's Gemini sheets, then build each with its timing row.
 ### 2026-11-17 · claude.ai chat (14)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - New base and free-spins backgrounds.
 ### 2026-11-17 · claude.ai chat (12)
 - Visible fixes: demo list no longer forces the Outlaw special; banner straight after all-lines view; steam transition; track-only scatter fx; western coins. Animations parked by Darshan.
-### 2026-11-16 · claude.ai chat (11)
-- Acted Outlaw animation from Darshan's Gemini sheet; `--timing` in anim_from_keys.py.

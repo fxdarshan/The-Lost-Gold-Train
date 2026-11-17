@@ -406,7 +406,7 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold
       expand: [12, 24, 12],             // expanding symbol: flash, grow to the full reel, settle
       expandLines: 45,                  // all 10 lines shown over the expanded reels
-      anticipation: 45,                 // extra spin time on each reel after 2 scatters have landed
+      anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
       summaryTally: 75,
@@ -414,6 +414,8 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
       transToBase: 60
     },
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing
+    anticSlow: 0.3,                     // ASSUMED: speed at the end of the anticipation window, as a fraction of full speed
+    showPaylines: false,                // Darshan 2026-11-17: no win lines drawn; winning symbols animate instead
     autoContinueModals: true,           // START / COLLECT continue by themselves after the hold
 
     spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },
@@ -1416,7 +1418,10 @@ window.ASSET_MANIFEST = {
         s.push(rs(), ...cur, rs());
         const pStart = R + N + 2, D = pStart - 1;
         const vEff = (D - .9) / (Tstop - wu), b = sp.bounce, slope = b + 3;
-        G.reels[i] = { strip: s, p: pStart, pStart, D, t0, T: Tstop, wu, vEff, b, bt: clamp(.9 * slope / vEff, .08, .6), state: 'spin', landed: false, antic: i >= from };
+        // anticipation reels: full speed, then ease down to C.anticSlow of it over the last FR.anticipation frames
+        const AB = i >= from ? Math.min(sec(FR.anticipation), Tstop - wu - .2) : 0, kL = C.anticSlow ?? .3;
+        const vMax = (D - .9) / ((Tstop - wu - AB) + AB * (1 + kL) / 2);
+        G.reels[i] = { strip: s, p: pStart, pStart, D, t0, T: Tstop, wu, vEff: AB ? vMax * kL : vEff, vMax, AB, kL, b, bt: clamp(.9 * slope / (AB ? vMax * kL : vEff), .08, .6), state: 'spin', landed: false, antic: i >= from };
       });
       G.antic = from < C.reels ? { from, t0 } : null;
       G.spinGrid = grid; G.spinResolve = resolve;
@@ -1428,6 +1433,11 @@ window.ASSET_MANIFEST = {
       const tau = t - r.t0; let d;
       r.blur = false;
       if (tau < r.wu) d = -.2 * Math.sin(Math.PI * tau / r.wu);
+      else if (tau < r.T && r.AB) {
+        const Ts = r.T - r.AB;
+        if (tau < Ts) { d = r.vMax * (tau - r.wu); r.blur = true; }
+        else { const u = (tau - Ts) / r.AB; d = r.vMax * (Ts - r.wu) + r.vMax * r.AB * (u - (1 - r.kL) * u * u / 2); r.blur = u < .45; }
+      }
       else if (tau < r.T) { d = r.vEff * (tau - r.wu); r.blur = r.T - tau > .03; }
       else {
         const u = Math.min(1, (tau - r.T) / r.bt);
@@ -1435,7 +1445,8 @@ window.ASSET_MANIFEST = {
         if (!r.landed && u > .3) {
           r.landed = true; SND.play('sfx_reel_stop_0' + (i + 1));
           const sc = G.spinGrid[i];
-          sc.forEach((s, rr) => { if (s === SC) { G.fx[i][rr].land = t; SND.play('sfx_scatter_land'); } });
+          sc.forEach((s, rr) => { if (s === SC) { G.fx[i][rr].land = t; SND.play('sfx_scatter_land');
+            if (r.antic) { const [bx, by] = cellCenter(i, rr); emit('spark', bx, by, 40, { angle: 0, spread: 7, speed: 650, gravity: 300, life: .9, size: 11, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); G.anticHit = t; } } });
         }
         if (u >= 1) { r.state = 'idle'; G.board[i] = G.spinGrid[i].slice(); return; }
       }
@@ -1610,7 +1621,11 @@ window.ASSET_MANIFEST = {
       // glow behind a winning symbol
       const a = Math.sin(clamp(f / (FR.symWin[0] + FR.symWin[1] + FR.symWin[2]), 0, 1) * Math.PI);
       ctx.save(); ctx.globalAlpha = a * .85; const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, cw * .6); g.addColorStop(0, 'rgba(255,230,140,.95)'); g.addColorStop(1, 'rgba(255,200,60,0)'); ctx.fillStyle = g; ctx.fillRect(cx - cw * .6, cy - ch * .6, cw * 1.2, ch * 1.2); ctx.restore();
-    } else if (G.dim && !fx.keep) alpha = 1 - .55 * G.dim;
+    } else if (G.dim && !fx.keep) alpha = 1 - .65 * G.dim;
+    if (G.antic && G.reels[c] && G.reels[c].state === 'idle') {
+      const k = Math.max(...G.reels.map(rr => anticAmount(rr, t)));
+      if (s === SC) scale *= 1 + .07 * k * Math.sin(t * 6.4);
+    }
     if (s === SC && fx.land != null) { const f = F(fx.land); if (f < FR.scatterLand) sy = .82 + .18 * ease.back(f / FR.scatterLand, 2.5); }
     if (fx.pulse != null) scale *= 1 + .06 * Math.sin((t - fx.pulse) * 9);
     if (an) { drawAnimFrame(s, an, Math.floor(F(fx.win) * an.fps / C.fps) % an.frames, cx, cy, alpha); return; }
@@ -1640,22 +1655,53 @@ window.ASSET_MANIFEST = {
   }
 
   /* ------------------------------------------------------------ fx layers */
-  // anticipation: a glowing frame (and the fx_lantern decoration, if supplied) on each reel still spinning for the third Scatter
+  // anticipation (Western): the reel waiting for the third Scatter slows down; a lit fuse spark races round its
+  // frame leaving a burning trail, warm light pulses inside, steam rises from below; the other reels dim and the
+  // Scatters already showing pulse (drawCell)
+  function anticAmount(r, t) { return r && r.antic && r.state === 'spin' ? clamp((t - r.t0 - (r.T - r.AB)) * 2.5, 0, 1) : 0; }
   function drawAnticipation(t) {
     if (!G.antic) return;
-    const lamp = A.real.fx_lantern ? A.get('fx_lantern') : null;
-    G.reels.forEach((r, c) => {
-      if (!r || !r.antic || r.state !== 'spin') return;
-      const x = x0 + c * cw, a = clamp((t - G.antic.t0 - (r.T - sec(FR.anticipation)) ) * 3, 0, 1);
-      if (a <= 0) return;
-      ctx.save(); ctx.globalAlpha = a;
-      ctx.strokeStyle = '#ffd34a'; ctx.lineWidth = 8; ctx.shadowColor = '#ff8a00'; ctx.shadowBlur = 36;
-      ctx.beginPath(); ctx.roundRect(x + 4, y0 - 4, cw - 8, gh + 8, 16); ctx.stroke(); ctx.shadowBlur = 0;
-      ctx.globalCompositeOperation = 'lighter'; const g = ctx.createLinearGradient(0, y0, 0, y0 + gh); g.addColorStop(0, 'rgba(255,150,40,.35)'); g.addColorStop(1, 'rgba(255,60,20,.05)'); ctx.fillStyle = g; ctx.fillRect(x + 6, y0, cw - 12, gh);
-      ctx.globalCompositeOperation = 'source-over';
-      if (lamp) { const lw = cw * .26, lh = lamp.height * lw / lamp.width; ctx.translate(x + cw / 2, y0 + 4); ctx.rotate(Math.sin(t * 3 + c) * .12); ctx.globalCompositeOperation = 'source-over'; ctx.drawImage(lamp, -lw / 2, 0, lw, lh); }
+    // veil: the stopped reels sink into shadow, the Scatters already showing stay lit and are redrawn on top
+    const k = Math.max(...G.reels.map(rr => anticAmount(rr, t)));
+    if (k > 0) {
+      ctx.save(); ctx.fillStyle = `rgba(10,4,0,${.5 * k})`;
+      G.reels.forEach((r, c) => { if (r && r.state === 'idle') ctx.fillRect(x0 + c * cw, y0, cw, gh); });
       ctx.restore();
-      if (Math.random() < .5) emit('spark', x + Math.random() * cw, y0 + Math.random() * gh, 1, { angle: -Math.PI / 2, spread: 1, speed: 160, gravity: -40, life: .6, size: 8, color: ['#fff6b0', '#ffb84a'] });
+      G.reels.forEach((r, c) => { if (r && r.state === 'idle') for (let rr = 0; rr < C.rows; rr++) if (G.board[c][rr] === SC) { const [cx, cy] = cellCenter(c, rr); drawCell(c, rr, SC, cx, cy, t); } });
+    }
+    G.reels.forEach((r, c) => {
+      const a = anticAmount(r, t); if (a <= 0) return;
+      const x = x0 + c * cw + 4, y = y0 - 6, w = cw - 8, h = gh + 12, P = 2 * (w + h);
+      const pt = d => { d = ((d % P) + P) % P; return d < w ? [x + d, y] : d < w + h ? [x + w, y + d - w] : d < 2 * w + h ? [x + w - (d - w - h), y + h] : [x, y + h - (d - 2 * w - h)]; };
+      ctx.save(); ctx.globalAlpha = a;
+      // warm light inside the reel, pulsing like a heartbeat
+      const beat = .5 + .5 * Math.pow(Math.abs(Math.sin(t * 3.2)), 3);
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createLinearGradient(0, y0 + gh, 0, y0); g.addColorStop(0, `rgba(255,120,30,${.55 * beat})`); g.addColorStop(.6, `rgba(255,170,60,${.22 * beat})`); g.addColorStop(1, 'rgba(255,200,90,0)');
+      ctx.fillStyle = g; ctx.fillRect(x, y0, w, gh);
+      ctx.globalCompositeOperation = 'source-over';
+      // frame: dark smouldering rope with a gold edge
+      ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(60,24,6,.9)'; ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.stroke();
+      ctx.lineWidth = 4; ctx.strokeStyle = `rgba(255,200,90,${.6 + .4 * beat})`; ctx.shadowColor = '#ff8a00'; ctx.shadowBlur = 34 * beat; ctx.stroke(); ctx.stroke(); ctx.shadowBlur = 0;
+      // two fuse sparks racing round the frame in opposite directions, each with a burning trail
+      const speed = P * .9, head = (t - r.t0) * speed;
+      for (const dir of [1, -1]) {
+        const h0 = dir > 0 ? head : P / 2 - head;
+        for (let q = 0; q < 40; q++) {
+          const [px, py] = pt(h0 - dir * q * 9), f = 1 - q / 40;
+          ctx.fillStyle = `rgba(255,${Math.round(130 + 110 * f)},${Math.round(30 + 140 * f)},${f})`;
+          ctx.beginPath(); ctx.arc(px, py, 3 + 8 * f, 0, 7); ctx.fill();
+        }
+        const [hx, hy2] = pt(h0);
+        ctx.globalCompositeOperation = 'lighter';
+        const hg = ctx.createRadialGradient(hx, hy2, 0, hx, hy2, 48); hg.addColorStop(0, 'rgba(255,255,230,1)'); hg.addColorStop(.3, 'rgba(255,200,80,.85)'); hg.addColorStop(1, 'rgba(255,120,0,0)');
+        ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy2, 48, 0, 7); ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+        if (Math.random() < .7) emit('spark', hx, hy2, 1, { angle: 0, spread: 7, speed: 220, gravity: 500, life: .45, size: 6, color: ['#fff6b0', '#ffb84a', '#ff6a1a'] });
+      }
+      ctx.restore();
+      // steam rising from the bottom of the reel
+      if (Math.random() < .35 * a) emit('spark', x + Math.random() * w, y0 + gh - 10, 1, { angle: -Math.PI / 2, spread: .5, speed: 90, gravity: -30, life: 1.6, size: 26, color: ['rgba(240,228,214,.22)', 'rgba(220,205,190,.18)'] });
     });
   }
   // trigger: the Scatter badge's railway track lays down its reel (fx_scatter_full); the sparks are the headlight
@@ -1714,6 +1760,7 @@ window.ASSET_MANIFEST = {
   }
   function drawLines(t) {
     const L2 = G.lines; if (!L2) return;
+    if (!C.showPaylines) { if (L2.fade && t - L2.fade > .25) G.lines = null; return; }   // win lines are not drawn (Darshan, 2026-11-17)
     const a = L2.fade ? clamp(1 - (t - L2.fade) / .25, 0, 1) : clamp((t - L2.t0) / .15, 0, 1);
     if (a <= 0) { G.lines = null; return; }
     ctx.save(); ctx.globalAlpha = a; ctx.lineJoin = 'round'; ctx.lineCap = 'round';

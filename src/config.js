@@ -154,7 +154,7 @@
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold
       expand: [12, 24, 12],             // expanding symbol: flash, grow to the full reel, settle
       expandLines: 45,                  // all 10 lines shown over the expanded reels
-      anticipation: 45,                 // extra spin time on each reel after 2 scatters have landed
+      anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
       summaryTally: 75,
@@ -162,6 +162,8 @@
       transToBase: 60
     },
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing
+    anticSlow: 0.3,                     // ASSUMED: speed at the end of the anticipation window, as a fraction of full speed
+    showPaylines: false,                // Darshan 2026-11-17: no win lines drawn; winning symbols animate instead
     autoContinueModals: true,           // START / COLLECT continue by themselves after the hold
 
     spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },
