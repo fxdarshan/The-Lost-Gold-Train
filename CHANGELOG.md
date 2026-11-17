@@ -2,6 +2,9 @@
 
 Newest first.
 
+## 2026-11-17: new backgrounds
+- Darshan's new base game (daytime desert, railway, train) and free spins (gold-carriage interior at night) backgrounds, cover-cropped to 1920×1080. Previous versions kept in `assets/source/originals/backgrounds/old/`.
+
 ## 2026-11-17: visible fixes
 - Expanding symbol "always the Outlaw": the demo list preloaded at start had a free-spins step forced to the Outlaw, so SPIN played it first. The list now starts empty, so SPIN plays the real maths. The pick was already random and weighted (Outlaw 5.0%, Train and Gold 5.9%, every other symbol 6.9%; these weights are part of the tuned RTP). The Outlaw is still forced only where a cheat or scenario says so (P, "Free spins: the Outlaw expands", "Max win").
 - Win banner came after every line had cycled (2.5 s each, about 17 s for 6 lines): a round that ends on a banner now goes straight to it after the all-lines view (about 4.5 s).

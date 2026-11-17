@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-17 · claude.ai chat (13)
+- New base and free-spins backgrounds.
 ### 2026-11-17 · claude.ai chat (12)
 - Visible fixes: demo list no longer forces the Outlaw special; banner straight after all-lines view; steam transition; track-only scatter fx; western coins. Animations parked by Darshan.
 ### 2026-11-16 · claude.ai chat (11)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Animations for Lantern, K, Q, J, 10, Wild, Scatter; WebP block-alignment fix (cells 320x240).
 ### 2026-11-16 · claude.ai chat (9)
 - Win animations slowed to 2.5 s (75 frames) and smoother; win and line holds match.
-### 2026-11-16 · claude.ai chat (8)
-- Full symbol set: 15 pay symbols, Wild, Power Dynamite multipliers, separate Scatter; re-tuned; paytable, rules and docs rewritten.
