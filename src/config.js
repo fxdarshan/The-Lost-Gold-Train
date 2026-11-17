@@ -166,19 +166,19 @@
 
     spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },
 
-    // Layout in stage pixels (1920 x 1080): where the reels sit on the background art (ASSUMED until the
-    // backgrounds arrive; docs/art-direction.md asks for the frame to match). The reels sit right of centre
-    // so the Outlaw mascot can stand on the left, as in the reference images.
+    // Layout in stage pixels (1920 x 1080), 2026-11-17 after Darshan's Pragmatic Play reference (Chronos):
+    // the reels and the Outlaw take most of the screen; the logo sits on top of the reel frame; feature buy
+    // (and an ante bet, if one is added) always in the left column; a slim control bar along the bottom.
     stage: { landscape: [1920, 1080] },
-    window: { x: 540, y: 150, w: 1300, h: 690 },
-    // left column, as in the art references: the logo on top, the Outlaw mascot below, the buy button at the bottom
-    logo: { x: 15, y: 4, w: 510, h: 255 },       // box the logo (ui_splash_logo) is fitted into
-    mascot: { x: 30, y: 250, w: 480, h: 612 },
+    window: { x: 285, y: 200, w: 1340, h: 705 },
+    logo: { x: 625, y: -12, w: 660, h: 232 },      // box the logo (ui_splash_logo) is fitted into: centred on the reels
+    mascot: { x: 1590, y: 150, w: 400, h: 850, flip: true },  // box the mascot art is fitted into (feet on the bottom edge); flip: face the reels
     // the supplied backgrounds are open scenery with no reel frame painted in, so the game draws a
     // weathered timber frame and dark plank panels behind the reels (ASSUMED look, matches the symbol tiles)
-    reelFrame: true,   // box the mascot art is fitted into (feet on the bottom edge)
-    buyButton: { x: 50, y: 868, w: 440, h: 68 },
-    hudTop: 944,                        // the bottom bar starts here (mockup y 1940)
+    reelFrame: true,
+    buyButton: { x: 26, y: 330, w: 236, h: 176 },   // left column panel; the expanding-symbol card takes it in free spins
+    anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
+    hudTop: 985,                        // the slim bottom bar starts here
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar
   };
 

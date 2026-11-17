@@ -61,7 +61,8 @@ async def main():
         t1 = await pg.evaluate("window.__n")
         await pg.evaluate("Game.G.autoplay = false"); await idle(pg)
         per = (t1 - t0) / 8
-        check('autoplay: a single loop (not double spin rate)', per < 0.75, f'{per:.2f} spins/s')
+        check('autoplay: a single loop (not double spin rate)', per < 1.1,   # one loop ~0.7/s at speed 3, a doubled loop ~1.4/s
+              f'{per:.2f} spins/s')
         await pg.close()
 
         # 5 malformed cheat items do not crash

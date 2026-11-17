@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-17: layout after Darshan's Pragmatic Play reference
+- Reels bigger and centred-left (1340×705, was 1300×690; symbols fill 99% of the cell, were 96%); the logo sits on top of the reel frame; the Outlaw stands right of the reels, taller, mirrored to face them; buy panel in the left column (an ante bet slot is reserved below it); slim Pragmatic-style bottom bar (credit and bet left, message centre, win, − SPIN + with autoplay).
+- The free-spins expanding-symbol card takes the buy panel's place.
+- Fixed: the buy button showed "TAP AGAIN TO BUY" for 3 s after loading.
+- Edge case 4 threshold 0.75 → 1.1 spins/s (one loop now runs about 0.7/s since rounds got shorter; a doubled loop is about 1.4/s).
+
 ## 2026-11-17: new backgrounds
 - Darshan's new base game (daytime desert, railway, train) and free spins (gold-carriage interior at night) backgrounds, cover-cropped to 1920×1080. Previous versions kept in `assets/source/originals/backgrounds/old/`.
 

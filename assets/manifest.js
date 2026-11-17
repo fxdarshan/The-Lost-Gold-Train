@@ -22,7 +22,7 @@ window.ASSET_MANIFEST = {
   // fitting box per symbol, [width, height] as a fraction of the cell; art may overflow the cell a little
   fit: {
     // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
-    default:          [0.96, 0.98],
+    default:          [0.99, 0.99],
     sym_power_idle:   [0.98, 1.02]                  // round badge with no panel: a little larger
   },
 

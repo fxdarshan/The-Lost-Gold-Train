@@ -52,12 +52,14 @@
   const cellCenter = (c, r) => [x0 + c * cw + cw / 2, y0 + r * ch + ch / 2];
   const hy = C.hudTop, barH = H - hy;
   // HUD positions follow the supplied mockup's bottom bar
+  // slim bar (Pragmatic-style): menu and info far left, credit and bet, the message in the middle, win,
+  // then - SPIN + with autoplay under the spin button
+  const hc = hy + barH / 2;
   const btn = {
-    settings: { x: 206, y: 989, r: 22 }, sound: { x: 206, y: 1036, r: 22 }, info: { x: 278, y: 1013, r: 37 },
-    minus: { x: 905, y: 970, r: 24 }, plus: { x: 965, y: 970, r: 24 },
-    spin: { x: 1647, y: 964, r: 78 }, auto: { x: 1647, y: 1058, r: 40 }
+    settings: { x: 48, y: hc - 21, r: 17 }, sound: { x: 48, y: hc + 21, r: 17 }, info: { x: 106, y: hc, r: 29 },
+    minus: { x: 1500, y: hc, r: 28 }, plus: { x: 1740, y: hc, r: 28 },
+    spin: { x: 1620, y: hc - 26, r: 70 }, auto: { x: 1620, y: hc + 34, r: 40 }
   };
-  const pill = { x: x0 + gw / 2 - 350, y: 881, w: 700, h: 58 };
   // feature buy button, top left above the mascot (the special symbol card takes its place in free spins)
   const buyBtn = C.buyButton || { x: 40, y: 36, w: 440, h: 76 };
   const M = C.mascot;
@@ -179,8 +181,8 @@
     ctx.lineWidth = size * .14; ctx.strokeStyle = o.stroke || '#6a0a0a'; ctx.strokeText(txt, 0, 0);
     ctx.fillStyle = g; ctx.fillText(txt, 0, 0); ctx.restore();
   }
-  function uiText(txt, x, y, size, col = '#fff', align = 'center', weight = 700) {
-    ctx.font = `${weight} ${size}px ${UIF}`; ctx.fillStyle = col; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(txt, x, y);
+  function uiText(txt, x, y, size, col = '#fff', align = 'center', weight = 700, maxW) {
+    ctx.font = `${weight} ${size}px ${UIF}`; ctx.fillStyle = col; ctx.textAlign = align; ctx.textBaseline = 'middle'; maxW ? ctx.fillText(txt, x, y, maxW) : ctx.fillText(txt, x, y);
   }
 
   /* ------------------------------------------------------------ environment */
@@ -200,14 +202,14 @@
   }
 
   /* ------------------------------------------------------------ mascot */
-  // the Outlaw stands left of the reels: idle sway and breathing; hops on big wins and free spins
+  // the Outlaw stands right of the reels: idle sway and breathing; hops on big wins and free spins
   function drawMascot(t) {
     const img = A.get('char_mascot'); if (!img || !M) return;
     const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
     const hopU = clamp((t - G.mascotHop) / .6, 0, 1), hop = G.mascotHop ? Math.sin(hopU * Math.PI) * 40 : 0;
     const breathe = 1 + .012 * Math.sin(t * 2.2), sway = .015 * Math.sin(t * 1.1);
     const fx = M.x + M.w / 2, fy = M.y + M.h;    // feet
-    ctx.save(); ctx.translate(fx, fy - hop); ctx.rotate(sway); ctx.scale(1, breathe);
+    ctx.save(); ctx.translate(fx, fy - hop); ctx.rotate(sway); ctx.scale(M.flip ? -1 : 1, breathe);
     ctx.drawImage(img, -w / 2, -h, w, h); ctx.restore();
   }
 
@@ -411,36 +413,31 @@
 
   /* ------------------------------------------------------------ HUD (follows the mockup's bottom bar) */
   function drawHUD(t) {
-    // message pill above the bar, overlapping the reel ledge
     const fs = G.fs, inFS = fs.active || (G.modal && G.modal.kind === 'outro');
-    ctx.save(); ctx.fillStyle = inFS ? '#14101e' : '#1e1210'; ctx.beginPath(); ctx.roundRect(pill.x - 4, pill.y - 2, pill.w + 8, pill.h + 24, 20); ctx.fill(); ctx.restore();
-    let msg = G.message || C.message;
-    if (inFS && !G.message) msg = `FREE SPIN ${Math.min(fs.played, fs.awarded)} OF ${fs.awarded}`;
-    uiText(msg, pill.x + pill.w / 2, pill.y + pill.h / 2 + 2, 30, inFS ? '#ffd45a' : '#fff', 'center', 600);
-    // bar
-    const g = ctx.createLinearGradient(0, hy, 0, H); g.addColorStop(0, inFS ? '#141224' : '#2a1a14'); g.addColorStop(1, inFS ? '#0a0914' : '#160d0a'); ctx.fillStyle = g; ctx.fillRect(0, hy, W, barH);
-    const ring = (b, fill = '#000') => { ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke(); };
+    // bar: dark glass over the scene
+    const g = ctx.createLinearGradient(0, hy - 30, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.3, inFS ? 'rgba(10,9,24,.82)' : 'rgba(26,14,8,.82)'); g.addColorStop(1, inFS ? 'rgba(6,5,14,.95)' : 'rgba(14,8,4,.95)');
+    ctx.fillStyle = g; ctx.fillRect(0, hy - 30, W, barH + 30);
+    const ring = (b, fill = 'rgba(0,0,0,.6)') => { ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); };
     // settings, sound, info
-    ring(btn.settings); ctx.save(); ctx.translate(btn.settings.x, btn.settings.y); ctx.fillStyle = '#fff';
+    ring(btn.settings); ctx.save(); ctx.translate(btn.settings.x, btn.settings.y); ctx.fillStyle = '#fff'; ctx.scale(.8, .8);
     for (let i = 0; i < 8; i++) { ctx.rotate(Math.PI / 4); ctx.fillRect(-3, -14, 6, 7); } ctx.beginPath(); ctx.arc(0, 0, 9, 0, 7); ctx.fill(); ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, 7); ctx.fill(); ctx.restore();
-    ring(btn.sound); ctx.save(); ctx.translate(btn.sound.x, btn.sound.y); ctx.fillStyle = '#fff';
+    ring(btn.sound); ctx.save(); ctx.translate(btn.sound.x, btn.sound.y); ctx.fillStyle = '#fff'; ctx.scale(.8, .8);
     ctx.beginPath(); ctx.moveTo(-9, -5); ctx.lineTo(-3, -5); ctx.lineTo(5, -12); ctx.lineTo(5, 12); ctx.lineTo(-3, 5); ctx.lineTo(-9, 5); ctx.closePath(); ctx.fill();
     if (SND.muted) { ctx.strokeStyle = '#ff5a5a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-12, -12); ctx.lineTo(12, 12); ctx.stroke(); } ctx.restore();
-    ring(btn.info); uiText('i', btn.info.x, btn.info.y + 2, 50, '#fff', 'center', 700);
-    // values and labels
-    const value = (v, x, col = '#fff') => uiText(v, x, 1014, 44, col);
-    const label = (v, x) => uiText(v, x, 1058, 27, '#f5b800');
+    ring(btn.info); uiText('i', btn.info.x, btn.info.y + 2, 40, '#fff', 'center', 700);
+    // credit and bet (label gold, value white), left aligned
+    const pair = (lab, v, y, col = '#fff') => { uiText(lab, 250, y, 26, '#f5b800', 'right', 800); uiText(v, 262, y, 30, col, 'left', 700); };
+    pair('CREDIT', fmt(G.balance), hc - 18); pair('BET', fmt(bet()), hc + 20);
+    if (G.notice && performance.now() - G.notice.t0 < 2600) uiText(G.notice.text, 262, hy - 14, 18, '#ffd45a', 'left', 600);
+    // message (or the free spin counter) in the middle; the win next to it
+    let msg = G.message || C.message;
+    if (inFS && !G.message) msg = `FREE SPIN ${Math.min(fs.played, fs.awarded)} OF ${fs.awarded}`;
+    uiText(msg, 820, hc + 2, 32, inFS ? '#ffd45a' : '#fff', 'center', 800);
     const wv = G.winFrom + (G.win - G.winFrom) * ease.out(clamp((t - G.winT0) / .6, 0, 1));
-    value(fmt(G.balance), 458); label('CASH', 458);
-    if (G.notice && performance.now() - G.notice.t0 < 2600) uiText(G.notice.text, 458, 966, 18, '#ffd45a', 'center', 600);
-    value(String(C.paylines.length), 697); label('LINES', 697);
-    value(fmt(bet() / C.paylines.length), 935); label('BET', 935);
-    value(fmt(bet()), 1169); label('TOTAL BET', 1169);
-    value(fmt(G.win > 0 ? wv : 0), 1431, G.win > 0 ? '#ffd45a' : '#fff'); label('WIN', 1431);
+    if (G.win > 0 || inFS) { uiText('WIN', 1230, hc - 18, 24, '#f5b800', 'center', 800); uiText(fmt(G.win > 0 ? wv : 0), 1230, hc + 18, 34, '#ffd45a', 'center', 800); }
     // bet - / + (locked during a round)
     ctx.save(); ctx.globalAlpha = G.busy ? .4 : 1;
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(btn.minus.x - 30, btn.minus.y - 18, 120, 36, 18); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(935, btn.minus.y - 16); ctx.lineTo(935, btn.minus.y + 16); ctx.stroke();
+    for (const b of [btn.minus, btn.plus]) { ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); }
     ctx.fillStyle = '#fff'; ctx.fillRect(btn.minus.x - 11, btn.minus.y - 3, 22, 6); ctx.fillRect(btn.plus.x - 11, btn.plus.y - 3, 22, 6); ctx.fillRect(btn.plus.x - 3, btn.plus.y - 11, 6, 22);
     ctx.restore();
     // spin and autoplay
@@ -448,29 +445,33 @@
     ctx.save(); ctx.fillStyle = G.busy && !G.spinning ? '#333' : '#000'; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = '#fff'; ctx.stroke();
     if (G.spinning) { ctx.translate(b.x, b.y); ctx.rotate(t * 8); ctx.strokeStyle = '#ffd45a'; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(0, 0, b.r - 14, 0, 1.6); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, b.r - 14, Math.PI, Math.PI + 1.6); ctx.stroke(); }
     ctx.restore();
-    ctx.save(); ctx.font = `50px ${BLOCK}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = G.busy && !G.spinning ? '#999' : '#fff'; ctx.fillText(G.busy && !G.spinning ? 'SKIP' : 'SPIN', b.x, b.y + 2); ctx.restore();
+    ctx.save(); ctx.font = `44px ${BLOCK}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = G.busy && !G.spinning ? '#999' : '#fff'; ctx.fillText(G.busy && !G.spinning ? 'SKIP' : 'SPIN', b.x, b.y + 2); ctx.restore();
     const ab = btn.auto;
-    ctx.save(); ctx.fillStyle = G.autoplay ? '#ffd45a' : '#000'; ctx.beginPath(); ctx.roundRect(ab.x - 70, ab.y - 17, 140, 34, 17); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore();
-    uiText('AUTOPLAY', ab.x, ab.y + 1, 22, G.autoplay ? '#000' : '#fff', 'center', 700);
+    ctx.save(); ctx.fillStyle = G.autoplay ? '#ffd45a' : '#000'; ctx.beginPath(); ctx.roundRect(ab.x - 64, ab.y - 15, 128, 30, 15); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.restore();
+    uiText('AUTOPLAY', ab.x, ab.y + 1, 19, G.autoplay ? '#000' : '#fff', 'center', 700);
     // free spins: the special symbol card, bottom left over the clouds
+    const panel = (b, top, bottom, armed) => {
+      ctx.save(); const gg = ctx.createLinearGradient(0, b.y, 0, b.y + b.h); gg.addColorStop(0, top); gg.addColorStop(1, bottom);
+      ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, b.h, 16); ctx.fill(); ctx.shadowColor = 'transparent';
+      ctx.lineWidth = 5; ctx.strokeStyle = armed ? '#fff3a0' : '#ffd34a'; ctx.stroke();
+      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,220,140,.45)'; ctx.beginPath(); ctx.roundRect(b.x + 8, b.y + 8, b.w - 16, b.h - 16, 10); ctx.stroke(); ctx.restore();
+    };
     if (inFS && fs.special != null) {
-      // the special symbol card, top left (where the buy button sits in the base game)
-      const b = buyBtn, ch2 = b.h;
-      ctx.save(); const gg = ctx.createLinearGradient(0, b.y, 0, b.y + ch2); gg.addColorStop(0, '#8a3a12'); gg.addColorStop(1, '#4a1a08');
-      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, ch2, 16); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke(); ctx.restore();
-      const img = A.symbol(fs.special), k = Math.min(100 / img.width, (ch2 - 10) / img.height); ctx.drawImage(img, b.x + 66 - img.width * k / 2, b.y + ch2 / 2 - img.height * k / 2, img.width * k, img.height * k);
-      uiText('EXPANDING SYMBOL', b.x + 280, b.y + ch2 * .32, 20, '#ffe9a8', 'center', 700);
-      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + 280, b.y + ch2 * .7, 28, '#fff', 'center', 700);
+      // free spins: the expanding-symbol card takes the buy panel's place
+      const b = buyBtn; panel(b, '#7a3412', '#3a1406');
+      uiText('EXPANDING', b.x + b.w / 2, b.y + 26, 20, '#ffe9a8', 'center', 800);
+      const img = A.symbol(fs.special), k = Math.min((b.w - 70) / img.width, (b.h - 82) / img.height);
+      ctx.drawImage(img, b.x + b.w / 2 - img.width * k / 2, b.y + 44, img.width * k, img.height * k);
+      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + b.w / 2, b.y + b.h - 20, 22, '#fff', 'center', 800, b.w - 20);
     } else if (C.buy && C.buy.enabled) {
       // feature buy: first click arms it, a second click within 3 s buys
-      const b = buyBtn, armed = performance.now() - G.buyArm < 3000, off = G.busy;
+      const b = buyBtn, armed = G.buyArm > 0 && performance.now() - G.buyArm < 3000, off = G.busy;
       ctx.save(); ctx.globalAlpha = off ? .45 : 1;
-      const gg = ctx.createLinearGradient(0, b.y, 0, b.y + b.h); gg.addColorStop(0, armed ? '#e8b020' : '#b8401a'); gg.addColorStop(1, armed ? '#a86a08' : '#6a1a08');
-      ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(b.x, b.y, b.w, b.h, 38); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#ffd34a'; ctx.stroke();
-      ctx.restore();
-      ctx.save(); ctx.globalAlpha = off ? .45 : 1;
-      uiText(armed ? 'TAP AGAIN TO BUY' : 'BUY FREE SPINS', b.x + b.w / 2, b.y + b.h * .36, 26, '#fff', 'center', 700);
-      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + b.h * .74, 24, '#ffe9a8', 'center', 700);
+      panel(b, armed ? '#e8b020' : '#9a3a14', armed ? '#a86a08' : '#4a1606', armed);
+      if (armed) { uiText('TAP AGAIN', b.x + b.w / 2, b.y + 62, 32, '#fff', 'center', 900); uiText('TO BUY', b.x + b.w / 2, b.y + 100, 32, '#fff', 'center', 900); }
+      else { uiText('BUY', b.x + b.w / 2, b.y + 52, 34, '#ffe9a8', 'center', 900); uiText('FREE SPINS', b.x + b.w / 2, b.y + 92, 30, '#fff', 'center', 900); }
+      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + b.h - 34, 26, '#ffe9a8', 'center', 800);
       ctx.restore();
     }
   }
@@ -694,14 +695,14 @@
     ctx.save();
     if (G.camera !== 1) { ctx.translate(W / 2, H / 2); ctx.scale(G.camera, G.camera); ctx.translate(-W / 2, -H / 2); }
     drawEnvironment(t);
-    drawMascot(t);
-    drawLogo(t);
     drawReelFrame();
     drawGrid(t);
     drawExpanded(t);
     drawFuses(t);
     drawAnticipation(t);
     drawLines(t);
+    drawMascot(t);      // beside the reels, in front of the frame edge
+    drawLogo(t);        // on top of the reel frame
     ctx.restore();
     drawHUD(t);
     drawBanner(t, dt);
