@@ -1,0 +1,1811 @@
+{
+  "schema": "outlaw.animation-parts-manifest",
+  "schema_version": "2.0",
+  "purpose": "Give Claude the part files, estimated pivots, parent hierarchy, draw order and underpaint rules needed to build a cutout rig.",
+  "is_spine_import_or_runtime_json": false,
+  "read_first": "This is a rigging instruction manifest, not an automatically importable Spine skeleton. Assemble and visually align sprites first. Do not animate the complete atlas or the original reference as one image.",
+  "status": "AI-reconstructed cutout art with painted joint extensions. Not a production-validated rig.",
+  "art_fidelity": "Derived from the provided character. AI reconstructed hidden surfaces and may have reinterpreted visible details; this is not a pixel-identical source extraction.",
+  "original_reference": "Original_Reference.png",
+  "coordinate_system": {
+    "units": "pixels",
+    "origin": "top_left",
+    "x_positive": "right",
+    "y_positive": "down",
+    "original_reference_canvas": [
+      1060,
+      1584
+    ]
+  },
+  "default_root": {
+    "id": "root",
+    "pivot_canvas_xy": [
+      530,
+      1550
+    ],
+    "lock_translation_for_idle": true,
+    "lock_scale": true
+  },
+  "assembly_workflow": [
+    "Load individual transparent PNGs from parts/. The original reference is a positioning guide only.",
+    "Use estimated_setup as an initial guide. Uniformly resize and visually align each part to the reference; do not assume these estimated coordinates already produce an approved pose.",
+    "Create bones in parent-first topological order. Slot draw order is independent of bone order.",
+    "Use pivot_local_xy for each sprite rotation. After setup, keep body/gun scale constant. Setup uniform scale is only for aligning generated art.",
+    "Round joint plugs and hidden extensions go underneath neighbouring art; never align cut edges flush.",
+    "Use overlap_pairs to place and mask joint seams. Adjust slot draw order locally where sleeves, collar or boots must cover their joint plugs.",
+    "Choose poncho_shoulder and poncho_front coverage deliberately: these reconstruct some of the same folds. Mask hidden duplicate fabric after alignment rather than draw repeated folds visibly.",
+    "Keep hatband_optional disabled unless replacing the band baked into the hat.",
+    "Review every seam at neutral and at maximum rotation before generating final animation.",
+    "Then create a Spine JSON skeleton and pack an atlas for the exact Spine/runtime version used by the team."
+  ],
+  "animation_rules": [
+    "Animate separate parts using bone rotation/translation. Never apply one global mesh to the complete character.",
+    "Do not stretch or squeeze the face, limbs, hands, boots, hat or revolver. No animated nonuniform scaling or shear.",
+    "Gun barrel must remain rigid; the hand and gun move together unless a deliberate independent action is requested.",
+    "Use shoulder/elbow/wrist and hip/knee/ankle chains, with anatomically sensible pivots.",
+    "Only the poncho may use gentle mesh deformation and staggered follow-through.",
+    "For idle, pin both feet and keep the root still. Keep the character registration stable.",
+    "Use 30 FPS. For a 1.5-second symbol win, use 45 frame intervals and neutral first/end poses when a loop is requested.",
+    "Use eased timing and overlapping action, not synchronized wobble.",
+    "If a gap appears, increase real painted overlap or correct layer order. Never hide it by stretching a body part.",
+    "Generated overlap does not guarantee arbitrary turns or large pose changes; paint additional hidden anatomy if a requested action reveals unsupported areas."
+  ],
+  "overlap_pairs": [
+    {
+      "painted_under_part": "head",
+      "covering_part": "neck_connector",
+      "joint": "neck",
+      "target_overlap_in_assembled_canvas_px": 18,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "neck_connector",
+      "covering_part": "torso",
+      "joint": "collar",
+      "target_overlap_in_assembled_canvas_px": 20,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_aim_upper",
+      "covering_part": "torso",
+      "joint": "aiming shoulder",
+      "target_overlap_in_assembled_canvas_px": 24,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_aim_upper",
+      "covering_part": "arm_aim_forearm",
+      "joint": "aiming elbow",
+      "target_overlap_in_assembled_canvas_px": 24,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_aim_forearm",
+      "covering_part": "hand_aim",
+      "joint": "aiming wrist",
+      "target_overlap_in_assembled_canvas_px": 18,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_relaxed_upper",
+      "covering_part": "torso",
+      "joint": "relaxed shoulder",
+      "target_overlap_in_assembled_canvas_px": 22,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_relaxed_upper",
+      "covering_part": "arm_relaxed_forearm",
+      "joint": "relaxed elbow",
+      "target_overlap_in_assembled_canvas_px": 22,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "arm_relaxed_forearm",
+      "covering_part": "hand_relaxed",
+      "joint": "relaxed wrist",
+      "target_overlap_in_assembled_canvas_px": 16,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "thigh_image_left",
+      "covering_part": "pelvis",
+      "joint": "image-left hip",
+      "target_overlap_in_assembled_canvas_px": 28,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "thigh_image_right",
+      "covering_part": "pelvis",
+      "joint": "image-right hip",
+      "target_overlap_in_assembled_canvas_px": 28,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "thigh_image_left",
+      "covering_part": "calf_image_left",
+      "joint": "image-left knee",
+      "target_overlap_in_assembled_canvas_px": 24,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "thigh_image_right",
+      "covering_part": "calf_image_right",
+      "joint": "image-right knee",
+      "target_overlap_in_assembled_canvas_px": 24,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "calf_image_left",
+      "covering_part": "boot_image_left",
+      "joint": "image-left ankle",
+      "target_overlap_in_assembled_canvas_px": 20,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "calf_image_right",
+      "covering_part": "boot_image_right",
+      "joint": "image-right ankle",
+      "target_overlap_in_assembled_canvas_px": 20,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "poncho_back",
+      "covering_part": "poncho_shoulder",
+      "joint": "back poncho seam",
+      "target_overlap_in_assembled_canvas_px": 30,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "poncho_front",
+      "covering_part": "poncho_shoulder",
+      "joint": "front poncho seam",
+      "target_overlap_in_assembled_canvas_px": 28,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "poncho_right_tail",
+      "covering_part": "poncho_shoulder",
+      "joint": "right poncho seam",
+      "target_overlap_in_assembled_canvas_px": 28,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    },
+    {
+      "painted_under_part": "poncho_lower_fringe",
+      "covering_part": "poncho_back",
+      "joint": "fringe seam",
+      "target_overlap_in_assembled_canvas_px": 28,
+      "status": "recommended assembly target; not measured or motion-tested",
+      "instruction": "Place the painted extension underneath the covering part. Keep it concealed in the neutral pose; test at the maximum intended rotation."
+    }
+  ],
+  "parts": [
+    {
+      "id": "hat",
+      "file": "parts/01_hat.png",
+      "parent": "head",
+      "draw_order": 20,
+      "enabled_by_default": true,
+      "size_px": [
+        246,
+        154
+      ],
+      "atlas_source_cell_1based": [
+        1,
+        1
+      ],
+      "atlas_source_rect_xyxy": [
+        0,
+        0,
+        251,
+        251
+      ],
+      "crop_within_cell_xyxy": [
+        5,
+        52,
+        251,
+        206
+      ],
+      "pivot_local_xy": [
+        142.68,
+        110.88
+      ],
+      "pivot_local_normalized_xy": [
+        0.58,
+        0.72
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          557,
+          138
+        ],
+        "uniform_scale": 1.463415,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          348.2,
+          -24.263
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "head",
+      "file": "parts/02_head.png",
+      "parent": "neck_connector",
+      "draw_order": 20,
+      "enabled_by_default": true,
+      "size_px": [
+        212,
+        247
+      ],
+      "atlas_source_cell_1based": [
+        2,
+        1
+      ],
+      "atlas_source_rect_xyxy": [
+        251,
+        0,
+        502,
+        251
+      ],
+      "crop_within_cell_xyxy": [
+        32,
+        4,
+        244,
+        251
+      ],
+      "pivot_local_xy": [
+        108.12,
+        212.42
+      ],
+      "pivot_local_normalized_xy": [
+        0.51,
+        0.86
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          552,
+          258
+        ],
+        "uniform_scale": 1.367925,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          404.1,
+          -32.575
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "neck_connector",
+      "file": "parts/03_neck_connector.png",
+      "parent": "torso",
+      "draw_order": 20,
+      "enabled_by_default": true,
+      "size_px": [
+        200,
+        132
+      ],
+      "atlas_source_cell_1based": [
+        3,
+        1
+      ],
+      "atlas_source_rect_xyxy": [
+        502,
+        0,
+        752,
+        251
+      ],
+      "crop_within_cell_xyxy": [
+        25,
+        110,
+        225,
+        242
+      ],
+      "pivot_local_xy": [
+        100.0,
+        95.04
+      ],
+      "pivot_local_normalized_xy": [
+        0.5,
+        0.72
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          491,
+          260
+        ],
+        "uniform_scale": 0.85,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          406.0,
+          179.216
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "torso",
+      "file": "parts/04_torso.png",
+      "parent": "pelvis",
+      "draw_order": 12,
+      "enabled_by_default": true,
+      "size_px": [
+        218,
+        249
+      ],
+      "atlas_source_cell_1based": [
+        4,
+        1
+      ],
+      "atlas_source_rect_xyxy": [
+        752,
+        0,
+        1003,
+        251
+      ],
+      "crop_within_cell_xyxy": [
+        10,
+        2,
+        228,
+        251
+      ],
+      "pivot_local_xy": [
+        113.36,
+        226.59
+      ],
+      "pivot_local_normalized_xy": [
+        0.52,
+        0.91
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          564,
+          637
+        ],
+        "uniform_scale": 1.651376,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          376.8,
+          262.815
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "pelvis",
+      "file": "parts/05_pelvis.png",
+      "parent": "root",
+      "draw_order": 5,
+      "enabled_by_default": true,
+      "size_px": [
+        231,
+        221
+      ],
+      "atlas_source_cell_1based": [
+        5,
+        1
+      ],
+      "atlas_source_rect_xyxy": [
+        1003,
+        0,
+        1254,
+        251
+      ],
+      "crop_within_cell_xyxy": [
+        7,
+        30,
+        238,
+        251
+      ],
+      "pivot_local_xy": [
+        120.12,
+        81.77
+      ],
+      "pivot_local_normalized_xy": [
+        0.52,
+        0.37
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          582,
+          695
+        ],
+        "uniform_scale": 1.212121,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          436.4,
+          595.885
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "arm_aim_upper",
+      "file": "parts/06_arm_aim_upper.png",
+      "parent": "torso",
+      "draw_order": 15,
+      "enabled_by_default": true,
+      "size_px": [
+        175,
+        251
+      ],
+      "atlas_source_cell_1based": [
+        1,
+        2
+      ],
+      "atlas_source_rect_xyxy": [
+        0,
+        251,
+        251,
+        502
+      ],
+      "crop_within_cell_xyxy": [
+        42,
+        0,
+        217,
+        251
+      ],
+      "pivot_local_xy": [
+        92.75,
+        45.18
+      ],
+      "pivot_local_normalized_xy": [
+        0.53,
+        0.18
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          474,
+          372
+        ],
+        "uniform_scale": 0.8,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          399.8,
+          335.856
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "arm_aim_forearm",
+      "file": "parts/07_arm_aim_forearm.png",
+      "parent": "arm_aim_upper",
+      "draw_order": 16,
+      "enabled_by_default": true,
+      "size_px": [
+        240,
+        184
+      ],
+      "atlas_source_cell_1based": [
+        2,
+        2
+      ],
+      "atlas_source_rect_xyxy": [
+        251,
+        251,
+        502,
+        502
+      ],
+      "crop_within_cell_xyxy": [
+        1,
+        44,
+        241,
+        228
+      ],
+      "pivot_local_xy": [
+        38.4,
+        128.8
+      ],
+      "pivot_local_normalized_xy": [
+        0.16,
+        0.7
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          450,
+          510
+        ],
+        "uniform_scale": 0.854167,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          417.2,
+          399.983
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "hand_aim",
+      "file": "parts/08_hand_aim.png",
+      "parent": "arm_aim_forearm",
+      "draw_order": 18,
+      "enabled_by_default": true,
+      "size_px": [
+        191,
+        172
+      ],
+      "atlas_source_cell_1based": [
+        3,
+        2
+      ],
+      "atlas_source_rect_xyxy": [
+        502,
+        251,
+        752,
+        502
+      ],
+      "crop_within_cell_xyxy": [
+        20,
+        42,
+        211,
+        214
+      ],
+      "pivot_local_xy": [
+        26.74,
+        125.56
+      ],
+      "pivot_local_normalized_xy": [
+        0.14,
+        0.73
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          584,
+          420
+        ],
+        "uniform_scale": 0.706806,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          565.1,
+          331.253
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "revolver",
+      "file": "parts/09_revolver.png",
+      "parent": "hand_aim",
+      "draw_order": 17,
+      "enabled_by_default": true,
+      "size_px": [
+        224,
+        239
+      ],
+      "atlas_source_cell_1based": [
+        4,
+        2
+      ],
+      "atlas_source_rect_xyxy": [
+        752,
+        251,
+        1003,
+        502
+      ],
+      "crop_within_cell_xyxy": [
+        18,
+        11,
+        242,
+        250
+      ],
+      "pivot_local_xy": [
+        105.28,
+        169.69
+      ],
+      "pivot_local_normalized_xy": [
+        0.47,
+        0.71
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          676,
+          382
+        ],
+        "uniform_scale": 0.669643,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          605.5,
+          268.368
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "arm_relaxed_upper",
+      "file": "parts/10_arm_relaxed_upper.png",
+      "parent": "torso",
+      "draw_order": 9,
+      "enabled_by_default": true,
+      "size_px": [
+        173,
+        250
+      ],
+      "atlas_source_cell_1based": [
+        5,
+        2
+      ],
+      "atlas_source_rect_xyxy": [
+        1003,
+        251,
+        1254,
+        502
+      ],
+      "crop_within_cell_xyxy": [
+        34,
+        1,
+        207,
+        251
+      ],
+      "pivot_local_xy": [
+        81.31,
+        37.5
+      ],
+      "pivot_local_normalized_xy": [
+        0.47,
+        0.15
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          699,
+          624
+        ],
+        "uniform_scale": 0.66474,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          644.95,
+          599.072
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "arm_relaxed_forearm",
+      "file": "parts/11_arm_relaxed_forearm.png",
+      "parent": "arm_relaxed_upper",
+      "draw_order": 10,
+      "enabled_by_default": true,
+      "size_px": [
+        163,
+        231
+      ],
+      "atlas_source_cell_1based": [
+        1,
+        3
+      ],
+      "atlas_source_rect_xyxy": [
+        0,
+        502,
+        251,
+        752
+      ],
+      "crop_within_cell_xyxy": [
+        46,
+        2,
+        209,
+        233
+      ],
+      "pivot_local_xy": [
+        63.57,
+        30.03
+      ],
+      "pivot_local_normalized_xy": [
+        0.39,
+        0.13
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          746,
+          714
+        ],
+        "uniform_scale": 0.644172,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          705.05,
+          694.656
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "hand_relaxed",
+      "file": "parts/12_hand_relaxed.png",
+      "parent": "arm_relaxed_forearm",
+      "draw_order": 11,
+      "enabled_by_default": true,
+      "size_px": [
+        138,
+        231
+      ],
+      "atlas_source_cell_1based": [
+        2,
+        3
+      ],
+      "atlas_source_rect_xyxy": [
+        251,
+        502,
+        502,
+        752
+      ],
+      "crop_within_cell_xyxy": [
+        61,
+        0,
+        199,
+        231
+      ],
+      "pivot_local_xy": [
+        55.2,
+        34.65
+      ],
+      "pivot_local_normalized_xy": [
+        0.4,
+        0.15
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          786,
+          775
+        ],
+        "uniform_scale": 0.57971,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          754.0,
+          754.913
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "thigh_image_left",
+      "file": "parts/13_thigh_image_left.png",
+      "parent": "pelvis",
+      "draw_order": 3,
+      "enabled_by_default": true,
+      "size_px": [
+        186,
+        247
+      ],
+      "atlas_source_cell_1based": [
+        3,
+        3
+      ],
+      "atlas_source_rect_xyxy": [
+        502,
+        502,
+        752,
+        752
+      ],
+      "crop_within_cell_xyxy": [
+        24,
+        0,
+        210,
+        247
+      ],
+      "pivot_local_xy": [
+        109.74,
+        29.64
+      ],
+      "pivot_local_normalized_xy": [
+        0.59,
+        0.12
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          544,
+          756
+        ],
+        "uniform_scale": 0.913978,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          443.7,
+          728.91
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "calf_image_left",
+      "file": "parts/14_calf_image_left.png",
+      "parent": "thigh_image_left",
+      "draw_order": 4,
+      "enabled_by_default": true,
+      "size_px": [
+        141,
+        247
+      ],
+      "atlas_source_cell_1based": [
+        4,
+        3
+      ],
+      "atlas_source_rect_xyxy": [
+        752,
+        502,
+        1003,
+        752
+      ],
+      "crop_within_cell_xyxy": [
+        46,
+        0,
+        187,
+        247
+      ],
+      "pivot_local_xy": [
+        69.09,
+        27.17
+      ],
+      "pivot_local_normalized_xy": [
+        0.49,
+        0.11
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          434,
+          1064
+        ],
+        "uniform_scale": 1.205674,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          350.7,
+          1031.242
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "boot_image_right",
+      "file": "parts/15_boot_image_right.png",
+      "parent": "calf_image_right",
+      "draw_order": 8,
+      "enabled_by_default": true,
+      "size_px": [
+        231,
+        239
+      ],
+      "atlas_source_cell_1based": [
+        5,
+        3
+      ],
+      "atlas_source_rect_xyxy": [
+        1003,
+        502,
+        1254,
+        752
+      ],
+      "crop_within_cell_xyxy": [
+        5,
+        0,
+        236,
+        239
+      ],
+      "pivot_local_xy": [
+        69.3,
+        38.24
+      ],
+      "pivot_local_normalized_xy": [
+        0.3,
+        0.16
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          655,
+          1293
+        ],
+        "uniform_scale": 1.212121,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          571.0,
+          1246.648
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "thigh_image_right",
+      "file": "parts/16_thigh_image_right.png",
+      "parent": "pelvis",
+      "draw_order": 6,
+      "enabled_by_default": true,
+      "size_px": [
+        172,
+        245
+      ],
+      "atlas_source_cell_1based": [
+        1,
+        4
+      ],
+      "atlas_source_rect_xyxy": [
+        0,
+        752,
+        251,
+        1003
+      ],
+      "crop_within_cell_xyxy": [
+        45,
+        0,
+        217,
+        245
+      ],
+      "pivot_local_xy": [
+        92.88,
+        24.5
+      ],
+      "pivot_local_normalized_xy": [
+        0.54,
+        0.1
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          645,
+          744
+        ],
+        "uniform_scale": 0.959302,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          555.9,
+          720.497
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "calf_image_right",
+      "file": "parts/17_calf_image_right.png",
+      "parent": "thigh_image_right",
+      "draw_order": 7,
+      "enabled_by_default": true,
+      "size_px": [
+        142,
+        249
+      ],
+      "atlas_source_cell_1based": [
+        2,
+        4
+      ],
+      "atlas_source_rect_xyxy": [
+        251,
+        752,
+        502,
+        1003
+      ],
+      "crop_within_cell_xyxy": [
+        55,
+        0,
+        197,
+        249
+      ],
+      "pivot_local_xy": [
+        71.0,
+        24.9
+      ],
+      "pivot_local_normalized_xy": [
+        0.5,
+        0.1
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          658,
+          1049
+        ],
+        "uniform_scale": 1.056338,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          583.0,
+          1022.697
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "boot_image_left",
+      "file": "parts/18_boot_image_left.png",
+      "parent": "calf_image_left",
+      "draw_order": 5,
+      "enabled_by_default": true,
+      "size_px": [
+        193,
+        248
+      ],
+      "atlas_source_cell_1based": [
+        3,
+        4
+      ],
+      "atlas_source_rect_xyxy": [
+        502,
+        752,
+        752,
+        1003
+      ],
+      "crop_within_cell_xyxy": [
+        18,
+        0,
+        211,
+        248
+      ],
+      "pivot_local_xy": [
+        100.36,
+        37.2
+      ],
+      "pivot_local_normalized_xy": [
+        0.52,
+        0.15
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          365,
+          1306
+        ],
+        "uniform_scale": 0.906736,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          274.0,
+          1272.269
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "holster",
+      "file": "parts/19_holster.png",
+      "parent": "pelvis",
+      "draw_order": 13,
+      "enabled_by_default": true,
+      "size_px": [
+        128,
+        250
+      ],
+      "atlas_source_cell_1based": [
+        4,
+        4
+      ],
+      "atlas_source_rect_xyxy": [
+        752,
+        752,
+        1003,
+        1003
+      ],
+      "crop_within_cell_xyxy": [
+        58,
+        0,
+        186,
+        250
+      ],
+      "pivot_local_xy": [
+        61.44,
+        35.0
+      ],
+      "pivot_local_normalized_xy": [
+        0.48,
+        0.14
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          475,
+          731
+        ],
+        "uniform_scale": 0.859375,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          422.2,
+          700.922
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "poncho_shoulder",
+      "file": "parts/20_poncho_shoulder.png",
+      "parent": "torso",
+      "draw_order": 14,
+      "enabled_by_default": true,
+      "size_px": [
+        247,
+        212
+      ],
+      "atlas_source_cell_1based": [
+        5,
+        4
+      ],
+      "atlas_source_rect_xyxy": [
+        1003,
+        752,
+        1254,
+        1003
+      ],
+      "crop_within_cell_xyxy": [
+        0,
+        10,
+        247,
+        222
+      ],
+      "pivot_local_xy": [
+        140.79,
+        78.44
+      ],
+      "pivot_local_normalized_xy": [
+        0.57,
+        0.37
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          470,
+          302
+        ],
+        "uniform_scale": 1.477733,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          261.95,
+          186.087
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "cloth_region_or_weighted_mesh",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": true
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "poncho_back",
+      "file": "parts/21_poncho_back.png",
+      "parent": "torso",
+      "draw_order": 0,
+      "enabled_by_default": true,
+      "size_px": [
+        214,
+        251
+      ],
+      "atlas_source_cell_1based": [
+        1,
+        5
+      ],
+      "atlas_source_rect_xyxy": [
+        0,
+        1003,
+        251,
+        1254
+      ],
+      "crop_within_cell_xyxy": [
+        20,
+        0,
+        234,
+        251
+      ],
+      "pivot_local_xy": [
+        139.1,
+        27.61
+      ],
+      "pivot_local_normalized_xy": [
+        0.65,
+        0.11
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          375,
+          340
+        ],
+        "uniform_scale": 1.658879,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          144.25,
+          294.198
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "cloth_region_or_weighted_mesh",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": true
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "poncho_front",
+      "file": "parts/22_poncho_front.png",
+      "parent": "torso",
+      "draw_order": 14,
+      "enabled_by_default": true,
+      "size_px": [
+        232,
+        247
+      ],
+      "atlas_source_cell_1based": [
+        2,
+        5
+      ],
+      "atlas_source_rect_xyxy": [
+        251,
+        1003,
+        502,
+        1254
+      ],
+      "crop_within_cell_xyxy": [
+        3,
+        0,
+        235,
+        247
+      ],
+      "pivot_local_xy": [
+        150.8,
+        37.05
+      ],
+      "pivot_local_normalized_xy": [
+        0.65,
+        0.15
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          470,
+          302
+        ],
+        "uniform_scale": 1.508621,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          242.5,
+          246.106
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "cloth_region_or_weighted_mesh",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": true
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "poncho_right_tail",
+      "file": "parts/23_poncho_right_tail.png",
+      "parent": "torso",
+      "draw_order": 1,
+      "enabled_by_default": true,
+      "size_px": [
+        129,
+        251
+      ],
+      "atlas_source_cell_1based": [
+        3,
+        5
+      ],
+      "atlas_source_rect_xyxy": [
+        502,
+        1003,
+        752,
+        1254
+      ],
+      "crop_within_cell_xyxy": [
+        71,
+        0,
+        200,
+        251
+      ],
+      "pivot_local_xy": [
+        59.34,
+        25.1
+      ],
+      "pivot_local_normalized_xy": [
+        0.46,
+        0.1
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          715,
+          472
+        ],
+        "uniform_scale": 1.007752,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          655.2,
+          446.705
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "cloth_region_or_weighted_mesh",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": true
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "poncho_lower_fringe",
+      "file": "parts/24_poncho_lower_fringe.png",
+      "parent": "poncho_back",
+      "draw_order": 2,
+      "enabled_by_default": true,
+      "size_px": [
+        219,
+        238
+      ],
+      "atlas_source_cell_1based": [
+        4,
+        5
+      ],
+      "atlas_source_rect_xyxy": [
+        752,
+        1003,
+        1003,
+        1254
+      ],
+      "crop_within_cell_xyxy": [
+        0,
+        7,
+        219,
+        245
+      ],
+      "pivot_local_xy": [
+        116.07,
+        35.7
+      ],
+      "pivot_local_normalized_xy": [
+        0.53,
+        0.15
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          222,
+          1046
+        ],
+        "uniform_scale": 1.187215,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          84.2,
+          1003.616
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "cloth_region_or_weighted_mesh",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": true
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      }
+    },
+    {
+      "id": "hatband_optional",
+      "file": "parts/25_hatband_optional.png",
+      "parent": "hat",
+      "draw_order": 21,
+      "enabled_by_default": false,
+      "size_px": [
+        235,
+        81
+      ],
+      "atlas_source_cell_1based": [
+        5,
+        5
+      ],
+      "atlas_source_rect_xyxy": [
+        1003,
+        1003,
+        1254,
+        1254
+      ],
+      "crop_within_cell_xyxy": [
+        3,
+        74,
+        238,
+        155
+      ],
+      "pivot_local_xy": [
+        117.5,
+        40.5
+      ],
+      "pivot_local_normalized_xy": [
+        0.5,
+        0.5
+      ],
+      "estimated_setup": {
+        "pivot_canvas_xy": [
+          557,
+          138
+        ],
+        "uniform_scale": 1.191489,
+        "rotation_degrees": 0,
+        "top_left_canvas_xy": [
+          417.0,
+          89.745
+        ],
+        "status": "approximate visual alignment guide; not a validated assembly"
+      },
+      "render_as": "rigid_region",
+      "animation_constraints": {
+        "scale_x": 1,
+        "scale_y": 1,
+        "shear_degrees": 0,
+        "allow_rotation": true,
+        "allow_translation": true,
+        "allow_mesh_bending": false
+      },
+      "underpaint": {
+        "included": true,
+        "source": "AI reconstruction of concealed surfaces",
+        "joint_cap_style": "painted material continuation",
+        "overlap_coverage": "approximate; inspect and adjust against neighbouring sprites",
+        "seamless_motion_guaranteed": false
+      },
+      "note": "Hat already includes its band. This is an optional replacement/detail; do not draw on top by default."
+    }
+  ],
+  "validation": {
+    "png_count": 25,
+    "png_transparency": true,
+    "filenames_checked": true,
+    "hierarchy_checked": true,
+    "native_spine_import_tested": false,
+    "assembled_neutral_pose_approved": false,
+    "rotation_gap_tested": false
+  }
+}
