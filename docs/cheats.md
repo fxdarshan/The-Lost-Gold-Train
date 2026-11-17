@@ -56,3 +56,6 @@ The **Next spins** list takes the same outcomes (with **Add to list** buttons). 
 
 ## Prototype implementation status
 Every scenario and every outcome type was played to completion in headless Chrome with no page errors (2026-11-15).
+
+
+The Next spins list starts empty (2026-11-17), so SPIN plays the real maths; use Scenarios or the buttons to load scripted outcomes.

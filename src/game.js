@@ -146,7 +146,7 @@
         ctx.rotate(p.rot * .2); const w = Math.abs(Math.cos(p.rot)) * p.size + 2;
         ctx.fillStyle = '#f7c948'; ctx.beginPath(); ctx.ellipse(0, 0, w, p.size, 0, 0, 7); ctx.fill();
         ctx.strokeStyle = '#a8681a'; ctx.lineWidth = 3; ctx.stroke();
-        if (w > p.size * .6) { ctx.fillStyle = '#a8681a'; ctx.fillRect(-w * .22, -p.size * .22, w * .44, p.size * .44); }
+        if (w > p.size * .6) { ctx.strokeStyle = 'rgba(168,104,26,.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, 0, w * .66, p.size * .66, 0, 0, 7); ctx.stroke(); ctx.fillStyle = '#fff1b0'; ctx.beginPath(); ctx.ellipse(-w * .3, -p.size * .35, w * .16, p.size * .1, -.6, 0, 7); ctx.fill(); }   // gold coin: rim and shine
       } else if (p.type === 'confetti') { ctx.rotate(p.rot); ctx.fillStyle = p.color; ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2 * Math.abs(Math.cos(p.rot * 2))); }
       else if (p.type === 'cracker') {     // little red firecracker tube
         ctx.rotate(p.rot); ctx.fillStyle = '#d61f26'; ctx.fillRect(-p.size * .2, -p.size * .5, p.size * .4, p.size);
@@ -162,7 +162,7 @@
     for (let i = 0; i < n; i++) setTimeout(() => {
       const y = y0 + Math.random() * gh;
       emit('spark', x + (Math.random() - .5) * cw * .5, y, 14, { angle: 0, spread: 7, speed: 420, gravity: 300, life: .6, size: 9, color: ['#fff6c8', '#ffd34a', '#ff5a3a'] });
-      emit('cracker', x, y, 2, { speed: 500, gravity: 1200, life: 1, size: 28 });
+      emit('spark', x, y, 6, { angle: -Math.PI / 2, spread: 1.2, speed: 260, gravity: -60, life: 1.1, size: 22, color: ['rgba(235,222,205,.55)', 'rgba(200,185,170,.45)'] });   // a puff of steam
       SND.play('sfx_cracker_pop');
     }, i * 70 / G.speed);
   }
@@ -349,6 +349,8 @@
       if (img) { const k = Math.min((cw + 8) / img.width, (gh + 16) / img.height), w = img.width * k, h = img.height * k; ctx.drawImage(img, x + cw / 2 - w / 2, y0 + gh / 2 - h / 2, w, h); }
       else { ctx.fillStyle = '#b0181f'; ctx.fillRect(x, y0, cw, gh); }
       ctx.restore();
+      // the Scatter tiles stay on top of their track, wherever they landed on the reel
+      for (let r = 0; r < C.rows; r++) if (G.board[f.c][r] === SC) { const [cx, cy] = cellCenter(f.c, r); drawCell(f.c, r, SC, cx, cy, t); }
       // burning fuse tip
       if (u < 1) { const yy = y0 + gh * reveal; emit('spark', x + cw / 2, yy, 2, { angle: Math.PI / 2, spread: 3, speed: 200, gravity: 300, life: .4, size: 8, color: ['#fff6c8', '#ffb000'] }); }
     });
@@ -495,7 +497,7 @@
     if (fx === 'cascade') { if (p(30)) { emit('coin', W * .2, H + 20, 1, { angle: -Math.PI / 2 + .25, spread: .4, speed: 1500, gravity: 1500, life: 2.2, size: 24 }); emit('coin', W * .8, H + 20, 1, { angle: -Math.PI / 2 - .25, spread: .4, speed: 1500, gravity: 1500, life: 2.2, size: 24 }); } }
     if (fx === 'drop' || fx === 'epic' || fx === 'lasers') { if (p(fx === 'drop' ? 22 : 40)) emit('coin', Math.random() * W, -40, 1, { angle: Math.PI / 2, spread: .3, speed: 200, gravity: 900, life: 2.5, size: 24 }); }
     if (fx === 'fireworks' || fx === 'epic' || fx === 'lasers') { if (p(fx === 'epic' ? 3 : 1.8)) emit('rocket', W * (.15 + Math.random() * .7), H, 1, { spread: .25, speed: 1100, gravity: 600, life: .9 + Math.random() * .4, burst: ['#ff5a5a', '#ffd34a', '#ff9a3a', '#ffffff'][Math.floor(Math.random() * 4)] }); }
-    if (fx !== 'fountain' && p(20)) emit('cracker', Math.random() < .5 ? 0 : W, H * .7, 1, { angle: -Math.PI / 2, spread: 1.2, speed: 1000, gravity: 900, life: 2.4, size: 30 });
+    // (the firecrackers thrown here in New Year Crackers are gone: gold coins only)
   }
   function drawBanner(t, dt) {
     const b = G.banner; if (!b) return;
@@ -588,22 +590,40 @@
     if (f >= fi + fl && !m.outroCalled) { m.outroCalled = true; if (m.onOutro) m.onOutro(); }
     if (f >= fi + fl + fo) { const r = m.resolve; G.modal = null; r(); }
   }
-  // to free spins: red and gold firecracker curtain; back to base: zoom out
+  // to free spins: a wall of locomotive steam; back to base: zoom out
   function drawTransition(t) {
     const tr = G.trans; if (!tr) return;
     const f = (t - tr.t0) * C.fps * G.speed;
     if (tr.kind === 'toFree') {
+      // locomotive steam rolls across the screen from the right, FREE SPINS shows through it, then it clears
       const [a, b, c] = FR.transToFree;
-      const cover = f < a ? ease.out(f / a) : f < a + b ? 1 : 1 - ease.inOut((f - a - b) / c);
-      if (f >= a && !tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
-      const half = W / 2 * cover, folds = 9, fw = half / folds;
-      for (const side of [0, 1]) for (let i = 0; i < folds; i++) {
-        const x = side === 0 ? i * fw : W - (i + 1) * fw;
-        const g = ctx.createLinearGradient(x, 0, x + fw, 0), dark = (i + side) % 2;
-        g.addColorStop(0, dark ? '#6a0f1e' : '#c2283a'); g.addColorStop(.5, dark ? '#9a1a2c' : '#ff4a50'); g.addColorStop(1, dark ? '#4a0812' : '#a01a2a');
-        ctx.fillStyle = g; ctx.fillRect(x, 0, fw + 1, H); ctx.fillStyle = '#ffd34a'; ctx.fillRect(x, 0, 3, H);
+      if (!tr.puffs) {
+        let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        tr.puffs = [];
+        for (let i = 0; i < 120; i++) tr.puffs.push({ x: rnd() * 1.1 - .05, y: rnd() * 1.1 - .05, r: 110 + rnd() * 230, d: rnd() * .25, sh: .8 + rnd() * .2 });
       }
-      if (cover > .95) { blockText('FREE SPINS', W / 2, H * .45, 170); if (Math.random() < .4) popAt(W / 2 + (Math.random() - .5) * 1200, H * (.2 + Math.random() * .6)); }
+      const inU = clamp(f / a, 0, 1), outU = clamp((f - a - b) / c, 0, 1);
+      if (f >= a && !tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
+      // solid backing once the puffs have closed the gap, so nothing shows through mid-transition
+      const solid = clamp((inU - .75) / .2, 0, 1) * (1 - clamp(outU / .45, 0, 1));
+      if (solid > 0) { ctx.save(); ctx.globalAlpha = solid; ctx.fillStyle = '#d9c8b4'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      for (const p of tr.puffs) {
+        // in: each puff rolls in from the right, the leading edge first; out: puffs swell, lift and fade
+        const k = clamp((inU * 1.35 - (1 - p.x) * .35 - p.d * .5) / .55, 0, 1), e = ease.out(k);
+        const o = ease.inOut(clamp((outU - p.d) / (1 - p.d * .8), 0, 1));
+        const x = (p.x + (1 - e) * 1.1) * W - o * 160, y = p.y * H - o * 220, r = p.r * (.55 + .45 * e) * (1 + o * .6);
+        const al = e * (1 - o); if (al <= 0) continue;
+        // soft, low-contrast puffs (no hard highlight) so they read as steam, not bubbles
+        const g = ctx.createRadialGradient(x - r * .12, y - r * .15, 0, x, y, r);
+        const c1 = `${Math.round(240 * p.sh)},${Math.round(228 * p.sh)},${Math.round(214 * p.sh)}`;
+        g.addColorStop(0, `rgba(${c1},${al * .95})`); g.addColorStop(.6, `rgba(${c1},${al * .7})`); g.addColorStop(1, `rgba(${c1},0)`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      }
+      // sunset light through the steam: warm from below, cooler at the top
+      const wa = ease.out(inU) * (1 - outU);
+      if (wa > 0) { ctx.save(); ctx.globalAlpha = wa * .45; const lg = ctx.createLinearGradient(0, 0, 0, H); lg.addColorStop(0, 'rgba(120,90,80,.5)'); lg.addColorStop(.6, 'rgba(255,170,90,.35)'); lg.addColorStop(1, 'rgba(230,90,40,.75)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+      const ta = clamp((inU - .8) / .2, 0, 1) * (1 - clamp(outU / .3, 0, 1));
+      if (ta > 0) { ctx.save(); ctx.globalAlpha = ta; blockText('FREE SPINS', W / 2, H * .45, 170); ctx.restore(); }
       if (f >= a + b + c) { G.trans = null; tr.resolve(); }
     } else {
       const u = clamp(f / FR.transToBase, 0, 1);
@@ -709,7 +729,8 @@
     G.labels = [{ x: x0 + gw / 2, y: y0 + gh / 2, t0, text: fmt(step.amount), size: 70 }];
     SND.play('sfx_symbol_win_line'); setWin(G.win + step.amount);
     await waitF(symWinFrames(), true);
-    if (step.wins.length > 1 && !G.autoplay) {
+    // a round that ends on a win banner goes straight to it: no line-by-line pass first
+    if (step.wins.length > 1 && !G.autoplay && !G.bannerNext) {
       for (const w of step.wins) {
         if (G.skipLines) break;
         clearLines(); unhighlight(); await wait(.02);
@@ -794,7 +815,9 @@
     await startReels(res.start, inFS, G.fs.special, bought);
     G.spinning = false; G.onChange();
     await wait(.12 / G.speed);
+    G.bannerNext = engine.tierOf(res.total, bet()) >= 0;
     await playSteps(res.steps);
+    G.bannerNext = false;
     // the round's big win banner (free spins: per spin, the summary shows the total)
     await bigWinBanner(res.total);
     return res;

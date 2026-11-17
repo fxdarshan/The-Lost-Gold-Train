@@ -158,7 +158,7 @@
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
       summaryTally: 75,
-      transToFree: [15, 45, 15],
+      transToFree: [20, 40, 30],     // steam rolls in, holds, clears
       transToBase: 60
     },
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing

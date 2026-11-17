@@ -2,6 +2,13 @@
 
 Newest first.
 
+## 2026-11-17: visible fixes
+- Expanding symbol "always the Outlaw": the demo list preloaded at start had a free-spins step forced to the Outlaw, so SPIN played it first. The list now starts empty, so SPIN plays the real maths. The pick was already random and weighted (Outlaw 5.0%, Train and Gold 5.9%, every other symbol 6.9%; these weights are part of the tuned RTP). The Outlaw is still forced only where a cheat or scenario says so (P, "Free spins: the Outlaw expands", "Max win").
+- Win banner came after every line had cycled (2.5 s each, about 17 s for 6 lines): a round that ends on a banner now goes straight to it after the all-lines view (about 4.5 s).
+- Transition to free spins: New Year Crackers' red curtain replaced by a wall of locomotive steam lit by the sunset (`transToFree` 20/40/30).
+- Free-spins trigger: `fx_scatter_full` is now a railway track only, and the Scatter tiles are drawn on top of it wherever they landed (was the old badge pasted at the top of the reel); pops are gold sparks and steam puffs, not red firecrackers.
+- Banner coins: plain gold coins (the square hole of Chinese coins removed); no firecrackers thrown on banners.
+
 ## 2026-11-16: acted Outlaw animation
 - New Outlaw sheet ("quick draw", made by Darshan in Gemini from `docs/keypose-prompt-outlaw.md`) played with the timing chart: anticipation, fast draw and shot, smoke blow, gun spin, hat-tip grin, settle. Its pose 1 is the new Outlaw idle art.
 - `anim_from_keys.py --timing`: per-key frame counts (hold, then a 1–3 frame move into the next key).

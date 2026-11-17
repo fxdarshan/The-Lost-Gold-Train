@@ -20,7 +20,7 @@
   document.addEventListener('keydown', e => { if (e.key.toLowerCase() === 'd' && !/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) togglePanel($('#app').classList.contains('no-panel')); });
 
   /* ---------- queue ---------- */
-  G.queue = [{ type: 'small' }, { type: 'multi' }, { type: 'wildwin' }, { type: 'tease' }, { type: 'big' }, { type: 'trigger', special: 0 }, { type: 'expand' }, { type: 'random' }, { type: 'expand5' }];
+  G.queue = [];   // SPIN plays the real maths (random special symbol); scripted demos come from Scenarios or the buttons below
   function renderQueue() {
     const q = $('#queue'); q.innerHTML = '';
     if (!G.queue.length) { const li = document.createElement('li'); li.className = 'empty'; li.textContent = 'Empty: spins are random.'; q.appendChild(li); }
