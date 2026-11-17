@@ -180,7 +180,18 @@
     reelFrame: true,
     buyButton: { x: 26, y: 330, w: 236, h: 176 },   // left column panel; the expanding-symbol card takes it in free spins
     anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
-    hudTop: 985,                        // the slim bottom bar starts here
+    hudTop: 985,
+    // Mesh rig for the mascot (src/rig.js), in pixels of char_mascot (639 x 1200). ASSUMED shapes, traced on the art:
+    // the poncho waves, the chest breathes, the head turns, the gun arm aims and recoils when he fires.
+    mascotRig: {
+      cols: 18, rows: 34,
+      anchors: { clothRoot: [330, 200], waist: [420, 520], neck: [420, 190], shoulder: [330, 300], tip: [560, 162] },
+      cloth: { poly: [[305, 165], [250, 175], [195, 230], [120, 330], [55, 430], [5, 600], [20, 720], [60, 900], [105, 1010], [160, 960], [225, 900], [255, 800], [285, 560], [300, 330]], soft: 45 },
+      head: { ellipse: [400, 105, 160, 115], soft: 45 },
+      torso: { ellipse: [430, 360, 170, 210], soft: 70 },
+      arm: { capsule: [330, 300, 570, 160, 78], soft: 40 },
+      fireOn: 'win'                     // the Outlaw fires on every win; double tap on banners and free spins
+    },                        // the slim bottom bar starts here
     message: 'DEMO GAME IS ACTIVE'      // the message pill above the bar
   };
 

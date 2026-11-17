@@ -37,7 +37,7 @@
     banner: null, modal: null, trans: null, info: false,
     env: 0, envTarget: 0, camera: 1, message: null,
     fs: { active: false, left: 0, played: 0, total: 0, awarded: 0, special: null, bought: false },
-    buyArm: 0, mascotHop: 0,
+    buyArm: 0, mascotHop: 0, shots: [], shotFx: 0,
     queue: [], onChange: () => {}
   };
   const bet = () => C.bets[G.betIndex];
@@ -213,14 +213,44 @@
 
   /* ------------------------------------------------------------ mascot */
   // the Outlaw stands right of the reels: idle sway and breathing; hops on big wins and free spins
+  // the mascot is animated by the mesh rig (src/rig.js): poncho in the wind, breathing, head turn, and he fires his
+  // revolver on wins (G.shots holds the shot times). Rendered into its own canvas at 30 fps, then placed.
+  const rigs = {};
+  function rigCanvas(key, k, t, st) {
+    const img = A.get('char_mascot'); if (!img || !C.mascotRig || !root.Rig) return null;
+    let r = rigs[key];
+    if (!r || r.k !== k || r.img !== img) { const cv = document.createElement('canvas'); cv.width = Math.ceil(img.width * k); cv.height = Math.ceil(img.height * k); r = rigs[key] = { k, img, cv, c2: cv.getContext('2d'), rig: root.Rig.create(img, C.mascotRig), last: -1 }; }
+    const frame = Math.floor(t * 30), sk = JSON.stringify(st);
+    if (frame !== r.last || sk !== r.sk) { r.last = frame; r.sk = sk; r.c2.clearRect(0, 0, r.cv.width, r.cv.height); r.rig.render(r.c2, k, frame / 30, st); }
+    return r;
+  }
+  function mascotState(t) {
+    const last = G.shots.filter(s => s <= t).pop();
+    const fire = last == null || t - last > 1.2 ? null : t - last;
+    return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0 };
+  }
+  function shoot(n = 1) { const t = now(); for (let i = 0; i < n; i++) G.shots.push(t + i * .38); G.shots = G.shots.filter(s => s > t - 3); }
   function drawMascot(t) {
     const img = A.get('char_mascot'); if (!img || !M) return;
     const k = Math.min(M.w / img.width, M.h / img.height), w = img.width * k, h = img.height * k;
-    const hopU = clamp((t - G.mascotHop) / .6, 0, 1), hop = G.mascotHop ? Math.sin(hopU * Math.PI) * 40 : 0;
-    const breathe = 1 + .012 * Math.sin(t * 2.2), sway = .015 * Math.sin(t * 1.1);
-    const fx = M.x + M.w / 2, fy = M.y + M.h;    // feet
-    ctx.save(); ctx.translate(fx, fy - hop); ctx.rotate(sway); ctx.scale(M.flip ? -1 : 1, breathe);
-    ctx.drawImage(img, -w / 2, -h, w, h); ctx.restore();
+    const fx = M.x + M.w / 2, fy = M.y + M.h, dir = M.flip ? -1 : 1, st = mascotState(t);
+    const r = rigCanvas('mascot', k, t, st);
+    ctx.save(); ctx.translate(fx, fy); ctx.scale(dir, 1);
+    if (r) ctx.drawImage(r.cv, -w / 2, -h); else ctx.drawImage(img, -w / 2, -h, w, h);
+    ctx.restore();
+    // muzzle flash and smoke at the gun tip when he fires
+    if (r && st.fire != null) {
+      const [tx, ty] = r.rig.point('tip', Math.floor(t * 30) / 30, st), sx = fx + dir * (tx * k - w / 2), sy = fy - h + ty * k;
+      if (st.fire < .1) {
+        const rr = 90 * (1 - st.fire / .1) + 30; ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, rr); g.addColorStop(0, 'rgba(255,255,230,1)'); g.addColorStop(.3, 'rgba(255,200,90,.9)'); g.addColorStop(1, 'rgba(255,120,30,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sx, sy, rr, 0, 7); ctx.fill(); ctx.restore();
+      }
+      const key = G.shots.filter(s => s <= t).length;
+      if (G.shotFx !== key) { G.shotFx = key; SND.play('sfx_cracker_pop');
+        emit('spark', sx, sy, 10, { angle: dir > 0 ? -.4 : Math.PI + .4, spread: 1, speed: 420, drag: 7, gravity: 200, life: .35, size: 7, color: ['#fff6c8', '#ffd34a'] });
+        emit('spark', sx, sy, 5, { angle: -Math.PI / 2, spread: .6, speed: 80, drag: 2, gravity: -40, life: 1.3, size: 20, color: ['rgba(225,215,205,.4)', 'rgba(200,190,180,.35)'] }); }
+    }
   }
 
   // the game logo (ui_splash_logo) in its box with a slow shimmer; without logo art, the title in text above the reels
@@ -665,7 +695,7 @@
       // gunfight (re-uses the Outlaw mascot art, no extra asset): an Outlaw slides in on each side, they fire at each
       // other, the bullets meet in a spark burst, gunsmoke fills the scene, FREE SPINS stamps in, the smoke clears slowly
       const [a, b, c] = FR.transToFree, outU = clamp((f - a - b) / c, 0, 1);
-      const img = A.get('char_mascot'), FIRE = [14, 18], MEET = 23;
+      const img = A.get('char_mascot'), FIRE = [15, 15], MEET = 22;
       const k = H * 1.55 / (img ? img.height : 1200), tipX = 525, tipY = 187;      // muzzle position in the mascot art
       const tip = side => [side ? W * .70 : W * .30, H * .40];
       if (!tr.puffs) {
@@ -684,8 +714,11 @@
       if (img && showA > 0) for (const side of [0, 1]) {
         const slide = 1 - ease.out(clamp(f / 12, 0, 1)), rec = f >= FIRE[side] ? Math.exp(-(f - FIRE[side]) / 4) : 0;
         const [mx, my] = tip(side), dir = side ? -1 : 1;
-        ctx.save(); ctx.globalAlpha = showA; ctx.translate(mx - dir * (slide * 600 + rec * 30), my - rec * 18); ctx.rotate(-dir * rec * .08); ctx.scale(dir * k, k);
-        ctx.drawImage(img, -tipX, -tipY); ctx.restore();
+        // the rigged Outlaw (src/rig.js): his arm really kicks up when he fires
+        const tt = Math.floor(f) / C.fps, rg = rigCanvas('duel', k, tt, { fire: f >= FIRE[side] ? (f - FIRE[side]) / C.fps : null, gust: 1 });
+        ctx.save(); ctx.globalAlpha = showA; ctx.translate(mx - dir * slide * 600, my); ctx.scale(dir, 1);
+        if (rg) ctx.drawImage(rg.cv, -tipX * k, -tipY * k); else { ctx.scale(k, k); ctx.drawImage(img, -tipX, -tipY); }
+        ctx.restore();
       }
       // muzzle flashes and bullet tracers
       for (const side of [0, 1]) {
@@ -828,6 +861,7 @@
 
   // all winning lines together, then each line on its own once (only when more than one line won)
   async function showWin(step) {
+    if (C.mascotRig && C.mascotRig.fireOn === 'win') shoot(1);
     clearLines(); await wait(.02);
     let t0 = now();
     G.lines = { lines: step.wins.map(w => w.line), t0 };
@@ -904,7 +938,7 @@
   function bigWinBanner(amount) {
     const tier = engine.tierOf(amount, bet());
     if (tier < 0) return Promise.resolve();
-    G.mascotHop = now();
+    shoot(2);
     return new Promise(resolve => { G.banner = { tier, amount, t0: now(), tok: G.skip, resolve }; });
   }
   function modal(o) { return new Promise(resolve => { G.modal = Object.assign({ t0: now(), tok: G.skip, resolve }, o); }); }
@@ -978,7 +1012,7 @@
   async function freeSpins(count, roundWin, special, bought) {
     const fs = G.fs, baseWin = roundWin;
     Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
-    G.mascotHop = now();
+    shoot(2);
     await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
     await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
     await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });

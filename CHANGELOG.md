@@ -2,6 +2,12 @@
 
 Newest first.
 
+## 2026-11-17: rigged Outlaw mascot
+- `src/rig.js`: a small mesh rig (Spine-style mesh deform) that animates the single mascot image, no extra art. Soft-edged bones traced on the art (`CONFIG.mascotRig`): the poncho waves in a travelling wind (stronger in free spins), the chest breathes, the head turns, the gun arm drifts as he aims.
+- He fires on every line win, and twice on win banners and free-spins triggers: the arm kicks up and back, head jolt, muzzle flash, sparks and a smoke curl from the barrel. Replaces the old hop.
+- The gunfight transition uses the rigged Outlaw, so both gunmen really recoil (they now fire together).
+- Rendered into its own canvas at 30 fps; cells no bone touches are copied as rectangles.
+
 ## 2026-11-17: gunfight transition, animated expansions
 - Transition to free spins is now a gunfight, re-using the Outlaw mascot art (no new asset): an Outlaw slides in on each side, they fire at each other (muzzle flashes, recoil, tracers), the bullets meet in a flash and spark burst, gunsmoke rolls out and covers the scene, FREE SPINS stamps in, and the smoke thins slowly over 3 s (`transToFree` 40/30/90). Replaces the train charge.
 - Expanded reels play the symbol's win animation on every tile, two loops (`frames.expandLines` 45 → 156); symbols without a sheet get the shared shine. The Outlaw's full-reel art (`sym_00_expanded`) is used only if he has no win animation.

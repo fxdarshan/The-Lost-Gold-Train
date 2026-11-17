@@ -73,7 +73,7 @@ Or open `index.html` directly. `node tools/build-single.js` writes one self-cont
 | --- | --- |
 | All values (grid, lines, pays, weights, features, timings, layout, texts) | `src/config.js` |
 | Pure maths: `resolveSpin(grid, opts)` → ordered steps (`win`, `scatter`, `expand`) | `src/engine.js` |
-| Canvas presentation: reels, anticipation, wins, Scatter reveal, special symbol pick, expansion, banners, modals, transitions, HUD, free spins flow, max-win cap | `src/game.js` |
+| Canvas presentation: reels, anticipation, wins, Scatter reveal, special symbol pick, expansion, banners, modals, transitions, HUD, free spins flow, max-win cap | `src/game.js` (with `src/rig.js`, the mascot's mesh rig) |
 | Scripted outcomes from real engine results | `src/director.js` |
 | Cheat menu, hotkeys, scenarios, `?scenario=` links | `src/cheats.js`, `docs/cheats.md` |
 | Demo panel: outcome list, custom grid, speed, video recording with sound | `src/devpanel.js` |
