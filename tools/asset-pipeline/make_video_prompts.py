@@ -242,11 +242,13 @@ out = ["# Symbol win animation video prompts (image-to-video)\n",
 "- Text changed: `The text must stay exactly as in the image, letter for letter, in every frame. Regenerate.`",
 "- Doesn't loop: `The last frame must be identical to the first frame (the attached image). Regenerate.`\n",
 "## The Outlaw (`sym_00`)\nDone 2026-11-19 from Darshan's own video; no prompt needed.\n"]
+CUSTOM = {"sym_01": open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompt_train.txt")).read().strip()}
 for e in S:
     body = PREFIX.format(**{k: e[k] for k in ("desc", "border", "bg", "bg_action", "subject", "hero_action", "fx", "may")})
     body += "\n".join("- " + b for b in e["beats"]) + SUFFIX.format(subject=e["subject"], keep=e["keep"])
+    if e["sid"] in CUSTOM: body = CUSTOM[e["sid"]]
     out.append(f"## {e['name']} (`{e['sid']}`) — attach `{e['file']}`\n")
     out.append("```text\n" + body + "\n```\n")
-out.append("## Prototype implementation status\n- 2026-11-19: Outlaw done from video (45 frames, 1.5 s). The other symbols still use their key-pose sheets (75 frames) until their videos arrive.\n- 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.\n- 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say \"races past\" or \"full speed\" (the trains stay on the spot at full power).\n")
+out.append("## Prototype implementation status\n- 2026-11-19: Outlaw done from video (45 frames, 1.5 s). The other symbols still use their key-pose sheets (75 frames) until their videos arrive.\n- 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.\n- 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say \"races past\" or \"full speed\" (the trains stay on the spot at full power).\n- 2026-11-19: v3.2: the train still jumped and smoked everywhere, so it has its own short prompt (`prompt_train.txt`): the body is rigid, only the wheels, chimney smoke, lights and sparks move, and the chimney is the only smoke source.\n")
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "docs", "symbol-video-prompts.md"), "w").write("\n".join(out))
 print(len(S))

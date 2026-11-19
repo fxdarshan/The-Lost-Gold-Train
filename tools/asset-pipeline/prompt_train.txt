@@ -1,0 +1,17 @@
+Animate this image. Static tripod camera: the camera does not move at all.
+
+The steam locomotive and its carriages are rigid and fixed to the rails, like a statue. The train body does not move, jump, bounce, shake, tilt or slide. It stays on exactly the same pixels in every frame.
+
+Only these four things move, nothing else:
+1. WHEELS AND RODS: the big driving wheels spin fast in place and the side rods pump back and forth. The train does not travel.
+2. CHIMNEY SMOKE: the tall chimney on top of the locomotive, behind the headlamp, is the only source of smoke. A thick black plume surges out of it and rolls back toward the top-left, joining the dark cloud that is already there. No smoke or steam from anywhere else: not from the wheels, the carriages, the ground or the edges of the image.
+3. LIGHT: the round headlamp blazes and flares bright toward the viewer. The glowing lamp below it and the orange grille at the front pulse hot, like a furnace.
+4. SPARKS: a short spray of bright orange sparks shoots from where the front wheels touch the rails.
+
+Timing (4 seconds): 0-1 s, the wheels start spinning and the headlamp brightens; 1-2.5 s, full power: fast wheels, a big smoke surge, a strong headlamp flare and sparks; 2.5-4 s, everything calms down and returns to exactly the first frame, with the wheels in their starting position and the smoke cloud back to its original shape.
+
+Keep the thin dark border and the four corner rivets exactly as they are; do not add any frame. Keep the painted style, colours and every detail of the train.
+
+Do not: move or jump the train, add smoke or steam anywhere except the chimney, move the camera, zoom, add new objects, or end on a different image than the start.
+
+4 seconds, 30 fps, same aspect ratio, loops seamlessly.

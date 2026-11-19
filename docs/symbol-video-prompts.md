@@ -23,34 +23,23 @@ Done 2026-11-19 from Darshan's own video; no prompt needed.
 ## Steam Train (`sym_01`) — attach `02_steam_train`
 
 ```text
-Animate the attached image as an explosive, action-movie win animation for a slot machine symbol. The image shows a black steam locomotive with carriages on rails at sunset, under dark smoke clouds. The video must LOOP perfectly.
+Animate this image. Static tripod camera: the camera does not move at all.
 
-TREAT THE IMAGE AS SEPARATE LAYERS:
-1. BORDER: the thin dark border and the four small rivets in the corners. It is locked: it never moves, glows or changes. Do NOT add any frame, panel, vignette or edge decoration.
-2. BACKGROUND (sunset sky and clouds): it animates on its own, independently of the symbol: the clouds churn and boil in place, lit orange by the fire, and the sunset glow pulses; nothing in the background slides sideways.
-3. HERO SYMBOL (locomotive and its carriages): it is a character with attitude and acts on its own: the train stands on the spot and does not travel: like a locomotive at full power before departure, its wheels spin in place on the rails, the connecting rods pump, the whole train shudders and strains, then lets out a huge whistle blast.
-4. FX on top of everything: black smoke columns, a white steam jet, orange sparks spraying from the wheels, a headlamp lens flare.
+The steam locomotive and its carriages are rigid and fixed to the rails, like a statue. The train body does not move, jump, bounce, shake, tilt or slide. It stays on exactly the same pixels in every frame.
 
-HARD RULES:
-- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
-- The locomotive and its carriages stays inside the image and never touches the border. It may shudder and rock a little in place, but it always snaps back to exactly its starting position, size and angle by the end.
-- No new characters, hands, people, animals or objects.
-- The video starts on the attached image and ends on exactly the same image.
+Only these four things move, nothing else:
+1. WHEELS AND RODS: the big driving wheels spin fast in place and the side rods pump back and forth. The train does not travel.
+2. CHIMNEY SMOKE: the tall chimney on top of the locomotive, behind the headlamp, is the only source of smoke. A thick black plume surges out of it and rolls back toward the top-left, joining the dark cloud that is already there. No smoke or steam from anywhere else: not from the wheels, the carriages, the ground or the edges of the image.
+3. LIGHT: the round headlamp blazes and flares bright toward the viewer. The glowing lamp below it and the orange grille at the front pulse hot, like a furnace.
+4. SPARKS: a short spray of bright orange sparks shoots from where the front wheels touch the rails.
 
-TIMELINE (4 seconds, fast and punchy like a shot from an action movie):
-- 0.0-0.6 s: the headlamp blazes on; the wheels start to turn in place; the train shudders as steam builds.
-- 0.6-1.6 s: full power: the wheels spin into a blur on the spot, the rods pump hard, sparks spray off the rails, a thick black smoke column blasts from the chimney and billows up into the clouds.
-- 1.6-2.4 s: PEAK: a huge white steam jet screams out of the whistle; the headlamp fires a blinding beam with a lens flare straight at the viewer; the train strains and shudders hard, still in the same place.
-- 2.4-3.3 s: the train settles; smoke and steam roll up and thin out; sparks fade.
-- 3.3-4.0 s: the wheels stop at their starting position; the smoke settles into exactly its starting shape.
+Timing (4 seconds): 0-1 s, the wheels start spinning and the headlamp brightens; 1-2.5 s, full power: fast wheels, a big smoke surge, a strong headlamp flare and sparks; 2.5-4 s, everything calms down and returns to exactly the first frame, with the wheels in their starting position and the smoke cloud back to its original shape.
 
-STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impacts, overshoot and follow-through; big bright flashes, heavy smoke, flying sparks; same painted art style, colours and detail as the image; the hero symbol keeps its exact design.
+Keep the thin dark border and the four corner rivets exactly as they are; do not add any frame. Keep the painted style, colours and every detail of the train.
 
-KEEP: the locomotive's position on the rails, its shape, colours and details; the number of carriages; the sunset colours.
+Do not: move or jump the train, add smoke or steam anywhere except the chimney, move the camera, zoom, add new objects, or end on a different image than the start.
 
-DO NOT: add a frame or border; let the locomotive and its carriages leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
-
-OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
+4 seconds, 30 fps, same aspect ratio, loops seamlessly.
 ```
 
 ## Gold Bars (`sym_02`) — attach `03_gold_bars`
@@ -585,3 +574,4 @@ OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 - 2026-11-19: Outlaw done from video (45 frames, 1.5 s). The other symbols still use their key-pose sheets (75 frames) until their videos arrive.
 - 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.
 - 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say "races past" or "full speed" (the trains stay on the spot at full power).
+- 2026-11-19: v3.2: the train still jumped and smoked everywhere, so it has its own short prompt (`prompt_train.txt`): the body is rigid, only the wheels, chimney smoke, lights and sparks move, and the chimney is the only smoke source.
