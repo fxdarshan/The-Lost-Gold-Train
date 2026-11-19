@@ -8,6 +8,8 @@ Version 3, 2026-11-19. Darshan found v2 dull ("a small sparkle, a dead light swe
 3. Check: the camera stayed still, no frame was added, text is spelled right, the symbol is back in place at the end. A slight drift is fine (I morph the last frames into the first).
 4. Send me the MP4: I pick the 45 best frames, cut the background and close the loop (`tools/asset-pipeline/anim_from_video.py`).
 
+Each prompt below is complete in one paste: the rules, the negative prompt and a final check are all inside it. The fix lines are only for a follow-up message if a result still comes out wrong.
+
 **Fix lines** (reply in the same chat if the result is off):
 - Still too calm: `Make it twice as intense: faster, harder impacts, bigger flashes, more smoke and sparks. Keep everything else. Regenerate.`
 - Background didn't move: `The background must animate on its own as described, separately from the symbol. Regenerate.`
@@ -42,7 +44,16 @@ Keep the thin dark border and the four corner rivets exactly as they are; do not
 
 Do not: move, pan or zoom the camera; move or jump the train; put poles or anything else in front of the train; add smoke or steam anywhere except the chimney; add people or animals; end on a different image than the start.
 
-4 seconds, 30 fps, same aspect ratio, loops seamlessly.
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, train moving, train jumping, train bouncing, smoke from wheels, smoke everywhere, poles in front of the train, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The train body stayed fixed and only moved its wheels and rods; smoke came only from the chimney; poles and clouds passed only behind the train.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
+OUTPUT: 4 seconds, 30 fps, same aspect ratio, loops seamlessly.
 ```
 
 ## Gold Bars (`sym_02`) — attach `03_gold_bars`
@@ -74,6 +85,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the exact number, size and arrangement of the gold bars and nuggets at the start and end; the background colours.
 
 DO NOT: add a frame or border; let the pile of gold bars leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The pile of gold bars is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -108,6 +128,15 @@ KEEP: the word SHERIFF exactly as written, letter for letter, in every frame; si
 
 DO NOT: add a frame or border; let the badge leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The badge is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -140,6 +169,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the words WANTED and $10,000 exactly as written, letter for letter, in every frame; the portrait's face at the start and end; the nails; the paper never tears.
 
 DO NOT: add a frame or border; let the poster leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The poster is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -174,6 +212,15 @@ KEEP: the bundle always stays whole: the exact number of sticks; the clock desig
 
 DO NOT: add a frame or border; let the dynamite bundle and clock leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The dynamite bundle and clock is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -206,6 +253,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the revolver's design, its starting angle and position; the wooden grip; the background.
 
 DO NOT: add a frame or border; let the revolver leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The revolver is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -240,6 +296,15 @@ KEEP: the dollar sign exactly as it is; the bag's shape and tie at the start and
 
 DO NOT: add a frame or border; let the money bag leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The money bag is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -272,6 +337,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the horseshoe's shape and the number of nail holes; its starting colour at the start and end; the wooden planks.
 
 DO NOT: add a frame or border; let the horseshoe leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The horseshoe is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -306,6 +380,15 @@ KEEP: the lantern's design, brass colour and handle; the glass globe never break
 
 DO NOT: add a frame or border; let the lantern leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The lantern is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -338,6 +421,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the symbol exactly "A" in the same font, colour and design in every frame; no other letter or number.
 
 DO NOT: add a frame or border; let the "A" leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The "A" is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -372,6 +464,15 @@ KEEP: the symbol exactly "K" in the same font, colour and design in every frame;
 
 DO NOT: add a frame or border; let the "K" leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The "K" is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -404,6 +505,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the symbol exactly "Q" in the same font, colour and design in every frame; no other letter or number.
 
 DO NOT: add a frame or border; let the "Q" leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The "Q" is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -438,6 +548,15 @@ KEEP: the symbol exactly "J" in the same font, colour and design in every frame;
 
 DO NOT: add a frame or border; let the "J" leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The "J" is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -470,6 +589,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the symbol exactly "10" in the same font, colour and design in every frame; no other letter or number.
 
 DO NOT: add a frame or border; let the "10" leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The "10" is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
@@ -504,6 +632,15 @@ KEEP: the word WILD exactly as written, letter for letter, in every frame; the h
 
 DO NOT: add a frame or border; let the emblem, hat and revolvers leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The emblem, hat and revolvers is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -537,6 +674,15 @@ KEEP: the word SCATTER exactly as written, letter for letter, in every frame; th
 
 DO NOT: add a frame or border; let the emblem, locomotive and ribbon leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The emblem, locomotive and ribbon is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
+
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
@@ -569,6 +715,15 @@ STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impa
 KEEP: the bundle always whole; the exact number of sticks; the clock design; plain white background at the start and end. No text or number (the game adds the multiplier plate).
 
 DO NOT: add a frame or border; let the dynamite bundle and clock leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- The dynamite bundle and clock is back in exactly its starting position, size and angle at the end, and it never touched the border.
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```

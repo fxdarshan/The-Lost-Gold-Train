@@ -3,23 +3,12 @@
 Written 2026-11-19 for Darshan. These are three animations for the mascot beside the reels: two idles and one win.
 
 ## How to use
-1. Attach `assets/source/originals/last_train_gold/24_full_body_outlaw_greenscreen.png` (9:16, 1080×1920, flat #00FF00 green) as the **first frame**. If your tool supports a last frame, attach **the same image** as the last frame too, so the clip loops.
-2. Use a new chat for each animation. Paste the prompt, choose 9:16, and set the camera to **static** if the tool has that setting.
-3. **Negative prompt**, if the tool has a field for one: `camera movement, zoom, background, scenery, ground, floor, shadow, extra people, extra gun, extra hand, walking, jumping, feet moving, changing face, changing costume`.
-4. Send me the MP4. I key out the green, pick the best frames, close the loop and put it in the game as the mascot's idle 1, idle 2 and win.
+Each prompt below is complete in one paste: the rules, the negative prompt and a final check are all inside it.
+1. Attach `assets/source/originals/last_train_gold/24_full_body_outlaw_greenscreen.png` (9:16, flat green) as the first frame. If your tool has a last frame, attach the same image there too.
+2. Open a new chat for each animation, paste one prompt, choose 9:16, and set the camera to static if the tool offers it.
+3. Send me the MP4. I key out the green, close the loop and put it in the game.
 
-**Fix lines** (reply in the same chat if a result is off):
-- Background changed: `The background must stay flat pure green (#00FF00) in every frame: no scenery, ground, floor or shadow. Regenerate.`
-- Camera moved: `Static tripod shot: the camera must not move or zoom at all. Regenerate.`
-- Feet slid or he walked: `His boots stay planted on exactly the same spot the whole time. Regenerate.`
-- Face or costume changed: `Keep his face, beard, hat, poncho and clothes exactly as in the image. Regenerate.`
-- Doesn't loop: `The last frame must be identical to the first frame (the attached image). Regenerate.`
-
-## Shared rules (already inside every prompt)
-- Static camera, and the background stays flat green.
-- His boots stay planted, and his design never changes.
-- Every clip starts and ends on the attached pose.
-- The smoke is thin and wispy. Thick grey smoke over green is hard to key cleanly.
+Optional follow-up if a result still comes out wrong (reply in the same chat): `Keep the camera still, the background flat green, his boots planted and his look unchanged; the last frame must match the first. Regenerate.`
 
 ## 1. Idle 1: "Ready" (4 s loop)
 ```text
@@ -40,6 +29,16 @@ TIMING (4 s): 0-2 s, a breath in while the wind gusts and the poncho billows up;
 KEEP: his face, beard, hat, poncho pattern, clothes, belt, holster, spurs and revolver exactly as in the image; same painted comic style and colours.
 
 DO NOT: move the camera; change or add a background; move his feet; walk, jump or turn around; change his face or costume; add other people, objects or extra hands; end on a different pose than the start.
+
+NEGATIVE PROMPT: camera movement, pan, zoom, camera shake, background, scenery, sky, ground, floor, shadow, light change on the green, feet moving, walking, jumping, sliding, turning around, changed face, changed costume, extra gun, extra hand, extra fingers, extra people, bullets, targets, thick smoke, morphing, melting, distorted body, blurry, low quality, watermark, text.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved or zoomed.
+- The background is flat pure green (#00FF00) in every frame, with no ground or shadow.
+- His boots stayed on exactly the same spot.
+- His face, hat, poncho, clothes and revolver look exactly as in the image.
+- He kept aiming to the right the whole time.
+- The last frame is identical to the first frame, so it loops seamlessly.
 
 OUTPUT: 4 seconds, 30 fps, 9:16, seamless loop, no audio needed.
 ```
@@ -63,6 +62,16 @@ KEEP: one revolver only, always in his right hand; his face, beard, hat, poncho 
 
 DO NOT: move the camera; change or add a background; move his feet; walk, jump or turn around; drop the gun or add a second gun; change his face or costume; add other people, objects or extra hands; end on a different pose than the start.
 
+NEGATIVE PROMPT: camera movement, pan, zoom, camera shake, background, scenery, sky, ground, floor, shadow, light change on the green, feet moving, walking, jumping, sliding, turning around, changed face, changed costume, extra gun, extra hand, extra fingers, extra people, bullets, targets, thick smoke, morphing, melting, distorted body, blurry, low quality, watermark, text.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved or zoomed.
+- The background is flat pure green (#00FF00) in every frame, with no ground or shadow.
+- His boots stayed on exactly the same spot.
+- His face, hat, poncho, clothes and revolver look exactly as in the image.
+- One revolver, always in his right hand; it was never dropped.
+- The last frame is identical to the first frame, so it loops seamlessly.
+
 OUTPUT: 5 seconds, 30 fps, 9:16, seamless loop, no audio needed.
 ```
 
@@ -85,6 +94,17 @@ ACTION:
 KEEP: one revolver only, always in his right hand; his face, beard, hat, poncho pattern, clothes, belt, holster and spurs exactly as in the image; same painted comic style and colours. The smoke stays thin and wispy and fades away completely.
 
 DO NOT: move the camera; change or add a background; move his feet; walk, jump or turn around; add a second gun, bullets, targets, other people or extra hands; leave smoke on screen at the end; change his face or costume; end on a different pose than the start.
+
+NEGATIVE PROMPT: camera movement, pan, zoom, camera shake, background, scenery, sky, ground, floor, shadow, light change on the green, feet moving, walking, jumping, sliding, turning around, changed face, changed costume, extra gun, extra hand, extra fingers, extra people, bullets, targets, thick smoke, morphing, melting, distorted body, blurry, low quality, watermark, text.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved or zoomed.
+- The background is flat pure green (#00FF00) in every frame, with no ground or shadow.
+- His boots stayed on exactly the same spot.
+- His face, hat, poncho, clothes and revolver look exactly as in the image.
+- Exactly three shots, then the smoke blow, then back to the aim.
+- One revolver, always in his right hand; no smoke left at the end.
+- The last frame is identical to the first frame (his starting pose).
 
 OUTPUT: 7 seconds, 30 fps, 9:16, no audio needed.
 ```

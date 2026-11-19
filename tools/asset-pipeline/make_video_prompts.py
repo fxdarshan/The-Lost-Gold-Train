@@ -233,6 +233,7 @@ out = ["# Symbol win animation video prompts (image-to-video)\n",
 "2. Paste the prompt. 4 s, 30 fps (24 fps is fine), same aspect ratio as the image.",
 "3. Check: the camera stayed still, no frame was added, text is spelled right, the symbol is back in place at the end. A slight drift is fine (I morph the last frames into the first).",
 "4. Send me the MP4: I pick the 45 best frames, cut the background and close the loop (`tools/asset-pipeline/anim_from_video.py`).\n",
+"Each prompt below is complete in one paste: the rules, the negative prompt and a final check are all inside it. The fix lines are only for a follow-up message if a result still comes out wrong.\n",
 "**Fix lines** (reply in the same chat if the result is off):",
 "- Still too calm: `Make it twice as intense: faster, harder impacts, bigger flashes, more smoke and sparks. Keep everything else. Regenerate.`",
 "- Background didn't move: `The background must animate on its own as described, separately from the symbol. Regenerate.`",
@@ -242,11 +243,26 @@ out = ["# Symbol win animation video prompts (image-to-video)\n",
 "- Text changed: `The text must stay exactly as in the image, letter for letter, in every frame. Regenerate.`",
 "- Doesn't loop: `The last frame must be identical to the first frame (the attached image). Regenerate.`\n",
 "## The Outlaw (`sym_00`)\nDone 2026-11-19 from Darshan's own video; no prompt needed.\n"]
+TAIL = """
+
+NEGATIVE PROMPT: camera movement, pan, tracking shot, zoom, camera shake, camera rotation, added frame, added border, vignette, cropped edges, {neg_extra}morphing, melting, distorted shapes, changed design, misspelled text, new text, watermark, logo, new characters, people, hands, animals, fade to black, fade to white, blurry, low quality.
+
+FINAL CHECK (fix before output, regenerate if any fails):
+- The camera never moved and the border and image edges stayed on exactly the same pixels.
+- No frame, border or decoration was added.
+- {check_subject}
+- Any text is exactly as in the image, letter for letter.
+- The last frame is identical to the first frame, so the video loops seamlessly."""
 CUSTOM = {"sym_01": open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompt_train.txt")).read().strip()}
 for e in S:
     body = PREFIX.format(**{k: e[k] for k in ("desc", "border", "bg", "bg_action", "subject", "hero_action", "fx", "may")})
     body += "\n".join("- " + b for b in e["beats"]) + SUFFIX.format(subject=e["subject"], keep=e["keep"])
     if e["sid"] in CUSTOM: body = CUSTOM[e["sid"]]
+    tr = e["sid"] == "sym_01"
+    body = body.replace("\n\nOUTPUT:", TAIL.format(
+        neg_extra="train moving, train jumping, train bouncing, smoke from wheels, smoke everywhere, poles in front of the train, " if tr else "",
+        check_subject="The train body stayed fixed and only moved its wheels and rods; smoke came only from the chimney; poles and clouds passed only behind the train." if tr else "The " + e["subject"] + " is back in exactly its starting position, size and angle at the end, and it never touched the border.")
+        + "\n\nOUTPUT:", 1) if "\n\nOUTPUT:" in body else body + TAIL.format(neg_extra="", check_subject="")
     out.append(f"## {e['name']} (`{e['sid']}`) — attach `{e['file']}`\n")
     out.append("```text\n" + body + "\n```\n")
 out.append("## Prototype implementation status\n- 2026-11-19: Outlaw done from video (45 frames, 1.5 s). The other symbols still use their key-pose sheets (75 frames) until their videos arrive.\n- 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.\n- 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say \"races past\" or \"full speed\" (the trains stay on the spot at full power).\n- 2026-11-19: v3.2: the train still jumped and smoked everywhere, so it has its own short prompt (`prompt_train.txt`): the body is rigid, only the wheels, chimney smoke, lights and sparks move, and the chimney is the only smoke source.\n- 2026-11-19: v3.3: Darshan liked v3.2 but the train looked parked, so telegraph poles and clouds now rush past behind it while the camera and train stay fixed.\n")

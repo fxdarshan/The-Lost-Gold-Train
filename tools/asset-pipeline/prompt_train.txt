@@ -17,4 +17,4 @@ Keep the thin dark border and the four corner rivets exactly as they are; do not
 
 Do not: move, pan or zoom the camera; move or jump the train; put poles or anything else in front of the train; add smoke or steam anywhere except the chimney; add people or animals; end on a different image than the start.
 
-4 seconds, 30 fps, same aspect ratio, loops seamlessly.
+OUTPUT: 4 seconds, 30 fps, same aspect ratio, loops seamlessly.
