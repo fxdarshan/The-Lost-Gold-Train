@@ -13,7 +13,7 @@ Version 3, 2026-11-19. Darshan found v2 dull ("a small sparkle, a dead light swe
 - Background didn't move: `The background must animate on its own as described, separately from the symbol. Regenerate.`
 - Added a frame or border: `Do not add any frame or border. The edges of the image must stay exactly as in the original. Regenerate.`
 - Symbol flew off or ended in a new place: `The symbol must stay inside the image and snap back to exactly its starting position and size by the end. Regenerate.`
-- Camera moved: `Keep the camera completely still: no zoom, pan or shake. Only the layers move. Regenerate.`
+- Camera moved or slid side to side: `Static tripod shot: the camera must not move at all. The border and image edges stay at exactly the same position in every frame; the train stays on the spot and does not travel. Regenerate.`
 - Text changed: `The text must stay exactly as in the image, letter for letter, in every frame. Regenerate.`
 - Doesn't loop: `The last frame must be identical to the first frame (the attached image). Regenerate.`
 
@@ -27,26 +27,26 @@ Animate the attached image as an explosive, action-movie win animation for a slo
 
 TREAT THE IMAGE AS SEPARATE LAYERS:
 1. BORDER: the thin dark border and the four small rivets in the corners. It is locked: it never moves, glows or changes. Do NOT add any frame, panel, vignette or edge decoration.
-2. BACKGROUND (sunset sky, clouds and ground): it animates on its own, independently of the symbol: the clouds and sky race from right to left as if the train is at full speed; the ground beside the rails streaks into motion blur; dust whips past.
-3. HERO SYMBOL (locomotive and its carriages): it is a character with attitude and acts on its own: the wheels spin furiously, the connecting rods pump, the whole train shudders and strains with power, then lets out a huge whistle blast.
+2. BACKGROUND (sunset sky and clouds): it animates on its own, independently of the symbol: the clouds churn and boil in place, lit orange by the fire, and the sunset glow pulses; nothing in the background slides sideways.
+3. HERO SYMBOL (locomotive and its carriages): it is a character with attitude and acts on its own: the train stands on the spot and does not travel: like a locomotive at full power before departure, its wheels spin in place on the rails, the connecting rods pump, the whole train shudders and strains, then lets out a huge whistle blast.
 4. FX on top of everything: black smoke columns, a white steam jet, orange sparks spraying from the wheels, a headlamp lens flare.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
-- The locomotive and its carriages stays inside the image and never touches the border. It may shudder, rock and lean forward with power, but it always snaps back to exactly its starting position, size and angle by the end.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
+- The locomotive and its carriages stays inside the image and never touches the border. It may shudder and rock a little in place, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
 
 TIMELINE (4 seconds, fast and punchy like a shot from an action movie):
-- 0.0-0.6 s: the headlamp blazes on; the wheels start turning; the train shudders as steam builds.
-- 0.6-1.6 s: full speed: wheels spin into a blur, rods pump hard, sparks spray off the rails, a thick black smoke column blasts from the chimney and streams back over the carriages; sky and ground race past.
-- 1.6-2.4 s: PEAK: a huge white steam jet screams out of the whistle; the headlamp fires a blinding beam with a lens flare straight at the viewer; the train leans forward hard.
-- 2.4-3.3 s: the train rocks back; smoke and steam roll back across the sky; sparks fade.
-- 3.3-4.0 s: the wheels stop at their starting position, the background slows to a stop, smoke settles into exactly its starting shape.
+- 0.0-0.6 s: the headlamp blazes on; the wheels start to turn in place; the train shudders as steam builds.
+- 0.6-1.6 s: full power: the wheels spin into a blur on the spot, the rods pump hard, sparks spray off the rails, a thick black smoke column blasts from the chimney and billows up into the clouds.
+- 1.6-2.4 s: PEAK: a huge white steam jet screams out of the whistle; the headlamp fires a blinding beam with a lens flare straight at the viewer; the train strains and shudders hard, still in the same place.
+- 2.4-3.3 s: the train settles; smoke and steam roll up and thin out; sparks fade.
+- 3.3-4.0 s: the wheels stop at their starting position; the smoke settles into exactly its starting shape.
 
 STYLE: blockbuster Western action: snappy timing, strong anticipation, hard impacts, overshoot and follow-through; big bright flashes, heavy smoke, flying sparks; same painted art style, colours and detail as the image; the hero symbol keeps its exact design.
 
-KEEP: the locomotive's shape, colours and details; the number of carriages; the sunset colours.
+KEEP: the locomotive's position on the rails, its shape, colours and details; the number of carriages; the sunset colours.
 
 DO NOT: add a frame or border; let the locomotive and its carriages leave the image or end in a new position; morph, melt or redesign anything; add or change any text, logo or watermark; slow, gentle or subtle motion; fade to black or white.
 
@@ -65,7 +65,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: gold sparks, a white impact flash, gold dust, a shine slash across the bars.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The pile of gold bars stays inside the image and never touches the border. It may jolt and bounce, and the top bar may flip up and land back, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -98,7 +98,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: a ricochet spark streak, a shockwave ring, star flashes on the point balls, a shine sweep.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The badge stays inside the image and never touches the border. It may kick back, swing up to 20 degrees and punch toward the viewer (up to 15% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -131,7 +131,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: blowing dust and sand, a gold blaze on $10,000, flying embers.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The poster stays inside the image and never touches the border. It may flap, ripple and snap in the wind while staying nailed, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -164,7 +164,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: fizzing sparks from the wire, the fireball, flying embers, black smoke.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The dynamite bundle and clock stays inside the image and never touches the border. It may tremble, shake and jolt back with the blast, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -197,7 +197,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: big muzzle flashes, fire and sparks, shockwave rings, grey gun smoke.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The revolver stays inside the image and never touches the border. It may recoil up to 15 degrees and spin once around its centre, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -230,7 +230,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: gold coins, gold dust, a dust puff from the planks, a gold blaze on the dollar sign.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The money bag stays inside the image and never touches the border. It may squash, stretch, bulge and hop, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -263,7 +263,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: spark showers, a white impact flash on each strike, orange heat glow, a gold light burst.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The horseshoe stays inside the image and never touches the border. It may jolt and shake on each strike, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -296,7 +296,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: flames, glowing embers, heat haze, warm light rays.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The lantern stays inside the image and never touches the border. It may swing up to 25 degrees from its handle and rattle, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -329,7 +329,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: flames and fire trails, a white impact flash, a shine slash across the A.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The "A" stays inside the image and never touches the border. It may squash, stretch and punch toward the viewer (up to 20% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -362,7 +362,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: gold sparks and gold coins of light, a white impact flash, a shine slash across the K.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The "K" stays inside the image and never touches the border. It may squash, stretch and punch toward the viewer (up to 20% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -395,7 +395,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: copper embers and hot sparks, a white impact flash, a shine slash across the Q.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The "Q" stays inside the image and never touches the border. It may squash, stretch and punch toward the viewer (up to 20% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -428,7 +428,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: crackling blue-white electric sparks, a white impact flash, a shine slash across the J.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The "J" stays inside the image and never touches the border. It may squash, stretch and punch toward the viewer (up to 20% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -461,7 +461,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: steel sparks and white smoke, a white impact flash, a shine slash across the 10.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The "10" stays inside the image and never touches the border. It may squash, stretch and punch toward the viewer (up to 20% larger), but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -494,7 +494,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: muzzle flashes, fire, gold sparks, shockwave rings, gun smoke.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The emblem, hat and revolvers stays inside the image and never touches the border. It may pulse and shake; the hat may flip up and land back, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -522,19 +522,19 @@ Animate the attached image as an explosive, action-movie win animation for a slo
 
 TREAT THE IMAGE AS SEPARATE LAYERS:
 1. BORDER: the dark riveted metal panel edge. It is locked: it never moves or changes. Do NOT add another frame or decoration.
-2. BACKGROUND (dark red panel and the sunset sky inside the emblem): it animates on its own, independently of the symbol: the sunset sky inside the emblem races past as if the train is at full speed; steam bursts out from behind the emblem's edge onto the red panel.
-3. HERO SYMBOL (emblem, locomotive and ribbon): it is a character with attitude and acts on its own: the locomotive inside the emblem charges: its wheels spin, it shudders with power and blows a huge whistle of steam; the ribbon snaps in the wind; the gold star spins once.
+2. BACKGROUND (dark red panel and the sunset sky inside the emblem): it animates on its own, independently of the symbol: the sunset sky inside the emblem glows and pulses and its clouds churn in place; steam bursts out from behind the emblem's edge onto the red panel.
+3. HERO SYMBOL (emblem, locomotive and ribbon): it is a character with attitude and acts on its own: the locomotive inside the emblem stays on the spot at full power: its wheels spin in place, it shudders with power and blows a huge whistle of steam; the ribbon snaps in the wind; the gold star spins once.
 4. FX on top of everything: smoke, steam, sparks, a headlamp lens flare, gold light rays.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The emblem, locomotive and ribbon stays inside the image and never touches the border. It may pulse and shake; the ribbon may flap and the star may spin once, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
 
 TIMELINE (4 seconds, fast and punchy like a shot from an action movie):
 - 0.0-0.6 s: the headlamp blazes on; the wheels start to spin.
-- 0.6-1.5 s: full speed: smoke blasts from the chimney; the sky races past; sparks fly off the rails; the ribbon flaps.
+- 0.6-1.5 s: full power: smoke blasts from the chimney; the clouds churn; sparks fly off the rails; the ribbon flaps.
 - 1.5-2.3 s: PEAK: a huge whistle of steam bursts out past the emblem's edge; the headlamp flares straight at the viewer; gold rays blast behind the emblem.
 - 2.3-3.3 s: the gold star spins once; the steam rolls away; a shine sweeps along SCATTER without changing the letters.
 - 3.3-4.0 s: everything slows and settles to exactly the starting image.
@@ -560,7 +560,7 @@ TREAT THE IMAGE AS SEPARATE LAYERS:
 4. FX on top of everything: fizzing sparks from the wire, fire, crackling orange electricity, embers.
 
 HARD RULES:
-- Locked camera: no zoom, pan, cut or camera move. Only the layers move.
+- STATIC TRIPOD SHOT: the camera is bolted down. No pan, no tracking, no side-to-side or up-down drift, no zoom, no rotation, no cuts, no shake. The border and the corners of the image stay at exactly the same pixels in every frame. Only things inside the image move.
 - The dynamite bundle and clock stays inside the image and never touches the border. It may shake violently and jolt back with the blast, but it always snaps back to exactly its starting position, size and angle by the end.
 - No new characters, hands, people, animals or objects.
 - The video starts on the attached image and ends on exactly the same image.
@@ -584,3 +584,4 @@ OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ## Prototype implementation status
 - 2026-11-19: Outlaw done from video (45 frames, 1.5 s). The other symbols still use their key-pose sheets (75 frames) until their videos arrive.
 - 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.
+- 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say "races past" or "full speed" (the trains stay on the spot at full power).
