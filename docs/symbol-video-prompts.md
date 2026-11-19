@@ -23,21 +23,24 @@ Done 2026-11-19 from Darshan's own video; no prompt needed.
 ## Steam Train (`sym_01`) — attach `02_steam_train`
 
 ```text
-Animate this image. Static tripod camera: the camera does not move at all.
+Animate this image. Static tripod camera: the camera does not move at all. The border, the edges of the image and the train stay on exactly the same pixels in every frame.
 
-The steam locomotive and its carriages are rigid and fixed to the rails, like a statue. The train body does not move, jump, bounce, shake, tilt or slide. It stays on exactly the same pixels in every frame.
+The train is speeding forward at full power, shown the way a fixed camera on a moving train sees it: the train stays still in the frame and the world rushes past BEHIND it.
 
-Only these four things move, nothing else:
-1. WHEELS AND RODS: the big driving wheels spin fast in place and the side rods pump back and forth. The train does not travel.
-2. CHIMNEY SMOKE: the tall chimney on top of the locomotive, behind the headlamp, is the only source of smoke. A thick black plume surges out of it and rolls back toward the top-left, joining the dark cloud that is already there. No smoke or steam from anywhere else: not from the wheels, the carriages, the ground or the edges of the image.
-3. LIGHT: the round headlamp blazes and flares bright toward the viewer. The glowing lamp below it and the orange grille at the front pulse hot, like a furnace.
-4. SPARKS: a short spray of bright orange sparks shoots from where the front wheels touch the rails.
+The steam locomotive and its carriages are rigid and fixed in place, like a statue. The train body does not move, jump, bounce, shake, tilt or slide.
 
-Timing (4 seconds): 0-1 s, the wheels start spinning and the headlamp brightens; 1-2.5 s, full power: fast wheels, a big smoke surge, a strong headlamp flare and sparks; 2.5-4 s, everything calms down and returns to exactly the first frame, with the wheels in their starting position and the smoke cloud back to its original shape.
+Only these things move, nothing else:
+1. SCENERY RUSHING PAST (behind the train only): three or four dark wooden telegraph poles whip past behind the train from right to left, fast, one after another. Each pole enters at the right edge and leaves at the left edge; no pole is visible in the first or last frame. The clouds in the sky stream from right to left, and the ground and platform near the rails blur with speed. The poles and clouds always pass BEHIND the train and never cover it.
+2. WHEELS AND RODS: the big driving wheels spin fast and the side rods pump back and forth.
+3. CHIMNEY SMOKE: the tall chimney on top of the locomotive, behind the headlamp, is the only source of smoke. A thick black plume surges out of it and streams back toward the top-left, blown by the speed. No smoke or steam from anywhere else: not from the wheels, the carriages, the ground or the edges of the image.
+4. LIGHT: the round headlamp blazes and flares bright toward the viewer. The glowing lamp below it and the orange grille at the front pulse hot, like a furnace.
+5. SPARKS: a short spray of bright orange sparks shoots from where the front wheels touch the rails.
+
+Timing (4 seconds): 0-1 s, the wheels speed up, the first pole flashes past, the headlamp brightens; 1-2.5 s, full speed: poles whip past, clouds stream, a big smoke surge, a strong headlamp flare and sparks; 2.5-4 s, the last pole leaves, the sky and smoke settle back to their original shape and everything returns to exactly the first frame.
 
 Keep the thin dark border and the four corner rivets exactly as they are; do not add any frame. Keep the painted style, colours and every detail of the train.
 
-Do not: move or jump the train, add smoke or steam anywhere except the chimney, move the camera, zoom, add new objects, or end on a different image than the start.
+Do not: move, pan or zoom the camera; move or jump the train; put poles or anything else in front of the train; add smoke or steam anywhere except the chimney; add people or animals; end on a different image than the start.
 
 4 seconds, 30 fps, same aspect ratio, loops seamlessly.
 ```
@@ -575,3 +578,4 @@ OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 - 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.
 - 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say "races past" or "full speed" (the trains stay on the spot at full power).
 - 2026-11-19: v3.2: the train still jumped and smoked everywhere, so it has its own short prompt (`prompt_train.txt`): the body is rigid, only the wheels, chimney smoke, lights and sparks move, and the chimney is the only smoke source.
+- 2026-11-19: v3.3: Darshan liked v3.2 but the train looked parked, so telegraph poles and clouds now rush past behind it while the camera and train stay fixed.
