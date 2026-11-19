@@ -3,6 +3,8 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-19: win animations for Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe, Lantern, Wild, Scatter and Power Dynamite from Darshan's videos (75 frames, seamless). Wild and Scatter idles are now square panels; Power Dynamite animates and keeps its multiplier plate.
+- 2026-11-19: the Outlaw mascot plays Darshan's green-screen videos (idle 1, idle 2, win) in his order: idle 1 three times, idle 2, idle 1 twice; the win never straight after idle 2. The puppet stays as fallback and in the gunfight transition.
 - 2026-11-19: full-body Outlaw video prompts (idle 1, idle 2, win) and a 9:16 green-screen source image. `docs/outlaw-fullbody-video-prompts.md`.
 - 2026-11-19: symbol video prompts v3: action-movie style, image treated as layers (locked border, background with its own action, symbol as an acting hero that snaps back to its start pose). `docs/symbol-video-prompts.md`.
 - Every prompt now describes exactly what is in its image (border, background, details), never mentions a frame the image doesn't have, and keeps the main object completely still (the train test added a frame and made the locomotive jump); motion is light, glow, sparks, smoke and the flame. Power Dynamite is prompted on its original white-background art.

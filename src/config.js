@@ -182,6 +182,18 @@
     buyButton: { x: 26, y: 330, w: 236, h: 176 },   // left column panel; the expanding-symbol card takes it in free spins
     anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
     hudTop: 985,
+    // Video mascot (2026-11-19): Darshan's three green-screen clips as sheets (char_outlaw_idle1/idle2/win). Used when
+    // all three load; otherwise the cutout puppet below. Darshan's order: idle 1 several times, idle 2, idle 1 twice,
+    // and the win never straight after idle 2 (idle 2 and the win look alike). A win cuts into idle 1 with a short
+    // cross-fade; if it comes during idle 2 it waits for idle 2 and gapAfterIdle2 idle-1 loops.
+    mascotVideo: {
+      order: ['idle1', 'idle1', 'idle1', 'idle2', 'idle1', 'idle1'],
+      gapAfterIdle2: 2,
+      feet: [251, 744], charH: 597,      // in sheet-cell pixels: middle of his boots, and hat-to-boots height
+      screenH: 751,                      // drawn height on the stage (same as the puppet), feet on the box's bottom edge
+      shots: [1.71],                     // seconds into the win clip with a muzzle flash (gunshot sound)
+      fade: 0.3                          // cross-fade when a win cuts in
+    },
     // Mesh rig for the mascot (src/rig.js), in pixels of char_mascot (639 x 1200). ASSUMED shapes, traced on the art:
     // the poncho waves, the chest breathes, the head turns, the gun arm aims and recoils when he fires.
     mascotRig: {

@@ -250,6 +250,7 @@
     return { fire: fire == null ? null : Math.round(fire * 30) / 30, gust: G.fs.active ? .4 : 0, anim: a };
   }
   function shoot() {
+    if (videoMascotOn()) { if (VM.clip !== 'win' && VM.want == null) VM.want = now(); return; }
     const t = now(), ma = G.mascotAnim;
     const W2 = (puppetOn() ? root.Rig.PANIMS : root.Rig.ANIMS).win;
     if (ma && ma.name === 'win' && t - ma.t0 < W2.dur - .6) return;     // already playing: let it finish
@@ -257,7 +258,55 @@
     for (const d of W2.shots) G.shots.push(t + d);
     G.shots = G.shots.filter(s => s > t - 3);
   }
+  /* video mascot: three clips from Darshan's green-screen videos (C.mascotVideo). Every clip starts and ends on the
+     same pose, so any clip can follow any other; frames are blended for smooth playback at 12-15 fps. */
+  const MV = C.mascotVideo;
+  const vmClip = name => {
+    const key = 'char_outlaw_' + name, meta = (root.ASSET_MANIFEST.anims || {})[key];
+    if (!meta || !A.real[key]) return null;
+    const img = A.get(key); return Object.assign({ img, fw: img.width / meta.cols, fh: img.height / meta.rows, dur: meta.frames / meta.fps }, meta);
+  };
+  const videoMascotOn = () => !!(MV && M && vmClip('idle1') && vmClip('idle2') && vmClip('win'));
+  const VM = { clip: 'idle1', t0: 0, seq: 0, since2: 99, want: null, prev: null, shot: 0 };
+  function vmStart(name, t) { VM.prev = { clip: VM.clip, u: t - VM.t0, t }; VM.clip = name; VM.t0 = t; VM.shot = 0; }
+  function vmUpdate(t) {
+    if (!VM.t0) VM.t0 = t;
+    if (VM.want != null && t - VM.want > 20) VM.want = null;               // a win that waited too long is dropped
+    if (VM.want != null && VM.clip === 'idle1' && VM.since2 >= MV.gapAfterIdle2) { VM.want = null; vmStart('win', t); return; }
+    if (t - VM.t0 < vmClip(VM.clip).dur) return;
+    // the clip has finished: count idle-1 loops since idle 2, then pick the next clip
+    if (VM.clip === 'idle1') VM.since2++;
+    if (VM.clip === 'idle2') VM.since2 = 0;
+    let next;
+    if (VM.clip === 'win') { VM.seq = 0; next = MV.order[0]; }
+    else {
+      VM.seq = (VM.seq + 1) % MV.order.length; next = MV.order[VM.seq];
+      if (VM.want != null && VM.clip !== 'idle2' && VM.since2 >= MV.gapAfterIdle2) { VM.want = null; next = 'win'; }
+      else if (next === 'idle2' && VM.want != null) next = 'idle1';     // a waiting win goes first; idle 2 comes later
+    }
+    VM.prev = null; VM.clip = next; VM.t0 = t; VM.shot = 0;
+  }
+  function vmDraw(name, u, alpha, dir, k, fx, fy) {
+    const c = vmClip(name), p = clamp(u * c.fps, 0, c.frames - 1), i = Math.floor(p), f = p - i, j = (i + 1) % c.frames;
+    const cell = n => [(n % c.cols) * c.fw, Math.floor(n / c.cols) * c.fh];
+    ctx.save(); ctx.translate(fx, fy); ctx.scale(dir * k, k);
+    const [ax, ay] = cell(i), [bx, by] = cell(j), X = -MV.feet[0], Y = -MV.feet[1];
+    ctx.globalAlpha = alpha; ctx.drawImage(c.img, ax, ay, c.fw, c.fh, X, Y, c.fw, c.fh);
+    if (f > .02) { ctx.globalAlpha = alpha * f; ctx.drawImage(c.img, bx, by, c.fw, c.fh, X, Y, c.fw, c.fh); }
+    ctx.restore();
+  }
+  function drawVideoMascot(t) {
+    vmUpdate(t);
+    const dir = M.flip ? -1 : 1, k = MV.screenH / MV.charH, fx = M.x + M.w / 2, fy = M.y + M.h, u = t - VM.t0;
+    vmDraw(VM.clip, u, 1, dir, k, fx, fy);
+    if (VM.prev) {                                                         // a win cutting in: the old clip fades out on top
+      const q = (t - VM.prev.t) / MV.fade;
+      if (q >= 1) VM.prev = null; else vmDraw(VM.prev.clip, VM.prev.u + (t - VM.prev.t), 1 - q, dir, k, fx, fy);
+    }
+    if (VM.clip === 'win') while (VM.shot < MV.shots.length && u >= MV.shots[VM.shot]) { VM.shot++; SND.play('sfx_cracker_pop'); }
+  }
   function drawMascot(t) {
+    if (videoMascotOn()) { drawVideoMascot(t); return; }
     const img = A.get('char_mascot'), sz = mascotSize(); if (!sz || !M) return;
     const k = Math.min(M.w / sz[0], M.h / sz[1]), w = sz[0] * k, h = sz[1] * k;
     const fx = M.x + M.w / 2, fy = M.y + M.h, dir = M.flip ? -1 : 1, st = mascotState(t);
@@ -354,6 +403,8 @@
     const i = Math.max(0, Math.min(an.frames - 1, frame));
     ctx.save(); ctx.globalAlpha = alpha;
     ctx.drawImage(an.img, (i % an.cols) * an.fw, Math.floor(i / an.cols) * an.fh, an.fw, an.fh, cx - w / 2, cy - h / 2, w, h);
+    const plate = A.multPlate(id);     // Power Dynamite keeps its multiplier plate while it animates
+    if (plate) { const ph = ch * .42, pw = plate.width * ph / plate.height; ctx.drawImage(plate, cx + cw * .44 - pw, cy + ch * .47 - ph, pw, ph); }
     ctx.restore();
   }
   function drawCell(c, r, s, cx, cy, t) {
@@ -1132,5 +1183,5 @@
     if (splash) splash.finish();
   }
 
-  root.Game = { G, C, engine, director, setSpeed, play, buy: () => play({ buy: true }), playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
+  root.Game = { G, C, engine, director, setSpeed, mascot: () => Object.assign({}, VM), play, buy: () => play({ buy: true }), playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
 })(window);

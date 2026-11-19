@@ -23,7 +23,9 @@ window.ASSET_MANIFEST = {
   fit: {
     // the supplied symbols are framed tiles (watercolour panel + art), so they share one box
     default:          [0.99, 0.99],
-    sym_power_idle:   [0.98, 1.02]                  // round badge with no panel: a little larger
+    sym_power_idle:   [0.98, 1.02],                 // round badge with no panel: a little larger
+    sym_wild_idle:    [0.99, 1.04],                 // square panels from the 2026-11-19 videos
+    sym_scatter_idle: [0.99, 1.04]
   },
 
   images: {
@@ -58,25 +60,30 @@ window.ASSET_MANIFEST = {
     // win animations: 45 frames at 30 fps in a 9 x 5 sheet (see `anims` below), made from Darshan's 16-key-pose
     // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
     sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: from Darshan's video, 45 frames, 1.5 s loop
-    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: steam and wheels
-    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: shine sweep and glints
-    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: glints travel round the badge
-    sym_04_win:             'assets/images/anims/sym_04_win.webp',          // Wanted Poster: flutters
-    sym_05_win:             'assets/images/anims/sym_05_win.webp',          // Dynamite: ticks, explodes, reassembles
-    sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: barrel heats, fires, smoke clears
-    sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: bounces, coins glint
-    sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: glints
-    sym_09_win:             'assets/images/anims/sym_09_win.webp',          // Lantern: sways, flame flares
+    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: poles rush past, wheels, chimney smoke, headlamp (video, 75 frames)
+    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: top bar flips and slams back, gold burst (video, 75 frames)
+    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: bullet ricochet, punch forward, dust ring (video, 75 frames)
+    sym_04_win:             'assets/images/anims/sym_04_win.webp',          // Wanted Poster: wind storm, $10,000 blazes (video, 75 frames)
+    sym_05_win:             'assets/images/anims/sym_05_win.webp',          // Dynamite: clock whirls, fireball behind (video, 75 frames)
+    sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: three shots, recoil, gunslinger spin (video, 75 frames)
+    sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: jumps, coin fountain (video, 75 frames)
+    sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: anvil strikes, white-hot, lucky gold (video, 75 frames)
+    sym_09_win:             'assets/images/anims/sym_09_win.webp',          // Lantern: flame roars, firestorm (video, 75 frames)
     sym_11_win:             'assets/images/anims/sym_11_win.webp',          // K: glints
     sym_12_win:             'assets/images/anims/sym_12_win.webp',          // Q: glints
     sym_13_win:             'assets/images/anims/sym_13_win.webp',          // J: glints
     sym_14_win:             'assets/images/anims/sym_14_win.webp',          // 10: glints
-    sym_wild_win:           'assets/images/anims/sym_wild_win.webp',        // Wild: badge flares, crossed revolvers flash
-    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Scatter: train bursts out in steam, headlight flash
+    sym_wild_win:           'assets/images/anims/sym_wild_win.webp',        // Wild: hat flip, both revolvers fire (video, 75 frames)
+    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Scatter: train charges, steam burst (video, 75 frames)
+    sym_power_win:          'assets/images/anims/sym_power_win.webp',       // Power Dynamite: fuse, blast (video, 75 frames)
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
     char_outlaw_parts:      'assets/images/characters/char_outlaw_parts.webp',   // cutout puppet atlas (assets/rigs/outlaw.js)
+    // the Outlaw mascot from Darshan's green-screen videos (2026-11-19), keyed and cut to sheets of 448 x 752 cells
+    char_outlaw_idle1:      'assets/images/characters/char_outlaw_idle1.webp',   // wind in the poncho, 5 s
+    char_outlaw_idle2:      'assets/images/characters/char_outlaw_idle2.webp',   // gun spin, 5 s
+    char_outlaw_win:        'assets/images/characters/char_outlaw_win.webp',     // fires, blows the smoke, 10 s
 
     fx_scatter_full:        'assets/images/fx/fx_scatter_full.webp',
     fx_lantern:             'assets/images/fx/fx_lantern.webp',
@@ -108,7 +115,11 @@ window.ASSET_MANIFEST = {
     sym_13_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_14_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_wild_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
-    sym_scatter_win: { cols: 10, rows: 8, frames: 75, fps: 30 }
+    sym_scatter_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_power_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    char_outlaw_idle1: { cols: 8, rows: 8, frames: 61, fps: 12 },
+    char_outlaw_idle2: { cols: 10, rows: 8, frames: 77, fps: 15 },
+    char_outlaw_win: { cols: 16, rows: 8, frames: 121, fps: 12 }
   },
 
   sounds: {

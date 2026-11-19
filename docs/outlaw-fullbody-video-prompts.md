@@ -111,3 +111,4 @@ OUTPUT: 7 seconds, 30 fps, 9:16, no audio needed.
 
 ## Prototype implementation status
 - 2026-11-19: prompts written and the green-screen source made. The game still uses the cutout puppet (`Rig.createPuppet`) for the mascot until these videos arrive.
+- 2026-11-19: Darshan's three videos are in the game (`tools/asset-pipeline/mascot_from_video.py`). Only one muzzle flash came out in the win clip (at 1.7 s, where the gunshot sound plays). In the idle-1 gust the poncho leaves the video frame on one side; the cut is softened and sits at the screen edge.
