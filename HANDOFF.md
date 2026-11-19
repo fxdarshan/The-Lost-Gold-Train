@@ -16,6 +16,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-19 · claude.ai chat (26)
+- Video prompts for all symbols (docs/symbol-video-prompts.md); waiting for Darshan's videos, convert each with anim_from_video.py (45 frames).
 ### 2026-11-19 · claude.ai chat (25)
 - Outlaw symbol from Darshan's video (45 frames, seamless); base-game wins loop until next spin. Live on GitHub Pages: https://fxdarshan.github.io/The-Lost-Gold-Train/
 ### 2026-11-17 · claude.ai chat (24)
@@ -24,5 +26,3 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - Mascot win: draw, 3 shots, barrel to lips, blow the smoke (forearm bone in rig.js).
 ### 2026-11-17 · claude.ai chat (22)
 - Mascot: idle 1, idle 2 (wind gust), win (quick draw, 3 shots) as keyframed rig animations.
-### 2026-11-17 · claude.ai chat (21)
-- spine-mcp added as project MCP server (.mcp.json, also in the template); see docs/ai-tools.md. Darshan: install uv at home and approve the server.
