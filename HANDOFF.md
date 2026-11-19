@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-19 · claude.ai chat (29)
+- Cheat wins rotate through all symbols (`nextSym` bag in director.js). Real spins still win mostly with A-10 (maths), which have no video yet.
 ### 2026-11-19 · claude.ai chat (28)
 - Optimised: memory halved (863 → 420 MB decoded), disk 50 → 26 MB. Fewer frames + smaller cells, frame blending in `drawAnimFrame` and the mascot. `resample_sheet.py` for old sheets.
 ### 2026-11-19 · claude.ai chat (27)

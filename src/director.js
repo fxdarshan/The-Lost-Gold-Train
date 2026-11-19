@@ -50,6 +50,25 @@
       const m = make(); return engine.resolveSpin(m.grid, m.opts);
     }
     const stepOf = (res, type) => res.steps.find(s => s.type === type);
+    // cheat outcomes rotate through the symbols (a shuffled bag), so repeated picks show different symbols and their
+    // animations; a random board would mostly win with A-10, the most frequent symbols (presentation only, no maths)
+    let bag = [];
+    const nextSym = (ok = () => true) => {
+      for (let tries = 0; tries < 2; tries++) {
+        if (!bag.length) { bag = C.regular.slice(); for (let i = bag.length - 1; i > 0; i--) { const j = rnd(i + 1); [bag[i], bag[j]] = [bag[j], bag[i]]; } }
+        const k = bag.findIndex(ok); if (k >= 0) return bag.splice(k, 1)[0];
+        bag = [];
+      }
+      return C.regular[rnd(NR)];
+    };
+    // put symbol s on a random payline, len in a row from reel 1, and end the line there
+    function plant(g, s, len, line) {
+      const L = line || C.paylines[rnd(C.paylines.length)];
+      for (let c = 0; c < N; c++) { if (c < len) g[c][L[c]] = s; else if (g[c][L[c]] === s) g[c][L[c]] = (s + 1 + rnd(NR - 1)) % NR; }
+      return L;
+    }
+    const lenFor = s => engine.minCount(s) + rnd(5 - engine.minCount(s) + 1);
+    const hasSym = (w, s) => w && w.wins.some(x => x.sym === s);
     // put n Scatters on n different random reels (each on a random row)
     function placeScatters(g, n, reels) {
       const pool = reels ? reels.slice() : [...Array(N).keys()];
@@ -75,18 +94,33 @@
         case 'nowin':
           return search(r => r.total === 0, quiet);
         case 'small':
-          return search(r => (noFeature(r) && stepOf(r, 'win') && stepOf(r, 'win').wins.length === 1 && r.total / bet >= .5 && r.total / bet < C.winTiers[0].min) || (r.total > 0 && noFeature(r) ? .5 : 0), quiet);
+        {
+          const sy = nextSym();
+          return search(r => { const w = stepOf(r, 'win'); if (!noFeature(r) || !hasSym(w, sy)) return 0;
+            return (w.wins.length === 1 && r.total / bet < C.winTiers[0].min) || .5; },
+            () => { const g = rg(); plant(g, sy, lenFor(sy)); return { grid: g, opts: base }; }, 3000);
+        }
         case 'multi':
-          return search(r => (noFeature(r) && stepOf(r, 'win') && stepOf(r, 'win').wins.length >= 3 && r.total / bet < C.winTiers[0].min) || (stepOf(r, 'win') ? stepOf(r, 'win').wins.length / 10 : 0), quiet);
+        {
+          const sy = [nextSym(), nextSym(), nextSym()];
+          return search(r => { const w = stepOf(r, 'win'); if (!noFeature(r) || !w) return 0;
+            const n = sy.filter(x => hasSym(w, x)).length; return (n >= 3 && r.total / bet < C.winTiers[0].min) || n / 4; },
+            () => { const g = rg(), lines = C.paylines.slice().sort(() => Math.random() - .5);
+              sy.forEach((x, i) => plant(g, x, engine.minCount(x) + rnd(2), lines[i])); return { grid: g, opts: base }; }, 3000);
+        }
         case 'wildwin':
-          return search(r => { const w = stepOf(r, 'win'); return (w && w.wins.some(x => x.wilds > 0) && !stepOf(r, 'scatter')) || 0; },
-            () => { const g = rg(); g[1 + rnd(3)][1] = C.WILD != null ? C.WILD : S; return { grid: g, opts: base }; });
+        {
+          const sy = nextSym();
+          return search(r => { const w = stepOf(r, 'win'); if (!w || stepOf(r, 'scatter') || !w.wins.some(x => x.wilds > 0)) return 0; return w.wins.some(x => x.wilds > 0 && x.sym === sy) || .5; },
+            () => { const g = rg(), L = plant(g, sy, Math.max(3, lenFor(sy))), c = 1 + rnd(2); g[c][L[c]] = C.WILD != null ? C.WILD : S; return { grid: g, opts: base }; });
+        }
         case 'power': {
           // a line win that a Power Dynamite multiplies (any of x2 / x3 / x5 / x10)
           const pids = Object.keys(C.POWER || {}).map(Number);
           if (!pids.length) return build({ type: 'wildwin' }, ctx);
-          return search(r => { const w = stepOf(r, 'win'); return (w && w.wins.some(x => x.mult > 1) && !stepOf(r, 'scatter') && r.total / bet < C.winTiers[1].min) || 0; },
-            () => { const g = rg(); g[1 + rnd(3)][rnd(R)] = pids[rnd(pids.length)]; return { grid: g, opts: base }; });
+          const sy = nextSym();
+          return search(r => { const w = stepOf(r, 'win'); if (!w || stepOf(r, 'scatter') || !w.wins.some(x => x.mult > 1) || r.total / bet >= C.winTiers[1].min) return 0; return w.wins.some(x => x.mult > 1 && x.sym === sy) || .5; },
+            () => { const g = rg(), L = plant(g, sy, Math.max(3, lenFor(sy))), c = 1 + rnd(2); g[c][L[c]] = pids[rnd(pids.length)]; return { grid: g, opts: base }; });
         }
         case 'tease':
           return search(r => (scCount(r.start) === 2 && !stepOf(r, 'expand')) || 0,
@@ -98,12 +132,12 @@
         case 'nice': case 'big': case 'mega': case 'superb': {
           // a real board in the tier's range: one to three lines of premiums, no scatter trigger
           const ti = C.winTiers.findIndex(t => t.id === item.type), lo = C.winTiers[ti].min, hi = (C.winTiers[ti + 1] || { min: lo * 3 }).min;
-          return search(r => (noFeature(r) && r.total / bet >= lo && r.total / bet < hi) || 0, () => {
-            const g = rg(), k = 1 + rnd(3);
-            for (let i = 0; i < k; i++) {
-              const line = C.paylines[rnd(C.paylines.length)], s = PREM.length ? PREM[rnd(PREM.length)] : rnd(NR), len = 3 + rnd(3);
-              for (let c = 0; c < len; c++) g[c][line[c]] = s;
-            }
+          // the lead symbol rotates through all symbols; low symbols reach the tier with more lines and Wilds
+          const sy = nextSym();
+          return search(r => { if (!noFeature(r) || r.total / bet < lo || r.total / bet >= hi) return 0; return hasSym(stepOf(r, 'win'), sy) || .5; }, () => {
+            const g = rg(), k = 1 + rnd(5), lines = C.paylines.slice().sort(() => Math.random() - .5);
+            for (let i = 0; i < k; i++) plant(g, i === 0 || rnd(2) ? sy : (PREM.length ? PREM[rnd(PREM.length)] : rnd(NR)), 3 + rnd(3), lines[i]);
+            if (C.WILD != null && rnd(2)) g[1 + rnd(3)][rnd(R)] = C.WILD;
             return { grid: g, opts: base };
           }, 20000);
         }
