@@ -58,7 +58,7 @@ ACTION (cool, showy, full of attitude):
 - 3.0-4.0 s: he swings back into his aiming pose, pointing the revolver to the right, and his eyes lock on the viewer.
 - 4.0-5.0 s: he holds the aim and breathes; the poncho settles back to exactly its starting shape.
 
-KEEP: one revolver only, always in his right hand; his face, beard, hat, poncho pattern, clothes, belt, holster and spurs exactly as in the image; same painted comic style and colours.
+KEEP: one revolver only, always in the same hand that holds it in the image; his face, beard, hat, poncho pattern, clothes, belt, holster and spurs exactly as in the image; same painted comic style and colours.
 
 DO NOT: move the camera; change or add a background; move his feet; walk, jump or turn around; drop the gun or add a second gun; change his face or costume; add other people, objects or extra hands; end on a different pose than the start.
 
@@ -69,7 +69,7 @@ FINAL CHECK (fix before output, regenerate if any fails):
 - The background is flat pure green (#00FF00) in every frame, with no ground or shadow.
 - His boots stayed on exactly the same spot.
 - His face, hat, poncho, clothes and revolver look exactly as in the image.
-- One revolver, always in his right hand; it was never dropped.
+- One revolver, always in the same hand that holds it in the image; it was never dropped.
 - The last frame is identical to the first frame, so it loops seamlessly.
 
 OUTPUT: 5 seconds, 30 fps, 9:16, seamless loop, no audio needed.
@@ -91,7 +91,7 @@ ACTION:
 - 4.4-5.6 s: he gives the revolver one quick spin and swings back into his aiming pose, pointing to the right.
 - 5.6-7.0 s: he holds the aim with a cold stare; the poncho settles; back to exactly the starting image.
 
-KEEP: one revolver only, always in his right hand; his face, beard, hat, poncho pattern, clothes, belt, holster and spurs exactly as in the image; same painted comic style and colours. The smoke stays thin and wispy and fades away completely.
+KEEP: one revolver only, always in the same hand that holds it in the image; his face, beard, hat, poncho pattern, clothes, belt, holster and spurs exactly as in the image; same painted comic style and colours. The smoke stays thin and wispy and fades away completely.
 
 DO NOT: move the camera; change or add a background; move his feet; walk, jump or turn around; add a second gun, bullets, targets, other people or extra hands; leave smoke on screen at the end; change his face or costume; end on a different pose than the start.
 
@@ -103,7 +103,7 @@ FINAL CHECK (fix before output, regenerate if any fails):
 - His boots stayed on exactly the same spot.
 - His face, hat, poncho, clothes and revolver look exactly as in the image.
 - Exactly three shots, then the smoke blow, then back to the aim.
-- One revolver, always in his right hand; no smoke left at the end.
+- One revolver, always in the same hand that holds it in the image; no smoke left at the end.
 - The last frame is identical to the first frame (his starting pose).
 
 OUTPUT: 7 seconds, 30 fps, 9:16, no audio needed.
