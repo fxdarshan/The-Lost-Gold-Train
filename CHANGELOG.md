@@ -3,6 +3,8 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-19: paylines from the reference paytable screen (lines 6/7 and 8/9 swapped back, new line 10); RTP unchanged within noise: 96.8-97.9% (4 × 5M, average 97.4%), buy 95.6-96.7%, hit rate 21.4%.
+- 2026-11-19: all symbol win animations at 30 fps, 1.5 s loops of 45 frames; three loops per win display. Mascot 15 fps stored, played in 30 fps steps. Symbol-win cheat uses a random payline.
 - 2026-11-19: cheat outcomes rotate through all symbols, so repeated picks show different symbols and animations (before, most were A-10 wins).
 - 2026-11-19: optimised animations: symbol sheets 50 frames at 20 fps in 256 px cells, mascot 10-12 fps at 0.55 scale; neighbouring frames are blended so playback stays smooth. Decoded image memory 863 → 420 MB, files 50 → 26 MB.
 - 2026-11-19: win animations for Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe, Lantern, Wild, Scatter and Power Dynamite from Darshan's videos (75 frames, seamless). Wild and Scatter idles are now square panels; Power Dynamite animates and keeps its multiplier plate.

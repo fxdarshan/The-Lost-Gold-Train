@@ -60,3 +60,4 @@ Every scenario and every outcome type was played to completion in headless Chrom
 
 The Next spins list starts empty (2026-11-17), so SPIN plays the real maths; use Scenarios or the buttons to load scripted outcomes.
 - 2026-11-19: Single line, Several lines, Wild, Power Dynamite and the four banner outcomes now rotate through all 15 symbols (a shuffled bag: every symbol once before any repeats), so repeated picks show different symbols and their win animations. Before, they took the first random board that fitted, and about 70% of those won with A-10. Presentation only: normal spins and the maths are unchanged.
+- 2026-11-19: 'Symbol win' puts the symbol on a random payline (any of the 10), not always the middle row.

@@ -49,19 +49,19 @@
     },
 
     // ------------------------------------------------------------ paylines (REF: 10 fixed lines)
-    // Row index per reel: 0 Top, 1 Middle, 2 Bottom. ASSUMED: the classic 10-line book-slot layout
-    // (the reference game's line shapes are not published in the sources found).
+    // Row index per reel: 0 Top, 1 Middle, 2 Bottom. From the reference game's paytable screen (Darshan's
+    // screenshot, 2026-11-19); before that an ASSUMED classic layout with lines 6/7 and 8/9 swapped and another line 10.
     paylines: [
       [1, 1, 1, 1, 1],  //  1 middle
       [0, 0, 0, 0, 0],  //  2 top
       [2, 2, 2, 2, 2],  //  3 bottom
       [0, 1, 2, 1, 0],  //  4 V
       [2, 1, 0, 1, 2],  //  5 inverted V
-      [1, 2, 2, 2, 1],  //  6
-      [1, 0, 0, 0, 1],  //  7
-      [2, 2, 1, 0, 0],  //  8
-      [0, 0, 1, 2, 2],  //  9
-      [2, 1, 1, 1, 0]   // 10
+      [1, 0, 0, 0, 1],  //  6
+      [1, 2, 2, 2, 1],  //  7
+      [0, 0, 1, 2, 2],  //  8
+      [2, 2, 1, 0, 0],  //  9
+      [1, 2, 1, 0, 1]   // 10
     ],
 
     // ------------------------------------------------------------ paytable (REF, x TOTAL bet for one line)
@@ -89,7 +89,7 @@
     // Symbol weights per reel for random stops (TUNED). Each cell is drawn independently.
     // Rows: reel 1..5. Columns: ids 0..20 (15 Wild, 16 Scatter, 17-20 Power Dynamite x2/x3/x5/x10).
     // Wild and Power Dynamite only on reels 2-4 (ASSUMED). Odd and even reels favour different card ranks (fewer
-    // accidental lines) and the Scatter is commoner on the right. Measured (4 x 5M): RTP 96.6-97.3%, base 53%,
+    // accidental lines) and the Scatter is commoner on the right. Measured (4 x 5M, 2026-11-19 paylines): RTP 96.8-97.9% (avg 97.4%), base 53%,
     // free spins 1 in 177, hit rate 21.4%.
     weights: [
       [1.5, 1.7, 1.9, 2.1, 2.1, 2.5, 2.7, 2.9, 3.1, 3.1, 17, 17, 8, 8, 8, 0, 1.5, 0, 0, 0, 0],
@@ -147,13 +147,13 @@
     fps: 30,
     frames: {
       bgBaseLoop: 120,                  // background breathing
-      symWin: [15, 126, 15],            // winning symbol: pop, hold, settle = 156 frames (two full loops + margin) = two full 2.5 s loops of the win animation (Darshan 2026-11-17: at least two loops)
-      lineCycle: 156,                   // each line shown on its own after the all-lines view (two full loops + margin)
+      symWin: [15, 105, 15],            // winning symbol: pop, hold, settle = 135 frames = three 1.5 s loops of the 45-frame win animation (Darshan: at least two loops; 30 fps, 1.5 s per loop)
+      lineCycle: 135,                   // each line shown on its own after the all-lines view (three 1.5 s loops)
       scatterLand: 12,                  // scatter squash when it lands
       fuse: [24, 18, 18],               // trigger: fuse unrolls down the reel, crackers pop, settle
       pick: [90, 30],                   // special symbol pick: symbols cycle and slow down, then hold
       expand: [12, 24, 12],             // expanding symbol: flash, grow to the full reel, settle
-      expandLines: 156,                 // the expanded reels pay: their tiles play the win animation twice (two loops + margin)
+      expandLines: 135,                 // the expanded reels pay: their tiles play the win animation three times (1.5 s loops)
       anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],
@@ -189,7 +189,7 @@
     mascotVideo: {
       order: ['idle1', 'idle1', 'idle1', 'idle2', 'idle1', 'idle1'],
       gapAfterIdle2: 2,
-      feet: [197, 585], charH: 469,      // in sheet-cell pixels: middle of his boots, and hat-to-boots height
+      feet: [179, 521], charH: 426,      // in sheet-cell pixels: middle of his boots, and hat-to-boots height
       screenH: 751,                      // drawn height on the stage (same as the puppet), feet on the box's bottom edge
       shots: [1.71],                     // seconds into the win clip with a muzzle flash (gunshot sound)
       fade: 0.3                          // cross-fade when a win cuts in

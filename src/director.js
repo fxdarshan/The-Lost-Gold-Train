@@ -154,17 +154,10 @@
           }, 400);
         }
         case 'symwin': {
-          // the chosen symbol on the middle line, len in a row; only boards where that symbol is the only win
+          // the chosen symbol on a random payline (any of the 10), len in a row; only boards where that symbol is the only win
           const s = Math.max(0, Math.min(NR - 1, Math.round(Number(item.sym)) || 0));
           const minLen = engine.minCount(s), n = Math.max(minLen, Math.min(5, Math.round(Number(item.len)) || 3));
-          const make = () => {
-            const g = rg();
-            for (let c = 0; c < N; c++) {
-              if (c < n) g[c][1] = s;
-              else if (g[c][1] === s) g[c][1] = (s + 1 + rnd(NR - 1)) % NR;     // end the line exactly at n
-            }
-            return { grid: g, opts: base };
-          };
+          const make = () => { const g = rg(); plant(g, s, n); return { grid: g, opts: base }; };
           return search(r => {
             const w = stepOf(r, 'win');
             if (!w || !w.wins.some(x => x.sym === s && x.count === n)) return 0;

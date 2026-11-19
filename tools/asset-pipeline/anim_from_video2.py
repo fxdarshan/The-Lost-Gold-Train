@@ -19,9 +19,9 @@ from scipy import ndimage
 
 ap = argparse.ArgumentParser()
 ap.add_argument('dir'); ap.add_argument('key'); ap.add_argument('mode')
-ap.add_argument('--frames', type=int, default=50); ap.add_argument('--cols', type=int, default=10)
+ap.add_argument('--frames', type=int, default=45); ap.add_argument('--cols', type=int, default=9)
 ap.add_argument('--width', type=int, default=256, help='cell width; the game scales it to the reel cell')
-ap.add_argument('--k', type=int, default=7, help='frames morphed into frame 1 to close the loop')
+ap.add_argument('--k', type=int, default=6, help='frames morphed into frame 1 to close the loop')
 a = ap.parse_args()
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 files = sorted(f for f in os.listdir(a.dir) if f.endswith('.png'))

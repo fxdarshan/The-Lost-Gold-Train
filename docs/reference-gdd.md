@@ -13,11 +13,11 @@ Build a playable prototype that plays like the reference game, wearing the new t
 | Item | Target (reference) | Prototype (4 × 5M rounds) |
 | --- | --- | --- |
 | Grid / lines | 5×3 / 10 | 5×3 / 10 |
-| RTP | 96.50% | 96.61% to 97.33% (average 97.0%, about ±0.4% run to run; earlier runs 1% lower on the share gave 95.7%, so the true figure is about 96.5 to 97%) |
+| RTP | 96.50% | 96.8% to 97.9% (average 97.4%, ±0.5% run to run; 4 × 5M, paylines from the reference 2026-11-19); the old assumed paylines gave the same on the same seeds (97.4%) |
 | Base / free spins share | about 50 / 50 (derived) | 53% / 44% |
 | Free spins frequency | 1 in 174 (published); 1 in 150 (measured) | 1 in 177 |
 | Free spins round | median 60×, mean 80.7× (measured) | median 50×, mean 78× |
-| Feature buy | 100×; return not published (101% measured over 100 buys) | 100×; 95.7% to 96.2% |
+| Feature buy | 100×; return not published (101% measured over 100 buys) | 100×; 95.6% to 96.7% |
 | Hit frequency | 33.33% (published); 31% (measured) | **21.4%**: lower, see §7 |
 | Max win | 5,500× | 5,500× cap, reached about 1 in 5 million rounds (reference: 1 in 1 billion) |
 | Bet | 0.10 to 100 | 0.10 to 100, default 9.00 |
@@ -84,3 +84,4 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 ## Prototype implementation status
 - **Win loop rule (Darshan, 2026-11-19):** in the base game, winning symbols keep playing their win animation in a loop after the round ends, until the player starts the next spin (`CONFIG.loopWinsUntilSpin`). Not in free spins, and not on the spin that starts free spins. During a round every win still plays at least two full loops before moving on.
 Sections 3 to 7 are implemented. Section 8 is open.
+- 2026-11-19: paylines set from the reference game's paytable screen (Darshan's screenshot): lines 6/7 and 8/9 were swapped and line 10 is now middle-bottom-middle-top-middle. RTP unchanged within noise (4 × 5M: 96.8-97.9%, average 97.4%).

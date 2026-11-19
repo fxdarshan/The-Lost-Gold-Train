@@ -35,10 +35,10 @@ Single file: [`dist/the-lost-gold-train-prototype.html`](dist/the-lost-gold-trai
 ## Maths (`node tools/simulate.js 5000000 <seed>`, 4 seeds)
 | | Prototype | Reference |
 | --- | --- | --- |
-| RTP | 96.61% to 97.33% (average 97.0%, ±0.4% run to run) | 96.50% |
-| Base / free spins | 53% / 44% | |
+| RTP | 96.8% to 97.9% (average 97.4%, ±0.5% run to run; 4 × 5M, paylines from the reference 2026-11-19) | 96.50% |
+| Base / free spins | 53% / 44.5% | |
 | Free spins | 1 in 177; median round 50×, mean 78× | 1 in 150 to 174; median 60×, mean 80.7× |
-| Feature buy return | 95.7% to 96.2% | not published |
+| Feature buy return | 95.6% to 96.7% | not published |
 | Hit rate | 21.4% | 31% to 33% |
 | Max win | 5,500× cap, about 1 in 5 million | 1 in 1 billion |
 

@@ -46,3 +46,4 @@ The pay for the number of reels holding it × 10 lines. For example, the Outlaw 
 
 ## Prototype implementation status
 All values are in `src/config.js` (`paytable`, `scatterPays`, `POWER`, `paylines`, `buy.price`) and shown in the game's paytable screen (i button) at the current bet.
+- 2026-11-19: the 10 paylines now match the reference paytable screen (Darshan's screenshot).

@@ -27,3 +27,4 @@ Reel spin: first reel stops after 1.0 s, then every 0.18 s, with a small bounce 
 All timings above are used by `src/game.js`.
 - 2026-11-19: symbol win animations for 12 symbols and the mascot's idle 1 / idle 2 / win now come from Darshan's image-to-video clips (see `docs/symbol-video-prompts.md`, `docs/outlaw-fullbody-video-prompts.md`). Symbol loops are 2.5 s (about 2× the clip speed); the mascot plays at the clips' real speed (12-15 fps with frame blending).
 - 2026-11-19: optimised: symbol loops are 50 frames at 20 fps (still 2.5 s) and the mascot 10-12 fps; the renderer blends each frame into the next.
+- 2026-11-19 (later): Darshan's rule: every animation at 30 fps; symbol win loops 1.5 s = 45 frames, stored as 45 whole frames (no blending). The win display holds three loops (`symWin` 135 frames, `lineCycle` and `expandLines` 135). The mascot is stored at 15 fps and played in 30 fps steps, each frame blended into the next.

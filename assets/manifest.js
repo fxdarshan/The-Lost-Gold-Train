@@ -60,27 +60,27 @@ window.ASSET_MANIFEST = {
     // win animations: 45 frames at 30 fps in a 9 x 5 sheet (see `anims` below), made from Darshan's 16-key-pose
     // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
     sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: from Darshan's video, 45 frames, 1.5 s loop
-    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: poles rush past, wheels, chimney smoke, headlamp (video, 50 frames)
-    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: top bar flips and slams back, gold burst (video, 50 frames)
-    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: bullet ricochet, punch forward, dust ring (video, 50 frames)
-    sym_04_win:             'assets/images/anims/sym_04_win.webp',          // Wanted Poster: wind storm, $10,000 blazes (video, 50 frames)
-    sym_05_win:             'assets/images/anims/sym_05_win.webp',          // Dynamite: clock whirls, fireball behind (video, 50 frames)
-    sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: three shots, recoil, gunslinger spin (video, 50 frames)
-    sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: jumps, coin fountain (video, 50 frames)
-    sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: anvil strikes, white-hot, lucky gold (video, 50 frames)
-    sym_09_win:             'assets/images/anims/sym_09_win.webp',          // Lantern: flame roars, firestorm (video, 50 frames)
+    sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: poles rush past, wheels, chimney smoke, headlamp (video, 45 frames)
+    sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: top bar flips and slams back, gold burst (video, 45 frames)
+    sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: bullet ricochet, punch forward, dust ring (video, 45 frames)
+    sym_04_win:             'assets/images/anims/sym_04_win.webp',          // Wanted Poster: wind storm, $10,000 blazes (video, 45 frames)
+    sym_05_win:             'assets/images/anims/sym_05_win.webp',          // Dynamite: clock whirls, fireball behind (video, 45 frames)
+    sym_06_win:             'assets/images/anims/sym_06_win.webp',          // Revolver: three shots, recoil, gunslinger spin (video, 45 frames)
+    sym_07_win:             'assets/images/anims/sym_07_win.webp',          // Money Bag: jumps, coin fountain (video, 45 frames)
+    sym_08_win:             'assets/images/anims/sym_08_win.webp',          // Horseshoe: anvil strikes, white-hot, lucky gold (video, 45 frames)
+    sym_09_win:             'assets/images/anims/sym_09_win.webp',          // Lantern: flame roars, firestorm (video, 45 frames)
     sym_11_win:             'assets/images/anims/sym_11_win.webp',          // K: glints
     sym_12_win:             'assets/images/anims/sym_12_win.webp',          // Q: glints
     sym_13_win:             'assets/images/anims/sym_13_win.webp',          // J: glints
     sym_14_win:             'assets/images/anims/sym_14_win.webp',          // 10: glints
-    sym_wild_win:           'assets/images/anims/sym_wild_win.webp',        // Wild: hat flip, both revolvers fire (video, 50 frames)
-    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Scatter: train charges, steam burst (video, 50 frames)
-    sym_power_win:          'assets/images/anims/sym_power_win.webp',       // Power Dynamite: fuse, blast (video, 50 frames)
+    sym_wild_win:           'assets/images/anims/sym_wild_win.webp',        // Wild: hat flip, both revolvers fire (video, 45 frames)
+    sym_scatter_win:        'assets/images/anims/sym_scatter_win.webp',     // Scatter: train charges, steam burst (video, 45 frames)
+    sym_power_win:          'assets/images/anims/sym_power_win.webp',       // Power Dynamite: fuse, blast (video, 45 frames)
 
     // the Outlaw mascot beside the reels (full body, transparent, tall)
     char_mascot:            'assets/images/characters/char_mascot.webp',
     char_outlaw_parts:      'assets/images/characters/char_outlaw_parts.webp',   // cutout puppet atlas (assets/rigs/outlaw.js)
-    // the Outlaw mascot from Darshan's green-screen videos (2026-11-19), keyed and cut to sheets of 320-352 x 592 cells (drawn about 1.6x)
+    // the Outlaw mascot from Darshan's green-screen videos (2026-11-19), keyed and cut to 15 fps sheets of 288-320 x 528 cells (played at 30 fps, drawn about 1.75x)
     char_outlaw_idle1:      'assets/images/characters/char_outlaw_idle1.webp',   // wind in the poncho, 5 s
     char_outlaw_idle2:      'assets/images/characters/char_outlaw_idle2.webp',   // gun spin, 5 s
     char_outlaw_win:        'assets/images/characters/char_outlaw_win.webp',     // fires, blows the smoke, 10 s
@@ -101,25 +101,25 @@ window.ASSET_MANIFEST = {
   // sprite sheet layout for each *_win image: frames left to right, top to bottom
   anims: {
     sym_00_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
-    sym_01_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_02_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_03_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_04_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_05_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_06_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_07_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_08_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_09_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_11_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_12_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_13_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_14_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_wild_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_scatter_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    sym_power_win: { cols: 10, rows: 5, frames: 50, fps: 20 },
-    char_outlaw_idle1: { cols: 10, rows: 6, frames: 51, fps: 10 },
-    char_outlaw_idle2: { cols: 12, rows: 6, frames: 61, fps: 12 },
-    char_outlaw_win: { cols: 16, rows: 7, frames: 100, fps: 10 }
+    sym_01_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_02_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_03_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_04_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_05_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_06_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_07_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_08_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_09_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_11_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_12_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_13_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_14_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_wild_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_scatter_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    sym_power_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    char_outlaw_idle1: { cols: 14, rows: 6, frames: 77, fps: 15 },
+    char_outlaw_idle2: { cols: 14, rows: 6, frames: 77, fps: 15 },
+    char_outlaw_win: { cols: 20, rows: 8, frames: 151, fps: 15 }
   },
 
   sounds: {

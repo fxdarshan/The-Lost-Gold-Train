@@ -42,3 +42,4 @@
 - During free spins, the special symbol takes a fixed share of every reel, per symbol (`CONFIG.specialShare`, TUNED); bought free spins use 1.04× that share (`CONFIG.buy.specialShare`, TUNED). The reference game's reels aren't published; its rules say only that bought free spins use their own reel set per special symbol.
 - ASSUMED: line shapes (classic 10-line book layout), Scatter weights on the bought spin (3: 85%, 4: 13%, 5: 2%), special-symbol pick weights.
 - ASSUMED (2026-11-16, Darshan: "accommodate all the symbols"): the full 15-symbol set, a separate Wild and Scatter (the reference's Book is both), and Power Dynamite with ×2/×3/×5/×10 multipliers. None of these are in the reference game; they use every piece of the *Last Train Gold* asset sheet. Wild and Power Dynamite are kept off reels 1 and 5 so they can't start or finish a line on their own.
+- 2026-11-19: the 10 paylines now match the reference paytable screen (Darshan's screenshot).

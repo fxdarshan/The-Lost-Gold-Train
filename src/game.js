@@ -297,7 +297,7 @@
   }
   function drawVideoMascot(t) {
     vmUpdate(t);
-    const dir = M.flip ? -1 : 1, k = MV.screenH / MV.charH, fx = M.x + M.w / 2, fy = M.y + M.h, u = t - VM.t0;
+    const dir = M.flip ? -1 : 1, k = MV.screenH / MV.charH, fx = M.x + M.w / 2, fy = M.y + M.h, u = Math.floor((t - VM.t0) * 30) / 30;   // 30 fps steps
     vmDraw(VM.clip, u, 1, dir, k, fx, fy);
     if (VM.prev) {                                                         // a win cutting in: the old clip fades out on top
       const q = (t - VM.prev.t) / MV.fade;
@@ -398,9 +398,10 @@
     return 1;
   }
   // one frame of a symbol's win sheet, fitted exactly like its idle art (frame 1 = the idle art)
-  // frame may be fractional: the next frame is blended over by the fraction, so 20 fps sheets play smoothly at 60
+  // frame may be fractional: sheets stored below 30 fps blend the next frame over by the fraction, so they still play smoothly
   function drawAnimFrame(id, an, frame, cx, cy, alpha) {
     const f = A.fit(id), bw = cw * f[0], bh = ch * f[1], k = Math.min(bw / an.fw, bh / an.fh), w = an.fw * k, h = an.fh * k;
+    if (an.fps >= C.fps) frame = Math.floor(frame);              // 30 fps sheets: whole frames, no blending
     const p = ((frame % an.frames) + an.frames) % an.frames, i = Math.floor(p), fr = p - i, j = (i + 1) % an.frames;
     ctx.save(); ctx.globalAlpha = alpha;
     ctx.drawImage(an.img, (i % an.cols) * an.fw, Math.floor(i / an.cols) * an.fh, an.fw, an.fh, cx - w / 2, cy - h / 2, w, h);
@@ -430,9 +431,9 @@
     if (fx.win != null) shineFx(F(fx.win), cx, cy, scale);
   }
   // shared win FX for symbols without their own sheet (re-used, no extra asset): a light band sweeps across the
-  // tile and a star sparkle pops on its corner, once per 75-frame loop like the sheet animations
+  // tile and a star sparkle pops on its corner, once per 45-frame loop like the sheet animations
   function shineFx(f, cx, cy, scale) {
-    const u = (f % 75) / 75, w = cw * .98 * scale, h = ch * .98 * scale;
+    const u = (f % 45) / 45, w = cw * .98 * scale, h = ch * .98 * scale;
     ctx.save(); ctx.beginPath(); ctx.roundRect(cx - w / 2, cy - h / 2, w, h, 12); ctx.clip(); ctx.globalCompositeOperation = 'lighter';
     const bx = cx - w * .9 + w * 1.8 * clamp(u / .45, 0, 1);
     if (u < .45) { const g = ctx.createLinearGradient(bx - 70, 0, bx + 70, 0); g.addColorStop(0, 'rgba(255,230,160,0)'); g.addColorStop(.5, 'rgba(255,240,190,.55)'); g.addColorStop(1, 'rgba(255,230,160,0)');

@@ -15,9 +15,9 @@ import numpy as np, cv2
 from PIL import Image
 
 CROP = (0, 100, 640, 1156)      # x0, y0, x1, y1 in the 768 x 1344 source
-SCALE = .55
-FPS = {'idle1': 10, 'idle2': 12, 'win': 10}     # the game blends neighbouring frames
-COLS = {'idle1': 10, 'idle2': 12, 'win': 16}
+SCALE = .5
+FPS = {'idle1': 15, 'idle2': 15, 'win': 15}     # the game plays at 30 fps and blends each frame into the next
+COLS = {'idle1': 14, 'idle2': 14, 'win': 20}
 WIDTH = {'idle1': 560, 'idle2': 560, 'win': 640}   # source px from the left: the idles never reach the right side
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 
