@@ -13,7 +13,7 @@ PREFIX = """Animate the attached image. It is a slot machine symbol: {desc}. The
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - {border}
-- The {subject} is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. {still_extra}
+- Keep the {subject} completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. {still_extra}
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks{extra_movers} move):
@@ -68,7 +68,7 @@ S = [
   keep="the words WANTED and $10,000 exactly as written, letter for letter, in every frame; the portrait's face; the nails at the corners of the paper."),
  dict(name="Dynamite", sid="sym_05", file="06_dynamite_timer",
   desc="a bundle of red dynamite sticks with a round alarm clock strapped on the front and a coiled wire at the top, on a fiery orange burst background",
-  subject="dynamite bundle and clock", border=TILE, still_extra="It does not explode, break apart, shake or swell.", movers=", the clock hands, sparks",
+  subject="dynamite bundle and clock", border=TILE, still_extra="It does not explode, break apart, shake or swell.", movers=", the clock hands",
   beats=["0.0-0.8 s: the clock's second hand ticks forward; small sparks fizz from the wire at the top.",
          "0.8-1.5 s: the sparks grow; the clock face glows red; the red sticks pulse with a warm glow.",
          "1.5-2.2 s: the orange burst behind the bundle flares bright like a blast, with sparks shooting outward (behind and around the bundle only, the bundle stays intact).",
@@ -145,7 +145,7 @@ S += [
   keep="the word SCATTER exactly as written, letter for letter, in every frame; the round emblem and ribbon shapes."),
  dict(name="Power Dynamite", sid="sym_power", file="19_power_symbol_dynamite",
   desc="a bundle of red dynamite sticks with a round clock on the front and a wire coil at the top, in front of an orange-yellow explosion burst, on a plain white background",
-  subject="dynamite bundle and clock", border=WHITE, still_extra="It does not explode, break apart, shake or swell.", movers=", the clock hands, sparks",
+  subject="dynamite bundle and clock", border=WHITE, still_extra="It does not explode, break apart, shake or swell.", movers=", the clock hands",
   beats=["0.0-0.8 s: small sparks fizz from the wire at the top; the clock's second hand ticks.",
          "0.8-1.4 s: the red sticks glow hot; the orange burst behind starts to pulse.",
          "1.4-2.0 s: the burst flares bright and expands a little with sparks shooting outward (staying within the image).",

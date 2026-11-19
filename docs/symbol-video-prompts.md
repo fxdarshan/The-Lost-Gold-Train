@@ -27,7 +27,7 @@ Animate the attached image. It is a slot machine symbol: a full painted scene of
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The locomotive and its carriages is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. The rails and ground do not move. The wheels do not turn.
+- Keep the locomotive and its carriages completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. The rails and ground do not move. The wheels do not turn.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, smoke and steam move):
@@ -54,7 +54,7 @@ Animate the attached image. It is a slot machine symbol: a pile of shiny gold ba
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The pile of gold bars is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. No bar moves, lifts or changes place.
+- Keep the pile of gold bars completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. No bar moves, lifts or changes place.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -81,7 +81,7 @@ Animate the attached image. It is a slot machine symbol: a gold six-point sherif
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The badge is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not tilt or turn.
+- Keep the badge completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not tilt or turn.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -108,7 +108,7 @@ Animate the attached image. It is a slot machine symbol: an old paper wanted pos
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The poster is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. The paper does not flap, curl or move; the portrait does not move or change expression.
+- Keep the poster completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. The paper does not flap, curl or move; the portrait does not move or change expression.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, dust move):
@@ -135,10 +135,10 @@ Animate the attached image. It is a slot machine symbol: a bundle of red dynamit
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The dynamite bundle and clock is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not explode, break apart, shake or swell.
+- Keep the dynamite bundle and clock completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not explode, break apart, shake or swell.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
-ACTION (4 seconds; only light, glow, sparks, the clock hands, sparks move):
+ACTION (4 seconds; only light, glow, sparks, the clock hands move):
 - 0.0-0.8 s: the clock's second hand ticks forward; small sparks fizz from the wire at the top.
 - 0.8-1.5 s: the sparks grow; the clock face glows red; the red sticks pulse with a warm glow.
 - 1.5-2.2 s: the orange burst behind the bundle flares bright like a blast, with sparks shooting outward (behind and around the bundle only, the bundle stays intact).
@@ -162,7 +162,7 @@ Animate the attached image. It is a slot machine symbol: a silver revolver with 
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The revolver is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. The cylinder and hammer do not move.
+- Keep the revolver completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. The cylinder and hammer do not move.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, smoke move):
@@ -189,7 +189,7 @@ Animate the attached image. It is a slot machine symbol: a tied burlap money bag
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The money bag is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not hop, wobble or squash; the knot and the tie do not move.
+- Keep the money bag completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not hop, wobble or squash; the knot and the tie do not move.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, gold dust move):
@@ -216,7 +216,7 @@ Animate the attached image. It is a slot machine symbol: a metal horseshoe with 
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The horseshoe is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not swing, tilt or turn.
+- Keep the horseshoe completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not swing, tilt or turn.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -243,7 +243,7 @@ Animate the attached image. It is a slot machine symbol: an old brass oil lanter
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The lantern is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not swing or sway.
+- Keep the lantern completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not swing or sway.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, the flame, embers move):
@@ -270,7 +270,7 @@ Animate the attached image. It is a slot machine symbol: a big red Western-style
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The "A" is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not squash, stretch or bounce.
+- Keep the "A" completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not squash, stretch or bounce.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -297,7 +297,7 @@ Animate the attached image. It is a slot machine symbol: a big gold-orange Weste
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The "K" is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not squash, stretch or bounce.
+- Keep the "K" completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not squash, stretch or bounce.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -324,7 +324,7 @@ Animate the attached image. It is a slot machine symbol: a big orange-copper Wes
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The "Q" is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not squash, stretch or bounce.
+- Keep the "Q" completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not squash, stretch or bounce.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -351,7 +351,7 @@ Animate the attached image. It is a slot machine symbol: a big silver Western-st
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The "J" is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not squash, stretch or bounce.
+- Keep the "J" completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not squash, stretch or bounce.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -378,7 +378,7 @@ Animate the attached image. It is a slot machine symbol: a big silver Western-st
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The thin dark border and the four small rivets in the corners stay exactly as they are. Do NOT add any frame, border, panel, vignette or edge decoration.
-- The "10" is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not squash, stretch or bounce.
+- Keep the "10" completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not squash, stretch or bounce.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -405,7 +405,7 @@ Animate the attached image. It is a slot machine symbol: a dark red panel with a
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The dark riveted metal panel edge stays exactly as it is. Do NOT add another frame, border or decoration.
-- The emblem, hat and revolvers is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. The hat does not lift or move.
+- Keep the emblem, hat and revolvers completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. The hat does not lift or move.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks move):
@@ -432,7 +432,7 @@ Animate the attached image. It is a slot machine symbol: a dark red panel with a
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The dark riveted metal panel edge stays exactly as it is. Do NOT add another frame, border or decoration.
-- The emblem, locomotive and ribbon is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. The locomotive does not move and its wheels do not turn.
+- Keep the emblem, locomotive and ribbon completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. The locomotive does not move and its wheels do not turn.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
 ACTION (4 seconds; only light, glow, sparks, smoke move):
@@ -459,10 +459,10 @@ Animate the attached image. It is a slot machine symbol: a bundle of red dynamit
 CAMERA AND IMAGE (most important):
 - Locked-off camera: no zoom, no pan, no tilt, no shake, no cuts. The picture never moves or scales.
 - The background is plain white and stays plain white. Do NOT add any frame, border, tile, shadow box or scenery.
-- The dynamite bundle and clock is completely still: it does not move, slide, rock, bounce, jump, rotate, shake or change size. It does not explode, break apart, shake or swell.
+- Keep the dynamite bundle and clock completely still: no moving, sliding, rocking, bouncing, jumping, rotating, shaking or resizing. It does not explode, break apart, shake or swell.
 - The video starts on the attached image and ends on exactly the same image, so the last frame matches the first.
 
-ACTION (4 seconds; only light, glow, sparks, the clock hands, sparks move):
+ACTION (4 seconds; only light, glow, sparks, the clock hands move):
 - 0.0-0.8 s: small sparks fizz from the wire at the top; the clock's second hand ticks.
 - 0.8-1.4 s: the red sticks glow hot; the orange burst behind starts to pulse.
 - 1.4-2.0 s: the burst flares bright and expands a little with sparks shooting outward (staying within the image).
