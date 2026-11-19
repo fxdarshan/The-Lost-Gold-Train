@@ -998,6 +998,13 @@
     G.bannerNext = false;
     // the round's big win banner (free spins: per spin, the summary shows the total)
     await bigWinBanner(res.total);
+    // base game: the winning symbols keep looping their win animation until the player starts the next spin
+    // (spinOnce resets G.fx); not in free spins, and not when this spin started free spins
+    if (!inFS && C.loopWinsUntilSpin && !res.steps.some(s => s.freeSpins)) {
+      const cells = [], seen = new Set();
+      res.steps.forEach(s => (s.type === 'win' ? s.wins.flatMap(w => w.positions) : s.type === 'scatter' && s.amount ? s.positions : []).forEach(p => { const k = p[0] + ',' + p[1]; if (!seen.has(k)) { seen.add(k); cells.push(p); } }));
+      if (cells.length) { highlight(cells, now()); G.dimTarget = .6; }
+    }
     return res;
   }
   // what a base spin costs: the bet, or the feature buy price

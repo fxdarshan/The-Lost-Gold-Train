@@ -45,4 +45,5 @@ Symbols are framed tiles about 280×230 px. They fill a 260×230 cell, so they'r
 | `sym_10_win` (A) and Power Dynamite win animations | 16-key-pose sheets like the others | `docs/symbol-animation-prompt.md` |
 
 ## Prototype implementation status
+- **The Outlaw symbol (2026-11-19):** taken from Darshan's video (`assets/source/originals/anims/video/01_outlaw_symbol.mp4`, 150 frames at 30 fps). 45 frames picked by motion (60% equal visual change, 40% time), white background cut away, the last 7 frames morphed into frame 1 with optical flow so the loop is seamless; 1.5 s at 30 fps, 9×5 sheet of 320×272 cells. Tool: `tools/asset-pipeline/anim_from_video.py`. Frame 1 is the Outlaw's idle art.
 32 of 39 image IDs are delivered. The backgrounds have no reel frame painted in, so the game draws a timber frame with dark plank panels (`CONFIG.reelFrame`). Upload new art to `art/` named by asset ID; it is imported with `tools/asset-pipeline/import_art.py`.

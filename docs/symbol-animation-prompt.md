@@ -224,6 +224,8 @@ The final result should feel like a **professionally animated premium slot-game 
 One rule I would keep in **every Claude symbol prompt** is the **POSITION LOCK** section. For symbols such as the revolver, Wanted poster, lantern, character, train, etc., we can then explicitly override it only for the parts that are supposed to move. This should prevent Claude from interpreting normal interpolation as permission to move the entire symbol.
 
 ## Prototype implementation status
+- **The Outlaw symbol (2026-11-19):** taken from Darshan's video (`assets/source/originals/anims/video/01_outlaw_symbol.mp4`, 150 frames at 30 fps). 45 frames picked by motion (60% equal visual change, 40% time), white background cut away, the last 7 frames morphed into frame 1 with optical flow so the loop is seamless; 1.5 s at 30 fps, 9×5 sheet of 320×272 cells. Tool: `tools/asset-pipeline/anim_from_video.py`. Frame 1 is the Outlaw's idle art.
+- **Win loop rule (Darshan, 2026-11-19):** in the base game, winning symbols keep playing their win animation in a loop after the round ends, until the player starts the next spin (`CONFIG.loopWinsUntilSpin`). Not in free spins, and not on the spin that starts free spins. During a round every win still plays at least two full loops before moving on.
 Tool: `tools/asset-pipeline/anim_from_keys.py` (sheets kept in `assets/source/originals/anims/`).
 
 | Symbol | In game | Options | How the brief is met |

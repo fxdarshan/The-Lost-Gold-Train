@@ -57,7 +57,7 @@ window.ASSET_MANIFEST = {
 
     // win animations: 45 frames at 30 fps in a 9 x 5 sheet (see `anims` below), made from Darshan's 16-key-pose
     // sheets with tools/asset-pipeline/anim_from_keys.py; frame 1 of each is also the symbol's idle art
-    sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: draws, grins, holsters
+    sym_00_win:             'assets/images/anims/sym_00_win.webp',          // The Outlaw: from Darshan's video, 45 frames, 1.5 s loop
     sym_01_win:             'assets/images/anims/sym_01_win.webp',          // Steam Train: steam and wheels
     sym_02_win:             'assets/images/anims/sym_02_win.webp',          // Gold Bars: shine sweep and glints
     sym_03_win:             'assets/images/anims/sym_03_win.webp',          // Sheriff's Star: glints travel round the badge
@@ -93,7 +93,7 @@ window.ASSET_MANIFEST = {
 
   // sprite sheet layout for each *_win image: frames left to right, top to bottom
   anims: {
-    sym_00_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
+    sym_00_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_01_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_02_win: { cols: 10, rows: 8, frames: 75, fps: 30 },
     sym_03_win: { cols: 10, rows: 8, frames: 75, fps: 30 },

@@ -164,6 +164,7 @@
     anticipate: true,                   // slow the remaining reels when 2 scatters are showing
     anticSlow: 0.3,                     // ASSUMED: speed at the end of the anticipation window, as a fraction of full speed
     showPaylines: false,                // Darshan 2026-11-17: no win lines drawn; winning symbols animate instead
+    loopWinsUntilSpin: true,            // Darshan 2026-11-19: base game wins keep looping their symbol animation until the next spin
     autoContinueModals: true,           // START / COLLECT continue by themselves after the hold
 
     spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },

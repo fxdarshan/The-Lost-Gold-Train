@@ -82,4 +82,5 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 5. Full symbol set (2026-11-16): are the assumed pays for the new pictures right, and should Power Dynamite stay a multiplier Wild on reels 2-4? Win animations for the A and Power Dynamite would finish the set.
 
 ## Prototype implementation status
+- **Win loop rule (Darshan, 2026-11-19):** in the base game, winning symbols keep playing their win animation in a loop after the round ends, until the player starts the next spin (`CONFIG.loopWinsUntilSpin`). Not in free spins, and not on the spin that starts free spins. During a round every win still plays at least two full loops before moving on.
 Sections 3 to 7 are implemented. Section 8 is open.

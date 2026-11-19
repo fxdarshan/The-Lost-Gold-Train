@@ -1,5 +1,7 @@
 # The Lost Gold Train (prototype)
 
+**Win presentation:** base game wins keep looping their symbol animation until the next spin (`CONFIG.loopWinsUntilSpin`).
+
 **Play online:** https://fxdarshan.github.io/The-Lost-Gold-Train/ (GitHub Pages, updates on every push to `main`)
 
 A Wild West book-style slot in hand-painted watercolour. **The Outlaw** is the top symbol and the mascot beside the reels; every symbol of the *Last Train Gold* asset sheet is in play: 15 pay symbols, a Wild and **Power Dynamite** (a Wild with a ×2 to ×10 multiplier) on the middle reels, and a train-badge Scatter. Three or more Scatters give 10 free spins with a random expanding symbol, and free spins can also be bought for 100× the bet. Features and maths follow Pragmatic Play's *John Hunter and the Book of Tut* (the original); the separate Wild, Power Dynamite and the six extra pictures are additions (ASSUMED, GDD §7).

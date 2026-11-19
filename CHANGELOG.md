@@ -2,6 +2,10 @@
 
 Newest first.
 
+## 2026-11-19: Outlaw symbol from video, wins loop until the next spin
+- **The Outlaw symbol (2026-11-19):** taken from Darshan's video (`assets/source/originals/anims/video/01_outlaw_symbol.mp4`, 150 frames at 30 fps). 45 frames picked by motion (60% equal visual change, 40% time), white background cut away, the last 7 frames morphed into frame 1 with optical flow so the loop is seamless; 1.5 s at 30 fps, 9×5 sheet of 320×272 cells. Tool: `tools/asset-pipeline/anim_from_video.py`. Frame 1 is the Outlaw's idle art.
+- **Win loop rule (Darshan, 2026-11-19):** in the base game, winning symbols keep playing their win animation in a loop after the round ends, until the player starts the next spin (`CONFIG.loopWinsUntilSpin`). Not in free spins, and not on the spin that starts free spins. During a round every win still plays at least two full loops before moving on.
+
 ## 2026-11-17: Outlaw as a cutout puppet
 - Built from Darshan's second parts atlas (`Gritty_Outlaw_Sprite_Part_Atlas.png`, manifest v2): hat, head, collar, torso, gun arm (forearm, hand, revolver) and relaxed arm (upper, forearm, hand) as rigid parts on bones; legs, belt and holster, and the poncho (back flap, right tail, shoulder drape) cut from the original art (options 2+3). Parts placed by SIFT matching against the original where possible, by hand elsewhere.
 - `assets/rigs/outlaw.js` + `assets/images/characters/char_outlaw_parts.webp` (one 2048×832 atlas), built by `tools/asset-pipeline/puppet/build_puppet.py`.
