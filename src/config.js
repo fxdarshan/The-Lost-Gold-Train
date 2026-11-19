@@ -189,7 +189,7 @@
     mascotVideo: {
       order: ['idle1', 'idle1', 'idle1', 'idle2', 'idle1', 'idle1'],
       gapAfterIdle2: 2,
-      feet: [251, 744], charH: 597,      // in sheet-cell pixels: middle of his boots, and hat-to-boots height
+      feet: [197, 585], charH: 469,      // in sheet-cell pixels: middle of his boots, and hat-to-boots height
       screenH: 751,                      // drawn height on the stage (same as the puppet), feet on the box's bottom edge
       shots: [1.71],                     // seconds into the win clip with a muzzle flash (gunshot sound)
       fade: 0.3                          // cross-fade when a win cuts in

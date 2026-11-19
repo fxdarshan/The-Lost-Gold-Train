@@ -15,9 +15,10 @@ import numpy as np, cv2
 from PIL import Image
 
 CROP = (0, 100, 640, 1156)      # x0, y0, x1, y1 in the 768 x 1344 source
-SCALE = .7
-FPS = {'idle1': 12, 'idle2': 15, 'win': 12}
-COLS = {'idle1': 8, 'idle2': 10, 'win': 16}
+SCALE = .55
+FPS = {'idle1': 10, 'idle2': 12, 'win': 10}     # the game blends neighbouring frames
+COLS = {'idle1': 10, 'idle2': 12, 'win': 16}
+WIDTH = {'idle1': 560, 'idle2': 560, 'win': 640}   # source px from the left: the idles never reach the right side
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 
 def load(d):
@@ -50,7 +51,8 @@ def key(f):
 def build(name, src, anchor, head):
     n = len(src); dur = n / 24.0; m = max(2, round(dur * FPS[name]))
     idx = [min(n - 1, round(i * (n - 1) / (m - 1))) for i in range(m)]
-    fr = [src[i] for i in idx][:-1]                              # the last sample is replaced by the loop wrap
+    fr = [src[i][:, :WIDTH[name]] for i in idx][:-1]
+    anchor = anchor[:, :WIDTH[name]]                              # the last sample is replaced by the loop wrap
     K = max(4, round(FPS[name] * .5))                             # half a second into the anchor pose
     for j in range(K):
         u = (j + 1) / (K + 1); u = u * u * (3 - 2 * u); fr[-K + j] = morph(fr[-K + j], anchor, u)
@@ -64,9 +66,9 @@ def build(name, src, anchor, head):
     sheet = Image.new('RGBA', (cw * cols, ch * rows), (0, 0, 0, 0))
     for i, f in enumerate(fr):
         im = Image.fromarray(key(f)).resize((tw, th), Image.LANCZOS)
-        sheet.paste(im, ((i % cols) * cw + (cw - tw) // 2, (i // cols) * ch + (ch - th)))
+        sheet.paste(im, ((i % cols) * cw, (i // cols) * ch + (ch - th)))     # left and bottom aligned: same feet point in every clip
     out = os.path.join(ROOT, 'assets/images/characters/char_outlaw_%s.webp' % name)
-    sheet.save(out, 'WEBP', quality=86, method=6)
+    sheet.save(out, 'WEBP', quality=84, method=6)
     print(json.dumps({'key': 'char_outlaw_' + name, 'cols': cols, 'rows': rows, 'frames': len(fr), 'fps': FPS[name], 'cell': [cw, ch], 'size_kb': os.path.getsize(out) // 1024}))
     return fr
 

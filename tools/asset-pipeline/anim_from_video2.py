@@ -19,8 +19,9 @@ from scipy import ndimage
 
 ap = argparse.ArgumentParser()
 ap.add_argument('dir'); ap.add_argument('key'); ap.add_argument('mode')
-ap.add_argument('--frames', type=int, default=75); ap.add_argument('--cols', type=int, default=10)
-ap.add_argument('--k', type=int, default=10, help='frames morphed into frame 1 to close the loop')
+ap.add_argument('--frames', type=int, default=50); ap.add_argument('--cols', type=int, default=10)
+ap.add_argument('--width', type=int, default=256, help='cell width; the game scales it to the reel cell')
+ap.add_argument('--k', type=int, default=7, help='frames morphed into frame 1 to close the loop')
 a = ap.parse_args()
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 files = sorted(f for f in os.listdir(a.dir) if f.endswith('.png'))
@@ -98,8 +99,8 @@ for f in frames:
     rgba.append(np.dstack([f, np.clip(al, 0, 255).astype(np.uint8)]))
 
 # --- sheet
-TW = 320; TH = round(h / w * TW)
-if a.mode != 'tile' and TH > TW: TW = round(320 * w / h); TH = 320
+TW = a.width; TH = round(h / w * TW)
+if a.mode != 'tile' and TH > TW: TW = round(a.width * w / h); TH = a.width
 CW = (TW + 15) // 16 * 16; CH = (TH + 15) // 16 * 16
 cols = a.cols; rows = (OUT + cols - 1) // cols
 sheet = Image.new('RGBA', (CW * cols, CH * rows), (0, 0, 0, 0)); cells = []
@@ -107,7 +108,7 @@ for i, f in enumerate(rgba):
     im = Image.fromarray(f).resize((TW, TH), Image.LANCZOS)
     cell = Image.new('RGBA', (CW, CH), (0, 0, 0, 0)); cell.paste(im, ((CW - TW) // 2, (CH - TH) // 2)); cells.append(cell)
     sheet.paste(cell, ((i % cols) * CW, (i // cols) * CH))
-sheet.save(os.path.join(ROOT, 'assets/images/anims/%s_win.webp' % a.key), 'WEBP', quality=86, method=6)
+sheet.save(os.path.join(ROOT, 'assets/images/anims/%s_win.webp' % a.key), 'WEBP', quality=84, method=6)
 idle = Image.fromarray(rgba[0]).resize((TW, TH), Image.LANCZOS)
 idle.save(os.path.join(ROOT, 'assets/images/symbols/%s_idle.webp' % a.key), 'WEBP', quality=92, method=6)
 idle.save(os.path.join(ROOT, 'art/symbols/%s_idle.png' % a.key))

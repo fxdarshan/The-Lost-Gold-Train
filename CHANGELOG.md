@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-19: optimised animations: symbol sheets 50 frames at 20 fps in 256 px cells, mascot 10-12 fps at 0.55 scale; neighbouring frames are blended so playback stays smooth. Decoded image memory 863 → 420 MB, files 50 → 26 MB.
 - 2026-11-19: win animations for Steam Train, Gold Bars, Sheriff's Star, Wanted Poster, Dynamite, Revolver, Money Bag, Horseshoe, Lantern, Wild, Scatter and Power Dynamite from Darshan's videos (75 frames, seamless). Wild and Scatter idles are now square panels; Power Dynamite animates and keeps its multiplier plate.
 - 2026-11-19: the Outlaw mascot plays Darshan's green-screen videos (idle 1, idle 2, win) in his order: idle 1 three times, idle 2, idle 1 twice; the win never straight after idle 2. The puppet stays as fallback and in the gunfight transition.
 - 2026-11-19: full-body Outlaw video prompts (idle 1, idle 2, win) and a 9:16 green-screen source image. `docs/outlaw-fullbody-video-prompts.md`.

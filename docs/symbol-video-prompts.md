@@ -729,7 +729,7 @@ OUTPUT: 4 seconds, 30 fps, same aspect ratio as the image, no audio needed.
 ```
 
 ## Prototype implementation status
-- 2026-11-19: Outlaw done from video (45 frames, 1.5 s). 2026-11-19: Steam Train to Lantern, Wild, Scatter and Power Dynamite done from Darshan's videos with `anim_from_video2.py` (75 frames). Still to come: A, K, Q, J, 10.
+- 2026-11-19: Outlaw done from video (45 frames, 1.5 s). 2026-11-19: Steam Train to Lantern, Wild, Scatter and Power Dynamite done from Darshan's videos with `anim_from_video2.py` (50 frames). Still to come: A, K, Q, J, 10.
 - 2026-11-19: prompts rewritten as v3 (action-movie, layered). v1 and v2 are in git history.
 - 2026-11-19: v3.1: the train video panned side to side, so every prompt now asks for a static tripod shot, and the train and scatter no longer say "races past" or "full speed" (the trains stay on the spot at full power).
 - 2026-11-19: v3.2: the train still jumped and smoked everywhere, so it has its own short prompt (`prompt_train.txt`): the body is rigid, only the wheels, chimney smoke, lights and sparks move, and the chimney is the only smoke source.

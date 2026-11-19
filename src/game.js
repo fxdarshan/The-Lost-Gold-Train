@@ -398,11 +398,13 @@
     return 1;
   }
   // one frame of a symbol's win sheet, fitted exactly like its idle art (frame 1 = the idle art)
+  // frame may be fractional: the next frame is blended over by the fraction, so 20 fps sheets play smoothly at 60
   function drawAnimFrame(id, an, frame, cx, cy, alpha) {
     const f = A.fit(id), bw = cw * f[0], bh = ch * f[1], k = Math.min(bw / an.fw, bh / an.fh), w = an.fw * k, h = an.fh * k;
-    const i = Math.max(0, Math.min(an.frames - 1, frame));
+    const p = ((frame % an.frames) + an.frames) % an.frames, i = Math.floor(p), fr = p - i, j = (i + 1) % an.frames;
     ctx.save(); ctx.globalAlpha = alpha;
     ctx.drawImage(an.img, (i % an.cols) * an.fw, Math.floor(i / an.cols) * an.fh, an.fw, an.fh, cx - w / 2, cy - h / 2, w, h);
+    if (fr > .02) { ctx.globalAlpha = alpha * fr; ctx.drawImage(an.img, (j % an.cols) * an.fw, Math.floor(j / an.cols) * an.fh, an.fw, an.fh, cx - w / 2, cy - h / 2, w, h); ctx.globalAlpha = alpha; }
     const plate = A.multPlate(id);     // Power Dynamite keeps its multiplier plate while it animates
     if (plate) { const ph = ch * .42, pw = plate.width * ph / plate.height; ctx.drawImage(plate, cx + cw * .44 - pw, cy + ch * .47 - ph, pw, ph); }
     ctx.restore();
@@ -423,7 +425,7 @@
     }
     if (s === SC && fx.land != null) { const f = F(fx.land); if (f < FR.scatterLand) sy = .82 + .18 * ease.back(f / FR.scatterLand, 2.5); }
     if (fx.pulse != null) scale *= 1 + .06 * Math.sin((t - fx.pulse) * 9);
-    if (an) { drawAnimFrame(s, an, Math.floor(F(fx.win) * an.fps / C.fps) % an.frames, cx, cy, alpha); return; }
+    if (an) { drawAnimFrame(s, an, F(fx.win) * an.fps / C.fps, cx, cy, alpha); return; }
     drawSym(s, cx, cy, { scale, scaleY: sy, alpha });
     if (fx.win != null) shineFx(F(fx.win), cx, cy, scale);
   }
@@ -555,7 +557,7 @@
         // once the expanded reels pay, every tile plays the symbol's win animation (or the shared shine), like a normal win
         for (let r = 0; r < C.rows; r++) {
           const [cx, cy] = cellCenter(c, r), fA = e.tA ? (t - e.tA) * C.fps * G.speed : -1;
-          if (fA >= 0 && anE) drawAnimFrame(e.sym, anE, Math.floor(fA * anE.fps / C.fps) % anE.frames, cx, cy, 1);
+          if (fA >= 0 && anE) drawAnimFrame(e.sym, anE, fA * anE.fps / C.fps, cx, cy, 1);
           else { drawSym(e.sym, cx, cy, { scale: .96 }); if (fA >= 0) shineFx(fA, cx, cy, .96); }
         }
       }
