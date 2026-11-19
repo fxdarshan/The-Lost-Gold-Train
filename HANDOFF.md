@@ -17,7 +17,7 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 
 ## Log
 ### 2026-11-19 · claude.ai chat (26)
-- Video prompts for all symbols (docs/symbol-video-prompts.md); waiting for Darshan's videos, convert each with anim_from_video.py (45 frames).
+- Video prompts for all symbols (docs/symbol-video-prompts.md (v3, action style)); waiting for Darshan's videos, convert each with anim_from_video.py (45 frames).
 ### 2026-11-19 · claude.ai chat (25)
 - Outlaw symbol from Darshan's video (45 frames, seamless); base-game wins loop until next spin. Live on GitHub Pages: https://fxdarshan.github.io/The-Lost-Gold-Train/
 ### 2026-11-17 · claude.ai chat (24)

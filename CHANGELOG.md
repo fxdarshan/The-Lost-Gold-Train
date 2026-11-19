@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-19: symbol video prompts v3: action-movie style, image treated as layers (locked border, background with its own action, symbol as an acting hero that snaps back to its start pose). `docs/symbol-video-prompts.md`.
 - Every prompt now describes exactly what is in its image (border, background, details), never mentions a frame the image doesn't have, and keeps the main object completely still (the train test added a frame and made the locomotive jump); motion is light, glow, sparks, smoke and the flame. Power Dynamite is prompted on its original white-background art.
 
 ## 2026-11-19: video prompts for every symbol
