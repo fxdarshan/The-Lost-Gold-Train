@@ -30,7 +30,7 @@
     const s = A.ctx.createBufferSource(), g = A.ctx.createGain();
     s.buffer = buf; s.loop = loop; g.gain.value = vol; s.connect(g); g.connect(A.master);
     const lp = loop && A.loops[key];                    // music: loop between its loop points, start on the downbeat
-    if (lp) { s.loopStart = lp.start; s.loopEnd = lp.start + lp.length; s.start(0, lp.start); } else s.start();
+    if (lp) { s.loopStart = lp.start; s.loopEnd = lp.start + lp.length; s.start(0, lp.intro ? 0 : lp.start); } else s.start();
     return { s, g };
   }
   function tone(f, dur, o = {}) {

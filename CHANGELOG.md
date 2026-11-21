@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: Darshan's base game and free spins music in the game; each plays from the top once, then loops its repeating section seamlessly (cut before the fade-out).
 - 2026-11-21: music v2, rougher: base game "Rattlesnake Ridge" (twangy overdriven guitar, harmonica, stomps, wind, rattlesnake) and free spins "Gold Train Heist" (train clacks, steam chuffs, whistle, chugging guitar, toms, brass, gunshots).
 - 2026-11-21: original music: base game loop "Dust on the Rails" and free spins loop "Gold Rush Express", composed in code, seamless loops, also in the single-file build.
 - 2026-11-21: Big Win screens from Darshan's art, progressing Nice → Big → Mega → Super → Epic (five tiers, Epic from 250×); Free Spins outro rebuilt from his background, board, ribbon and gold pile with live amount and spins count.

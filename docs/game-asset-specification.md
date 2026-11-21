@@ -54,3 +54,4 @@ Symbols are framed tiles about 280×230 px. They fill a 260×230 cell, so they'r
 - 2026-11-21: `ui_buy_decor_wood_plank` (from the clean final pack) is the free spins board for the expanding symbol, top right.
 - 2026-11-21: `banner_win_{nice,big,mega,super,epic}` are full Big Win screens (Darshan's pack); `ui_outro_bg`, `ui_outro_board`, `ui_outro_ribbon`, `ui_outro_gold` build the Free Spins outro. Originals in `art/banners/bigwin_pack/` and `art/ui/outro_pack/`.
 - 2026-11-21: `bgm_basegame_loop` and `bgm_freegame_loop` are original loops synthesised by `tools/audio/compose_music.py` (placeholders until final music); loop points in the manifest's `music` section.
+- 2026-11-21 (later): `bgm_basegame_loop` / `bgm_freegame_loop` are Darshan's tracks, played from the top once then looped over their repeating section (loop points in the manifest).

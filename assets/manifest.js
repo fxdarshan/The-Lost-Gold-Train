@@ -137,11 +137,11 @@ window.ASSET_MANIFEST = {
     char_outlaw_win: { cols: 20, rows: 8, frames: 151, fps: 15 }
   },
 
-  // music loop points (s): each file has 0.5 s of the loop's end before it and 0.5 s of its start after it, so the
-  // loop [start, start + length] is seamless whatever padding the MP3 encoder adds (tools/audio/compose_music.py)
+  // music (Darshan's tracks, 2026-11-21): each plays from the top once (intro: true), then loops [start, start + length].
+  // Loop points measured by tools/audio/make_loop.py: the section that repeats in the music, cut before its fade-out.
   music: {
-    bgm_basegame_loop: { start: 0.5, length: 45.7143 },   // "Rattlesnake Ridge", 84 BPM, 16 bars
-    bgm_freegame_loop: { start: 0.5, length: 26.6667 }    // "Gold Train Heist", 144 BPM, 16 bars
+    bgm_basegame_loop: { start: 36.67, length: 53.3198, intro: true },   // 108 BPM, 24-bar section; full track 0-90 s first
+    bgm_freegame_loop: { start: 3.6027, length: 6.871, intro: true }     // 140 BPM, 4-bar section; 0-10.5 s first
   },
   sounds: {
     bgm_basegame_loop:      'assets/audio/bgm_basegame_loop.mp3',
