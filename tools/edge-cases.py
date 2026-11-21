@@ -98,7 +98,7 @@ async def main():
         # 9 a symbol image that fails to load falls back to the placeholder art
         pg = await b.new_page(viewport={'width': 1920, 'height': 1080}); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e)))
-        await pg.route('**/sym_02_idle.webp', lambda r: r.abort())
+        await pg.route('**/sym_02_idle.webp*', lambda r: r.abort())   # URLs carry ?v=BUILD_VERSION
         await pg.goto(URL); await pg.wait_for_function('Game.G.assetInfo', timeout=30000)
         real = await pg.evaluate("!!Assets.real.sym_02_idle"); ph = await pg.evaluate("!!Assets.symbol(2)")
         await pg.evaluate("Game.G.queue.push({type:'symwin', sym:2, len:3}); void Game.play()"); await idle(pg)
