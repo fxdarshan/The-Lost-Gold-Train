@@ -755,7 +755,7 @@
   async function buyChoose(id) {
     if (BUY.lock) return;                                   // one purchase at a time: no double buy from rapid clicks
     const o = buyOption(id);
-    if (G.balance < o.price * bet() - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return; }
+    ensureBuyFunds(o.price * bet());
     BUY.lock = true; closeBuy();
     try { await wait(BU.fadeOut); await play({ buy: id, direct: true }); } finally { BUY.lock = false; }
   }
@@ -1241,6 +1241,13 @@
   }
 
   // a spin must be affordable: lower the bet to the highest one the balance covers, or refill the demo balance
+  // demo game: a feature buy the credit can't cover tops the demo credit up (as spins refill it), so every buy option
+  // works at every bet (Darshan 2026-11-21: clicking a buy option must always start free spins)
+  function ensureBuyFunds(cost) {
+    if (G.balance >= cost - 1e-9) return;
+    G.balance = Math.round((Math.max(C.startBalance, 0) + cost) * 100) / 100;
+    G.notice = { text: 'DEMO BALANCE REFILLED', t0: performance.now() }; G.onChange();
+  }
   function ensureFunds() {
     if (G.balance >= bet() - 1e-9) return;
     if (G.balance < C.bets[0] - 1e-9) {
@@ -1257,7 +1264,7 @@
     if (opts.buy) {
       if (!C.buy || !C.buy.enabled) return false;
       first = { type: 'buy', option: typeof opts.buy === 'string' ? opts.buy : 'free_spins' };
-      if (G.balance < spinCost(first) - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return false; }
+      ensureBuyFunds(spinCost(first));
     } else ensureFunds();
     G.busy = true; G.onChange(); SND.init(root.ASSET_MANIFEST); SND.playMusic('bgm_basegame_loop');
     try {

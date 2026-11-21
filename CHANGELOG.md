@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: fix: buy options did nothing at the default bet (price above the $500 demo credit); the demo credit now tops up for a buy.
 - 2026-11-21: Buy Feature UI from the simplified pack: one image per control with scale-only hover/press, board hanging on chains up to the top of the screen, simpler open/close (overlay 120 ms, board 0.98→1 over 140 ms).
 - 2026-11-21: buy options get their own rules (TUNED to about 96%): Super Free Spins more expansions, Feature Max more expansions with a top-four expanding symbol. Choosing an option plays the transition straight into free spins; clicking outside the board closes the popup.
 - 2026-11-21: Buy Feature: one BUY FREE SPINS button (four-state art) opens a popup with Free Spins (10, 100×), Super Free Spins (20, 300×) and Feature Max (30, 1500×), close button, fade/scale 0.97→1, pointer and touch, keyboard (Tab/arrows, Enter, Esc), one purchase per click. Simulator reports each option.

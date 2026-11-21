@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (34)
+- Fix: buy options blocked by 'not enough cash' at the default $9 bet ($500 credit); `ensureBuyFunds` tops up the demo credit. Test buys from the default state now (earlier tests used a big balance).
 ### 2026-11-21 · claude.ai chat (33)
 - Buy UI switched to Darshan's simplified pack (one PNG per control, scale-only, chains to the top). The four-state art and its open questions are gone.
 ### 2026-11-21 · claude.ai chat (32)

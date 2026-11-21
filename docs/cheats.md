@@ -63,3 +63,4 @@ The Next spins list starts empty (2026-11-17), so SPIN plays the real maths; use
 - 2026-11-19: 'Symbol win' puts the symbol on a random payline (any of the 10), not always the middle row.
 - 2026-11-21: Buy Super Free Spins (300×, 20 spins) and Buy Feature Max (1500×, 30 spins) scenarios; the main BUY FREE SPINS button now opens the three-option popup (one click; Esc or X closes it).
 - 2026-11-21: buys from the popup go straight to the free spins transition (no visible trigger spin); clicking outside the board closes it. The cheat-menu buy scenarios still show the trigger spin.
+- 2026-11-21: fix: buying with less credit than the price did nothing (start credit $500, default bet $9, cheapest buy $900). The demo now tops up its credit for a buy, like spins refill it, so every option starts free spins at every bet.
