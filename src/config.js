@@ -185,6 +185,7 @@
     stage: { landscape: [1920, 1080] },
     window: { x: 285, y: 200, w: 1340, h: 705 },
     logo: { x: 625, y: -12, w: 660, h: 232 },      // box the logo (ui_splash_logo) is fitted into: centred on the reels
+    specialBoard: { x: 1770, y: 162, w: 244 },      // free spins: expanding symbol on the wooden plank (centre, width), right side
     mascot: { x: 1590, y: 150, w: 400, h: 850, flip: true },  // box the mascot art is fitted into (feet on the bottom edge); flip: face the reels
     // the supplied backgrounds are open scenery with no reel frame painted in, so the game draws a
     // weathered timber frame and dark plank panels behind the reels (ASSUMED look, matches the symbol tiles)

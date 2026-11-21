@@ -650,12 +650,13 @@
       ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,220,140,.45)'; ctx.beginPath(); ctx.roundRect(b.x + 8, b.y + 8, b.w - 16, b.h - 16, 10); ctx.stroke(); ctx.restore();
     };
     if (inFS && fs.special != null) {
-      // free spins: the expanding-symbol card takes the buy panel's place
-      const b = buyBtn; panel(b, '#7a3412', '#3a1406');
-      uiText('EXPANDING', b.x + b.w / 2, b.y + 26, 20, '#ffe9a8', 'center', 800);
-      const img = A.symbol(fs.special), k = Math.min((b.w - 70) / img.width, (b.h - 82) / img.height);
-      ctx.drawImage(img, b.x + b.w / 2 - img.width * k / 2, b.y + 44, img.width * k, img.height * k);
-      uiText(C.symbolNames[fs.special].toUpperCase(), b.x + b.w / 2, b.y + b.h - 20, 22, '#fff', 'center', 800, b.w - 20);
+      // free spins: the chosen expanding symbol on Darshan's wooden plank, right side above the Outlaw
+      const pl = A.get('ui_buy_decor_wood_plank'), b = C.specialBoard, ph = b.w * pl.height / pl.width;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+      ctx.drawImage(pl, b.x - b.w / 2, b.y - ph / 2, b.w, ph); ctx.restore();
+      uiText('EXPANDING SYMBOL', b.x, b.y - ph / 2 - 2, 22, '#ffe9a8', 'center', 900);
+      const img = A.symbol(fs.special), k = Math.min(b.w * .62 / img.width, ph * .78 / img.height);
+      ctx.drawImage(img, b.x - img.width * k / 2 + b.w * .02, b.y - img.height * k / 2, img.width * k, img.height * k);
     } else if (C.buy && C.buy.enabled) drawBuyMain(t);
   }
 

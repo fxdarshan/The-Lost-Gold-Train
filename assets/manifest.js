@@ -104,7 +104,8 @@ window.ASSET_MANIFEST = {
     ui_buy_option_free_spins: 'assets/images/ui/buy/option_free_spins.png',
     ui_buy_option_super_free_spins: 'assets/images/ui/buy/option_super_free_spins.png',
     ui_buy_option_feature_max: 'assets/images/ui/buy/option_feature_max.png',
-    ui_buy_close_button: 'assets/images/ui/buy/close_button.png'
+    ui_buy_close_button: 'assets/images/ui/buy/close_button.png',
+    ui_buy_decor_wood_plank: 'assets/images/ui/buy/decor_wood_plank.png'   // free spins: board for the expanding symbol
   },
 
   // sprite sheet layout for each *_win image: frames left to right, top to bottom

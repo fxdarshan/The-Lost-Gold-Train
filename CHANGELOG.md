@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: free spins: the chosen expanding symbol shows on Darshan's wooden plank (`decor_wood_plank.png`) at the top right, above the Outlaw, instead of the code-drawn card on the left (`C.specialBoard`).
 - 2026-11-21: removed the ambient sparks drifting over the backgrounds (the only background particles; base game had none). Win, anticipation, mascot and banner effects are unchanged.
 - 2026-11-21: Buy Feature UI from the clean final pack: board with title and chains hanging from the top of the screen, larger option cards, new scale values (1.04 / 0.97 / 1.02; close 1.08 / 0.92 / 1.03).
 - 2026-11-21: fix: buy options did nothing at the default bet (price above the $500 demo credit); the demo credit now tops up for a buy.
