@@ -90,17 +90,24 @@
         const cur = G.board[i];
         const extra = i >= from ? sec(FR.anticipation) * (i - from + 1) : 0;
         const Tstop = (sp.first + i * sp.gap) / G.speed + extra, wu = .1 / G.speed;
-        const N = Math.max(R + 3, Math.round(sp.speed * (Tstop - wu)));
+        // strip length so the full speed comes out at about sp.speed cells/s after the speed-up and the stop
+        const abT = i >= from ? Math.min(sec(FR.anticipation), Tstop - wu - .4) : 0, kT = abT ? (C.anticSlow ?? .3) : 1;
+        const N = Math.max(R + 3, Math.round(sp.speed * (Tstop - wu - (sp.accel ?? .28) / G.speed / 2 - abT * (1 - kT) / 2) - (sp.settle ?? 1.6)));
         const rs = () => engine.randomSymbol(i, { fs, special, bought });
         const s = [rs(), ...col, rs()];
         for (let k = 1; k < N; k++) s.push(rs());
         s.push(rs(), ...cur, rs());
         const pStart = R + N + 2, D = pStart - 1;
-        const vEff = (D - .9) / (Tstop - wu), b = sp.bounce, slope = b + 3;
-        // anticipation reels: full speed, then ease down to C.anticSlow of it over the last FR.anticipation frames
-        const AB = i >= from ? Math.min(sec(FR.anticipation), Tstop - wu - .2) : 0, kL = C.anticSlow ?? .3;
-        const vMax = (D - .9) / ((Tstop - wu - AB) + AB * (1 + kL) / 2);
-        G.reels[i] = { strip: s, p: pStart, pStart, D, t0, T: Tstop, wu, vEff: AB ? vMax * kL : vEff, vMax, AB, kL, b, bt: clamp(.9 * slope / (AB ? vMax * kL : vEff), .08, .6), state: 'spin', landed: false, antic: i >= from };
+        // motion (smooth, 2026-11-21): a small wind-up, an eased speed-up, full speed, (anticipation: ease down to
+        // anticSlow of it), then a decelerating stop with one soft overshoot whose speed matches the spin, so there
+        // is no jump in speed anywhere. Speed V is solved so the reel lands exactly at Tstop.
+        const AB = i >= from ? Math.min(sec(FR.anticipation), Tstop - wu - .4) : 0, kL = AB ? (C.anticSlow ?? .3) : 1;
+        const A = Math.min((sp.accel ?? .28) / G.speed, (Tstop - wu - AB) * .5), v0 = sp.windup * Math.PI / wu;
+        const Ld = sp.settle ?? 1.6, b = sp.bounce;
+        const cruise = Tstop - wu - A - AB;
+        const V = (D - Ld - v0 * A / 2) / (A / 2 + cruise + AB * (1 + kL) / 2);
+        const vEnd = V * kL, bt = clamp(Ld * (b + 3) / vEnd, .1, .7);
+        G.reels[i] = { strip: s, p: pStart, pStart, D, t0, T: Tstop, wu, A, v0, V, AB, kL, Ld, b, bt, cruise, state: 'spin', landed: false, antic: i >= from, vel: 0 };
       });
       G.antic = from < C.reels ? { from, t0 } : null;
       G.spinGrid = grid; G.spinResolve = resolve;
@@ -109,19 +116,18 @@
   function updateReels(t) {
     G.reels.forEach((r, i) => {
       if (!r || r.state !== 'spin') return;
-      const tau = t - r.t0; let d;
-      r.blur = false;
-      if (tau < r.wu) d = -.2 * Math.sin(Math.PI * tau / r.wu);
-      else if (tau < r.T && r.AB) {
-        const Ts = r.T - r.AB;
-        if (tau < Ts) { d = r.vMax * (tau - r.wu); r.blur = true; }
-        else { const u = (tau - Ts) / r.AB; d = r.vMax * (Ts - r.wu) + r.vMax * r.AB * (u - (1 - r.kL) * u * u / 2); r.blur = u < .45; }
-      }
-      else if (tau < r.T) { d = r.vEff * (tau - r.wu); r.blur = r.T - tau > .03; }
+      const tau = t - r.t0; let d, v;
+      const w = C.spin.windup, t1 = r.wu + r.A, t2 = t1 + r.cruise, t3 = t2 + r.AB;
+      const d1 = r.v0 * r.A / 2 + r.V * r.A / 2, d2 = d1 + r.V * r.cruise, d3 = d2 + r.V * r.AB * (1 + r.kL) / 2;
+      if (tau < r.wu) { d = -w * Math.sin(Math.PI * tau / r.wu); v = -w * Math.PI / r.wu * Math.cos(Math.PI * tau / r.wu); }
+      else if (tau < t1) { const q = tau - r.wu, a = (r.V - r.v0) / r.A; d = r.v0 * q + a * q * q / 2; v = r.v0 + a * q; }
+      else if (tau < t2) { d = d1 + r.V * (tau - t1); v = r.V; }
+      else if (tau < t3) { const u = (tau - t2) / r.AB; d = d2 + r.V * r.AB * (u - (1 - r.kL) * u * u / 2); v = r.V * (1 - (1 - r.kL) * u); }
       else {
-        const u = Math.min(1, (tau - r.T) / r.bt);
-        d = (r.D - .9) + .9 * ease.back(u, r.b);
-        if (!r.landed && u > .3) {
+        const u = Math.min(1, (tau - t3) / r.bt);
+        d = d3 + r.Ld * ease.back(u, r.b);
+        v = r.Ld * (3 * (r.b + 1) * Math.pow(u - 1, 2) + 2 * r.b * (u - 1)) / r.bt;
+        if (!r.landed && u > .25) {
           r.landed = true; SND.play('sfx_reel_stop_0' + (i + 1));
           const sc = G.spinGrid[i];
           sc.forEach((s, rr) => { if (s === SC) { G.fx[i][rr].land = t; SND.play('sfx_scatter_land');
@@ -129,6 +135,8 @@
         }
         if (u >= 1) { r.state = 'idle'; G.board[i] = G.spinGrid[i].slice(); return; }
       }
+      r.vel = v;
+      r.blur = clamp((Math.abs(v) - 4) / 10, 0, 1);    // 0..1 with speed (cells/s): motion blur fades in and out smoothly
       r.p = r.pStart - d;
     });
     if (G.antic && G.reels.every(r => !r || r.state === 'idle' || !r.antic)) G.antic = null;
@@ -452,8 +460,9 @@
         const j0 = Math.floor(r.p) - 1, j1 = Math.ceil(r.p + C.rows);
         for (let j = Math.max(0, j0); j <= Math.min(r.strip.length - 1, j1); j++) {
           const cx = x0 + c * cw + cw / 2, cy = y0 + (j - r.p) * ch + ch / 2;
-          if (r.blur) for (let q = -2; q <= 2; q++) drawSym(r.strip[j], cx, cy + q * ch * .06, { alpha: q ? .22 : .5 });
-          else drawSym(r.strip[j], cx, cy);
+          const bl = r.blur;          // motion blur by speed: two trailing copies, the sharp symbol fades a little
+          if (bl > .02) { const o = ch * .07 * bl; drawSym(r.strip[j], cx, cy - o, { alpha: .35 * bl }); drawSym(r.strip[j], cx, cy + o, { alpha: .35 * bl }); }
+          drawSym(r.strip[j], cx, cy, { alpha: 1 - .45 * bl });
         }
       }
     }
@@ -684,28 +693,37 @@
     if (fx === 'fireworks' || fx === 'epic' || fx === 'lasers') { if (p(fx === 'epic' ? 3 : 1.8)) emit('rocket', W * (.15 + Math.random() * .7), H, 1, { spread: .25, speed: 1100, gravity: 600, life: .9 + Math.random() * .4, burst: ['#ff5a5a', '#ffd34a', '#ff9a3a', '#ffffff'][Math.floor(Math.random() * 4)] }); }
     // (the firecrackers thrown here in New Year Crackers are gone: gold coins only)
   }
+  // progressive big win (2026-11-21): the tally counts up from 0 and the banner climbs tier by tier (NICE -> BIG ->
+  // MEGA ...) as the amount passes each threshold, each step with its own pop, sound and effects; then a hold on the
+  // final tier and out. Skip jumps straight to the final tier and amount.
   function drawBanner(t, dt) {
     const b = G.banner; if (!b) return;
-    const f = (t - b.t0) * C.fps * G.speed, [fi, fl, fo] = FR.banner, total = fi + fl + fo;
-    if (G.skip !== b.tok) { b.tok = G.skip; if (f < fi + fl) b.t0 = t - sec(fi + fl); }
-    const tier = C.winTiers[b.tier];
+    const f = (t - b.t0) * C.fps * G.speed, [fi, fl, fo] = FR.banner, step = FR.bannerStep;
+    const n = b.tier + 1, countEnd = fi + n * step, holdEnd = countEnd + fl, total = holdEnd + fo;
+    if (G.skip !== b.tok) { b.tok = G.skip; if (f < countEnd) b.t0 = t - sec(countEnd); }
+    // which tier the count has reached, and the amount shown
+    const cu = clamp((f - fi * .5) / (n * step), 0, 1) * n, k = Math.min(b.tier, Math.floor(cu)), su = cu - k;
+    const lo = k === 0 ? 0 : C.winTiers[k].min * bet(), hi = k === b.tier ? b.amount : C.winTiers[k + 1].min * bet();
+    const shown = cu >= n ? b.amount : lo + (hi - lo) * (k === b.tier ? ease.out(su) : su);
+    if (b.k !== k) { b.k = k; b.kT = f; SND.play('banner_hit'); }
+    const tier = C.winTiers[k], fk = f - b.kT;
     let dim = .75, scale, alpha = 1, dy = 0;
-    if (f < fi) { dim = .75 * f / fi; const u = f / fi; scale = u < .66 ? 1.2 * ease.out(u / .66) : 1.2 - .2 * ease.inOut((u - .66) / .34); }
-    else if (f < fi + fl) scale = 1 + .03 * Math.sin((f - fi) / 30 * Math.PI * 2);
-    else { const u = clamp((f - fi - fl) / fo, 0, 1); dim = .75 * (1 - u); scale = 1 + .3 * u; alpha = 1 - u; dy = -120 * u; }
-    if (!b.hit && f >= 15) { b.hit = true; SND.play('banner_hit'); }
-    const [ta, tb] = FR.bannerTally, tu = clamp((f - ta) / (tb - ta), 0, 1), shown = b.amount * ease.out(tu);
-    if (tu > 0 && tu < 1 && t - (b.tick || 0) > .07) { b.tick = t; SND.play('sfx_countup_loop'); }
-    if (tu >= 1 && !b.ended) { b.ended = true; SND.play('sfx_countup_end'); }
-    if (f >= fi + fl && !b.snapped) { b.snapped = true; setWin(G.spinBaseWin + b.amount, true); }
+    if (f < fi) dim = .75 * f / fi;
+    if (f < holdEnd) {                         // pop on every new tier, then a gentle pulse
+      const u = clamp(fk / 22, 0, 1);
+      scale = (k === 0 && f < fi ? ease.out(f / fi) : 1) * (u < 1 ? (u < .5 ? 1 + .35 * ease.out(u / .5) : 1.35 - .35 * ease.inOut((u - .5) / .5)) : 1 + .03 * Math.sin((fk - 22) / 30 * Math.PI * 2));
+    } else { const u = clamp((f - holdEnd) / fo, 0, 1); dim = .75 * (1 - u); scale = 1 + .3 * u; alpha = 1 - u; dy = -120 * u; }
+    if (cu < n && t - (b.tick || 0) > .07) { b.tick = t; SND.play('sfx_countup_loop'); }
+    if (cu >= n && !b.ended) { b.ended = true; SND.play('sfx_countup_end'); setWin(G.spinBaseWin + b.amount, true); }
     dimmer(dim);
-    if (f < fi + fl) tierFx(tier.fx, dt);
+    if (f < holdEnd) tierFx(tier.fx, dt);
+    if (fk < 6 && k > 0 && !b['burst' + k]) { b['burst' + k] = true; emit('spark', W / 2, H * .36, 60 + 20 * k, { spread: Math.PI * 2, speed: 900, drag: 2.5, gravity: 300, life: .9, size: 12, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); }
     ctx.save(); ctx.globalAlpha = alpha;
     rays(W / 2, H * .42, t, 'rgba(255,200,90,.35)', alpha * .8, tier.fx === 'lasers' || tier.fx === 'epic' ? 24 : 16);
     const img = A.real['banner_win_' + tier.id] && A.get('banner_win_' + tier.id);
-    const k = img ? Math.min(W * .5 / img.width, H * .6 / img.height) : 1, ih = img ? img.height * k : 190, cy = img ? H * .36 : H * .4;
+    const kk = img ? Math.min(W * .5 / img.width, H * .6 / img.height) : 1, ih = img ? img.height * kk : 190, cy = img ? H * .36 : H * .4;
     ctx.translate(W / 2, cy + dy); ctx.scale(scale, scale);
-    if (img) ctx.drawImage(img, -img.width * k / 2, -ih / 2, img.width * k, ih);
+    if (img) ctx.drawImage(img, -img.width * kk / 2, -ih / 2, img.width * kk, ih);
     else { ribbon(0, 0, 1100, 190, ['#e8402a', '#b0101a', '#6a0a0a']); blockText(tier.label, 0, -6, 110, { colors: ['#ffffff', tier.colors[0], tier.colors[1]], maxW: 1000 }); }
     ctx.restore();
     blockText(fmt(shown), W / 2, (img ? cy + ih / 2 + 78 : H * .64) + dy, img ? 130 : 150, { alpha, scale: f < fi ? ease.out(f / fi) : 1, maxW: W * .8 });

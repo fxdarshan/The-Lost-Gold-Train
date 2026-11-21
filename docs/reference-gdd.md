@@ -85,3 +85,4 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 - **Win loop rule (Darshan, 2026-11-19):** in the base game, winning symbols keep playing their win animation in a loop after the round ends, until the player starts the next spin (`CONFIG.loopWinsUntilSpin`). Not in free spins, and not on the spin that starts free spins. During a round every win still plays at least two full loops before moving on.
 Sections 3 to 7 are implemented. Section 8 is open.
 - 2026-11-19: paylines set from the reference game's paytable screen (Darshan's screenshot): lines 6/7 and 8/9 were swapped and line 10 is now middle-bottom-middle-top-middle. RTP unchanged within noise (4 × 5M: 96.8-97.9%, average 97.4%).
+- 2026-11-21: big wins are progressive (NICE -> BIG -> MEGA -> SUPERB -> SENSATIONAL -> EPIC as the count passes each threshold).

@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (31)
+- Smooth reel motion (`updateReels`, `C.spin.windup/accel/settle`), progressive big win (`drawBanner`, `frames.bannerStep`), Dynamite smoke and Power Dynamite disc removed (`anim_from_video2.py --degrey`, white mode composites the still symbol over the video's fire; `--drop 49-59` for the bad blast frames).
 ### 2026-11-19 · claude.ai chat (30)
 - Paylines from Darshan's reference screenshot (RTP unchanged within noise, 97.4% avg over 4 × 5M). 30 fps everywhere: symbol loops 45 frames / 1.5 s, win display three loops (135 frames). Symbol-win cheat on random paylines.
 ### 2026-11-19 · claude.ai chat (29)

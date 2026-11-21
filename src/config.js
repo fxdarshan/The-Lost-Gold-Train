@@ -156,7 +156,8 @@
       expandLines: 135,                 // the expanded reels pay: their tiles play the win animation three times (1.5 s loops)
       anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
-      bannerTally: [30, 105],
+      bannerTally: [30, 105],          // (unused since the progressive banner; kept for older docs)
+      bannerStep: 75,                   // progressive big win: frames of count-up per tier (NICE -> BIG -> MEGA ...)
       summaryTally: 75,
       transToFree: [40, 30, 90],     // gunfight: Outlaws fire, bullets meet, smoke covers (40); FREE SPINS (30); smoke clears slowly (90 = 3 s)
       transToBase: 45
@@ -167,7 +168,7 @@
     loopWinsUntilSpin: true,            // Darshan 2026-11-19: base game wins keep looping their symbol animation until the next spin
     autoContinueModals: true,           // START / COLLECT continue by themselves after the hold
 
-    spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 1.2 },
+    spin: { first: 1.0, gap: 0.18, speed: 22, bounce: 0.9, windup: 0.15, accel: 0.28, settle: 1.6 },   // seconds / cells: wind-up height, speed-up time, stopping distance (smooth stop 2026-11-21)
 
     // Layout in stage pixels (1920 x 1080), 2026-11-17 after Darshan's Pragmatic Play reference (Chronos):
     // the reels and the Outlaw take most of the screen; the logo sits on top of the reel frame; feature buy
