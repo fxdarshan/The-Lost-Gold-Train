@@ -657,16 +657,165 @@
       const img = A.symbol(fs.special), k = Math.min((b.w - 70) / img.width, (b.h - 82) / img.height);
       ctx.drawImage(img, b.x + b.w / 2 - img.width * k / 2, b.y + 44, img.width * k, img.height * k);
       uiText(C.symbolNames[fs.special].toUpperCase(), b.x + b.w / 2, b.y + b.h - 20, 22, '#fff', 'center', 800, b.w - 20);
-    } else if (C.buy && C.buy.enabled) {
-      // feature buy: first click arms it, a second click within 3 s buys
-      const b = buyBtn, armed = G.buyArm > 0 && performance.now() - G.buyArm < 3000, off = G.busy;
-      ctx.save(); ctx.globalAlpha = off ? .45 : 1;
-      panel(b, armed ? '#e8b020' : '#9a3a14', armed ? '#a86a08' : '#4a1606', armed);
-      if (armed) { uiText('TAP AGAIN', b.x + b.w / 2, b.y + 62, 32, '#fff', 'center', 900); uiText('TO BUY', b.x + b.w / 2, b.y + 100, 32, '#fff', 'center', 900); }
-      else { uiText('BUY', b.x + b.w / 2, b.y + 52, 34, '#ffe9a8', 'center', 900); uiText('FREE SPINS', b.x + b.w / 2, b.y + 92, 30, '#fff', 'center', 900); }
-      uiText(fmt(bet() * C.buy.price), b.x + b.w / 2, b.y + b.h - 34, 26, '#ffe9a8', 'center', 800);
-      ctx.restore();
+    } else if (C.buy && C.buy.enabled) drawBuyMain(t);
+  }
+
+  /* ------------------------------------------------------------ Buy Feature UI (2026-11-21)
+     One BUY FREE SPINS button on the left and a popup with three purchase cards and a close button, all from
+     Darshan's PNGs (manifest ui_buy_<name>_<state>). Every widget has a fixed box computed once from its normal
+     image; the four state images are swapped inside that box (no layout from content bounds, no jumping).
+     States: normal, hover, pressed (pointer down), release (shown C.buyUI.release s, then the action). */
+  const BU = C.buyUI || {};
+  const BW = {                                   // widget -> image name
+    main: 'buy_btn', close: 'close',
+    free_spins: 'option_free_spins', super_free_spins: 'option_super_free_spins', feature_max: 'option_feature_max'
+  };
+  const BUY = { open: false, closing: false, t0: 0, st: {}, rel: {}, press: null, hover: null, ptr: 'mouse', lock: false, focus: 'main', kbd: false };
+  Object.keys(BW).forEach(k => { BUY.st[k] = 'normal'; });
+  const buyImg = (k, st) => A.get('ui_buy_' + BW[k] + '_' + st);
+  const buyReady = () => !!A.real['ui_buy_buy_btn_normal'];
+  const buyOption = id => (C.buy.options || []).find(o => o.id === id) || { id: 'free_spins', spins: C.freeSpins, price: C.buy.price };
+  function bodyX(img) {                          // left/right edge of the painted body (columns mostly opaque)
+    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0); const d = g.getImageData(0, 0, c.width, c.height).data;
+    let l = -1, r = -1;
+    for (let x = 0; x < c.width; x++) { let n = 0; for (let y = 0; y < c.height; y++) if (d[(y * c.width + x) * 4 + 3] > 230) n++; if (n > c.height * .3) { if (l < 0) l = x; r = x + 1; } }
+    return l < 0 ? [0, img.width] : [l, r];
+  }
+  let buyBoxes = null;
+  function buyLayout() {                         // fixed boxes, from the normal images, computed once
+    if (buyBoxes) return buyBoxes;
+    const box = (img, cx, cy, w) => { const h = w * img.height / img.width; return { x: cx - w / 2, y: cy - h / 2, w, h }; };
+    const mi = buyImg('main', 'normal'), mw = BU.mainW || buyBtn.w, b = {};
+    b.main = { x: buyBtn.x + (buyBtn.w - mw) / 2, y: buyBtn.y, w: mw, h: mw * mi.height / mi.width };
+    const fr = A.get('ui_buy_popup_frame'), fw = BU.frameW, fh = fw * fr.height / fr.width, fx = W / 2 - fw / 2, fy = BU.cy - fh / 2;
+    b.frame = { x: fx, y: fy, w: fw, h: fh };
+    const ti = A.get('ui_buy_popup_title_buy_free_spins');
+    b.title = box(ti, W / 2, fy + fh * BU.title.y, fw * BU.title.w);
+    b.close = box(buyImg('close', 'normal'), fx + fw * BU.close.x, fy + fh * BU.close.y, fw * BU.close.w);
+    // the three cards share one scale (same height), so the composition keeps the art's own proportions
+    // spaced by the cards' painted bodies (the PNGs have uneven transparent margins): equal gaps between the cards
+    const ids = ['free_spins', 'super_free_spins', 'feature_max'], ch = fh * BU.cards.h;
+    const info = ids.map(k => { const im = buyImg(k, 'normal'), sc = ch / im.height, bb = bodyX(im); return { w: im.width * sc, l: bb[0] * sc, r: bb[1] * sc }; });
+    const gap = fw * BU.cards.gap, tot = info.reduce((a, v) => a + (v.r - v.l), 0) + gap * 2;
+    let x = W / 2 - tot / 2;
+    ids.forEach((k, i) => { const f = info[i]; b[k] = { x: x - f.l, y: fy + fh * BU.cards.y - ch / 2, w: f.w, h: ch }; x += f.r - f.l + gap; });
+    return (buyBoxes = b);
+  }
+  const buyInside = (b, x, y) => b && x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
+  const mainEnabled = () => C.buy && C.buy.enabled && !G.busy && !G.fs.active && !G.info && !BUY.lock && buyReady();
+  function buyWidgetAt(x, y) {
+    const L = buyLayout();
+    if (BUY.open && !BUY.closing) { for (const k of ['close', 'free_spins', 'super_free_spins', 'feature_max']) if (buyInside(L[k], x, y)) return k; return 'backdrop'; }
+    if (!BUY.open && mainEnabled() && buyInside(L.main, x, y)) return 'main';
+    return null;
+  }
+  // draw one widget: the state image in the fixed box; the only extra motion is the tiny scale the spec allows
+  function drawBuyWidget(k, alpha = 1) {
+    const b = buyLayout()[k], t = now(); let st = BUY.st[k];
+    if (BUY.kbd && BUY.focus === k && st === 'normal') st = 'hover';          // keyboard focus shows the hover art
+    let sc = st === 'hover' ? 1.01 : st === 'pressed' ? .98 : 1;
+    if (st === 'release') { const u = clamp((t - BUY.rel[k]) / (BU.release || .12), 0, 1); sc = .98 + .02 * ease.out(u); }
+    const img = buyImg(k, st);
+    ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(b.x + b.w / 2, b.y + b.h / 2); ctx.scale(sc, sc);
+    ctx.drawImage(img, -b.w / 2, -b.h / 2, b.w, b.h); ctx.restore();
+  }
+  function drawBuyMain() {
+    if (!buyReady()) return;
+    const on = mainEnabled() || BUY.open;
+    drawBuyWidget('main', on ? 1 : .5);
+  }
+  function drawBuyPopup() {
+    if (!BUY.open || !buyReady()) return;
+    const t = now(), L = buyLayout();
+    let p = clamp((t - BUY.t0) / (BUY.closing ? BU.fadeOut : BU.fadeIn), 0, 1);
+    if (BUY.closing) { if (p >= 1) { BUY.open = false; BUY.closing = false; BUY.focus = 'main'; return; } p = 1 - p; }
+    const e = ease.out(p);
+    dimmer(BU.dim * e);                                                          // game stays visible, only darkened
+    ctx.save(); ctx.globalAlpha = e;
+    const s = .97 + .03 * e; ctx.translate(W / 2, BU.cy); ctx.scale(s, s); ctx.translate(-W / 2, -BU.cy);   // the whole popup as one piece
+    const f = L.frame; ctx.drawImage(A.get('ui_buy_popup_frame'), f.x, f.y, f.w, f.h);
+    const ti = L.title; ctx.drawImage(A.get('ui_buy_popup_title_buy_free_spins'), ti.x, ti.y, ti.w, ti.h);
+    ['free_spins', 'super_free_spins', 'feature_max', 'close'].forEach(k => drawBuyWidget(k));
+    ctx.restore();
+  }
+  function openBuy() {
+    if (BUY.open || !mainEnabled()) return;
+    BUY.open = true; BUY.closing = false; BUY.t0 = now(); BUY.focus = 'free_spins';
+    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => { BUY.st[k] = 'normal'; });
+    SND.play('sfx_spin_button_click');
+  }
+  function closeBuy() {
+    if (!BUY.open || BUY.closing) return;
+    BUY.closing = true; BUY.t0 = now();
+    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => { BUY.st[k] = 'normal'; });
+    BUY.st.main = BUY.hover === 'main' ? 'hover' : 'normal'; BUY.focus = 'main';   // focus goes back to the main button
+  }
+  async function buyChoose(id) {
+    if (BUY.lock) return;                                   // one purchase at a time: no double buy from rapid clicks
+    const o = buyOption(id);
+    if (G.balance < o.price * bet() - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return; }
+    BUY.lock = true; closeBuy();
+    try { await wait(BU.fadeOut); await play({ buy: id }); } finally { BUY.lock = false; }
+  }
+  function buyAction(k) {
+    if (k === 'main') openBuy();
+    else if (k === 'close') closeBuy();
+    else buyChoose(k);
+  }
+  // pointer handling: returns true when the Buy UI took the event
+  function buyDown(x, y, e) {
+    const k = buyWidgetAt(x, y); if (!k) return false;
+    BUY.kbd = false; BUY.ptr = e.pointerType || 'mouse';
+    if (k === 'backdrop') return true;                       // clicks outside the popup do nothing (only X closes)
+    if (BUY.st[k] === 'release' || BUY.lock) return true;
+    BUY.press = k; BUY.st[k] = 'pressed';
+    try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+    return true;
+  }
+  function buyUp(x, y) {
+    const k = BUY.press; if (!k) return BUY.open;
+    BUY.press = null;
+    const over = buyInside(buyLayout()[k], x, y);
+    if (!over) { BUY.st[k] = 'normal'; return true; }
+    BUY.st[k] = 'release'; BUY.rel[k] = now();
+    setTimeout(() => {
+      // after the release image: hover if the cursor is still over it (mouse), otherwise normal; then the action
+      BUY.st[k] = BUY.ptr === 'mouse' && BUY.hover === k ? 'hover' : 'normal';
+      buyAction(k);
+    }, (BU.release || .12) * 1000);
+    return true;
+  }
+  function buyMove(x, y, e) {
+    const k = e.pointerType === 'touch' ? null : buyWidgetAt(x, y);
+    const h = k && k !== 'backdrop' ? k : null;
+    if (h !== BUY.hover) {
+      if (BUY.hover && BUY.st[BUY.hover] === 'hover') BUY.st[BUY.hover] = 'normal';
+      BUY.hover = h;
+      if (h && BUY.st[h] === 'normal' && !BUY.press) BUY.st[h] = 'hover';
     }
+    if (BUY.press && BUY.press !== h && BUY.st[BUY.press] === 'pressed') { /* keep pressed until release, like a real button */ }
+    cv.style.cursor = h ? 'pointer' : '';
+  }
+  function buyKey(e) {
+    if (!buyReady()) return false;
+    if (BUY.open) {
+      const order = ['free_spins', 'super_free_spins', 'feature_max', 'close'];
+      if (e.code === 'Escape') { closeBuy(); return true; }
+      if (e.code === 'Tab' || e.code === 'ArrowRight' || e.code === 'ArrowLeft') {
+        const d = e.code === 'ArrowLeft' || (e.code === 'Tab' && e.shiftKey) ? -1 : 1, i = order.indexOf(BUY.focus);
+        BUY.focus = order[(i + d + order.length) % order.length]; BUY.kbd = true; return true;
+      }
+      if (e.code === 'Enter' || e.code === 'Space') { keyPress(BUY.focus); return true; }
+      return true;                                           // the popup is modal: keys don't reach the game
+    }
+    if (e.code === 'Enter' && BUY.focus === 'main' && mainEnabled()) { BUY.kbd = true; keyPress('main'); return true; }
+    return false;
+  }
+  function keyPress(k) {
+    if (BUY.st[k] === 'release' || BUY.lock) return;
+    BUY.st[k] = 'pressed';
+    setTimeout(() => { BUY.st[k] = 'release'; BUY.rel[k] = now(); setTimeout(() => { BUY.st[k] = 'normal'; buyAction(k); }, (BU.release || .12) * 1000); }, 90);
   }
 
   /* ------------------------------------------------------------ banners & modals */
@@ -952,6 +1101,7 @@
     drawLogo(t);        // on top of the reel frame
     ctx.restore();
     drawHUD(t);
+    drawBuyPopup(t);
     drawBanner(t, dt);
     drawModal(t, dt);
     drawParticles(dt);
@@ -1080,7 +1230,7 @@
     return res;
   }
   // what a base spin costs: the bet, or the feature buy price
-  const spinCost = item => (item && item.type === 'buy' && C.buy ? C.buy.price : 1) * bet();
+  const spinCost = item => (item && item.type === 'buy' && C.buy ? buyOption(item.option).price : 1) * bet();
   function nextItem() {
     const it = G.queue.length ? G.queue.shift() : { type: 'random' };
     G.onChange(); return it;
@@ -1098,11 +1248,11 @@
     G.onChange();
   }
   async function play(opts = {}) {
-    if (G.busy || G.info) return false;
+    if (G.busy || G.info || (BUY.open && !opts.buy)) return false;
     let first;
     if (opts.buy) {
       if (!C.buy || !C.buy.enabled) return false;
-      first = { type: 'buy' };
+      first = { type: 'buy', option: typeof opts.buy === 'string' ? opts.buy : 'free_spins' };
       if (G.balance < spinCost(first) - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return false; }
     } else ensureFunds();
     G.busy = true; G.onChange(); SND.init(root.ASSET_MANIFEST); SND.playMusic('bgm_basegame_loop');
@@ -1111,7 +1261,7 @@
       if (first.type === 'buy' && G.balance < spinCost(first) - 1e-9) { first = { type: 'random' }; ensureFunds(); }   // a queued buy the balance can't cover plays as a spin
       const base = await spinOnce(first, false);
       let roundWin = base.total;
-      if (base.freeSpins) roundWin = await freeSpins(base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial(), first.type === 'buy');
+      if (base.freeSpins) roundWin = await freeSpins(first.type === 'buy' ? buyOption(first.option).spins : base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial(), first.type === 'buy');
       roundWin = Math.min(roundWin, C.maxWin * bet());
       G.balance = Math.round((G.balance + roundWin) * 100) / 100;
       setWin(roundWin, true);
@@ -1172,21 +1322,24 @@
     SND.init(root.ASSET_MANIFEST);
     const rc = cv.getBoundingClientRect(), x = (e.clientX - rc.left) / rc.width * W, y = (e.clientY - rc.top) / rc.height * H;
     if (G.info) { G.info = false; return; }
+    if (buyDown(x, y, e)) return;
     const hit = b => Math.hypot(x - b.x, y - b.y) <= b.r * 1.15;
     if (hit(btn.spin)) { if (!G.busy) play(); else G.skip++; return; }
     if (Math.abs(x - btn.auto.x) < 72 && Math.abs(y - btn.auto.y) < 20) { autoplayLoop(); return; }
     if (hit(btn.info)) { if (!G.busy) G.info = true; return; }
     if (hit(btn.sound)) { SND.setMuted(!SND.muted); return; }
-    if (x >= buyBtn.x && x <= buyBtn.x + buyBtn.w && y >= buyBtn.y && y <= buyBtn.y + buyBtn.h && C.buy && C.buy.enabled && !G.fs.active) {
-      if (G.busy) return;
-      if (performance.now() - G.buyArm < 3000) { G.buyArm = 0; play({ buy: true }); } else G.buyArm = performance.now();
-      return;
-    }
     if (hit(btn.minus)) { if (!G.busy) { G.betIndex = Math.max(0, G.betIndex - 1); G.onChange(); } return; }
     if (hit(btn.plus)) { if (!G.busy) { G.betIndex = Math.min(C.bets.length - 1, G.betIndex + 1); G.onChange(); } return; }
     G.skip++;
   });
+  const stageXY = e => { const rc = cv.getBoundingClientRect(); return [(e.clientX - rc.left) / rc.width * W, (e.clientY - rc.top) / rc.height * H]; };
+  cv.addEventListener('pointermove', e => { const [x, y] = stageXY(e); buyMove(x, y, e); });
+  cv.addEventListener('pointerup', e => { const [x, y] = stageXY(e); buyUp(x, y); });
+  cv.addEventListener('pointercancel', () => { if (BUY.press) { BUY.st[BUY.press] = 'normal'; BUY.press = null; } });
+  cv.addEventListener('pointerleave', () => { if (BUY.hover && BUY.st[BUY.hover] === 'hover') BUY.st[BUY.hover] = 'normal'; BUY.hover = null; cv.style.cursor = ''; });
   document.addEventListener('keydown', e => {
+    const tg0 = e.target.tagName; if (tg0 === 'INPUT' || tg0 === 'SELECT' || tg0 === 'BUTTON' || tg0 === 'TEXTAREA') return;
+    if (buyKey(e)) { e.preventDefault(); return; }
     if (e.code !== 'Space') return;
     const tg = e.target.tagName; if (tg === 'INPUT' || tg === 'SELECT' || tg === 'BUTTON' || tg === 'TEXTAREA') return;
     e.preventDefault(); SND.init(root.ASSET_MANIFEST); if (G.info) G.info = false; else if (G.busy) G.skip++; else play();
@@ -1204,5 +1357,5 @@
     if (splash) splash.finish();
   }
 
-  root.Game = { G, C, engine, director, setSpeed, mascot: () => Object.assign({}, VM), play, buy: () => play({ buy: true }), playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
+  root.Game = { G, C, engine, director, setSpeed, mascot: () => Object.assign({}, VM), play, buy: id => play({ buy: id || true }), buyUI: () => ({ open: BUY.open, st: Object.assign({}, BUY.st), lock: BUY.lock, boxes: buyLayout() }), openBuy, playQueue, autoplayLoop, boot, canvas: cv, bet, cellCenter };
 })(window);

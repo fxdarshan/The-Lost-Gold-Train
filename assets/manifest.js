@@ -95,7 +95,32 @@ window.ASSET_MANIFEST = {
     banner_win_sensational: 'assets/images/banners/banner_win_sensational.webp',
     banner_win_epic:        'assets/images/banners/banner_win_epic.webp',
 
-    ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp'
+    ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp',
+    // Buy Feature UI: Darshan's final PNGs (Lost_Gold_Train_Buy_Feature_FINAL_Assets.zip, 2026-11-21), unscaled. Sheet
+    // leftovers removed and the four states of each control aligned on one canvas by tools/asset-pipeline/clean_buy_ui.py;
+    // originals in art/ui/buy/supplied/.
+    ui_buy_buy_btn_normal: 'assets/images/ui/buy/buy_btn_normal.png',
+    ui_buy_buy_btn_hover: 'assets/images/ui/buy/buy_btn_hover.png',
+    ui_buy_buy_btn_pressed: 'assets/images/ui/buy/buy_btn_pressed.png',
+    ui_buy_buy_btn_release: 'assets/images/ui/buy/buy_btn_release.png',
+    ui_buy_option_free_spins_normal: 'assets/images/ui/buy/option_free_spins_normal.png',
+    ui_buy_option_free_spins_hover: 'assets/images/ui/buy/option_free_spins_hover.png',
+    ui_buy_option_free_spins_pressed: 'assets/images/ui/buy/option_free_spins_pressed.png',
+    ui_buy_option_free_spins_release: 'assets/images/ui/buy/option_free_spins_release.png',
+    ui_buy_option_super_free_spins_normal: 'assets/images/ui/buy/option_super_free_spins_normal.png',
+    ui_buy_option_super_free_spins_hover: 'assets/images/ui/buy/option_super_free_spins_hover.png',
+    ui_buy_option_super_free_spins_pressed: 'assets/images/ui/buy/option_super_free_spins_pressed.png',
+    ui_buy_option_super_free_spins_release: 'assets/images/ui/buy/option_super_free_spins_release.png',
+    ui_buy_option_feature_max_normal: 'assets/images/ui/buy/option_feature_max_normal.png',
+    ui_buy_option_feature_max_hover: 'assets/images/ui/buy/option_feature_max_hover.png',
+    ui_buy_option_feature_max_pressed: 'assets/images/ui/buy/option_feature_max_pressed.png',
+    ui_buy_option_feature_max_release: 'assets/images/ui/buy/option_feature_max_release.png',
+    ui_buy_close_normal: 'assets/images/ui/buy/close_normal.png',
+    ui_buy_close_hover: 'assets/images/ui/buy/close_hover.png',
+    ui_buy_close_pressed: 'assets/images/ui/buy/close_pressed.png',
+    ui_buy_close_release: 'assets/images/ui/buy/close_release.png',
+    ui_buy_popup_frame: 'assets/images/ui/buy/popup_frame.png',
+    ui_buy_popup_title_buy_free_spins: 'assets/images/ui/buy/popup_title_buy_free_spins.png'
   },
 
   // sprite sheet layout for each *_win image: frames left to right, top to bottom

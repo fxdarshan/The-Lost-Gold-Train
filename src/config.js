@@ -121,7 +121,15 @@
       enabled: true,
       price: 100,                              // REF: 100x total bet
       scatterWeights: { 3: 85, 4: 13, 5: 2 },  // TUNED (REF: "weighted", values not published)
-      specialShare: 1.04                       // TUNED: bought free spins use 1.04x the natural specialShare (buy RTP about 96.5%)
+      specialShare: 1.04,                      // TUNED: bought free spins use 1.04x the natural specialShare (buy RTP about 96.5%)
+      // The Buy Feature popup (Darshan's UI art, 2026-11-21): three options. Spins and prices are from the art.
+      // Free spins work the same in all three (ASSUMED: the art gives no other rule), so the dearer options pay
+      // back far less than their price until Darshan says what they add. See the README "Decisions".
+      options: [
+        { id: 'free_spins',       spins: 10, price: 100 },    // REF: 10 free spins for 100x
+        { id: 'super_free_spins', spins: 20, price: 300 },    // art: 20 spins, 300x (rules ASSUMED)
+        { id: 'feature_max',      spins: 30, price: 1500 }    // art: 30 spins, 1500x (rules ASSUMED)
+      ]
     },
 
     maxWin: 5500,                              // REF (pragmaticplay.com): 5,500x per round. Reviews say 5,000x.
@@ -181,6 +189,17 @@
     // weathered timber frame and dark plank panels behind the reels (ASSUMED look, matches the symbol tiles)
     reelFrame: true,
     buyButton: { x: 26, y: 330, w: 236, h: 176 },   // left column panel; the expanding-symbol card takes it in free spins
+    // Buy Feature UI (2026-11-21): the main button keeps its image's proportions inside buyButton's width; the popup
+    // is one composition (frame, title, three cards, close) scaled together. Positions are fractions of the frame.
+    buyUI: {
+      mainW: 214,                                  // main BUY FREE SPINS button width on the stage (height from the art)
+      frameW: 1240, cy: 560,                       // popup frame width and centre (stage px); the whole popup scales as one
+      title: { y: .005, w: .5 },                   // title centre y and width, as fractions of the frame
+      close: { x: .93, y: .14, w: .085 },          // close button centre and width
+      cards: { y: .5, h: .56, gap: .045 },         // the three cards: centre y, height (one shared scale), gap
+      fadeIn: .16, fadeOut: .12, dim: .6,          // seconds; backdrop = popup_overlay_60pct_black.png (60% black)
+      release: .12                                 // seconds the release image shows before the action
+    },
     anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
     hudTop: 985,
     // Video mascot (2026-11-19): Darshan's three green-screen clips as sheets (char_outlaw_idle1/idle2/win). Used when

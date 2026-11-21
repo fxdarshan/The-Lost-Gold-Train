@@ -86,3 +86,4 @@ Pays in `docs/pay-table.md`; rules in `docs/official-game-rules.md`.
 Sections 3 to 7 are implemented. Section 8 is open.
 - 2026-11-19: paylines set from the reference game's paytable screen (Darshan's screenshot): lines 6/7 and 8/9 were swapped and line 10 is now middle-bottom-middle-top-middle. RTP unchanged within noise (4 × 5M: 96.8-97.9%, average 97.4%).
 - 2026-11-21: big wins are progressive (NICE -> BIG -> MEGA -> SUPERB -> SENSATIONAL -> EPIC as the count passes each threshold).
+- 2026-11-21: Buy Feature popup with three options from Darshan's UI art: Free Spins 10 / 100×, Super Free Spins 20 / 300×, Feature Max 30 / 1500×. Only the first is in the reference rules; the other two are ASSUMED to be the same feature with more spins (returns 61% and 18%) until their rules are given.

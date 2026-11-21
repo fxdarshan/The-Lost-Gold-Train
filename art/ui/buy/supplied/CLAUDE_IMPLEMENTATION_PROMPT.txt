@@ -1,0 +1,44 @@
+CLAUDE IMPLEMENTATION PROMPT
+
+Implement the Buy Free Spins UI using ONLY the supplied assets in this folder. Do not search for, regenerate, redraw or substitute artwork.
+
+MAIN SCREEN:
+Use buy_btn_normal/hover/pressed/release. There must be exactly one BUY FREE SPINS button on the left UI.
+
+On pointer hover -> hover asset.
+On pointer down -> pressed asset.
+On pointer up -> release asset for 100-150 ms, then open popup.
+
+POPUP:
+Use popup_overlay_60pct_black.png behind the modal.
+Use popup_frame.png as the modal background.
+Use popup_title_buy_free_spins.png at top center.
+Use close_normal/hover/pressed/release at top right.
+
+Inside popup show exactly three choices:
+1) option_free_spins_* states
+2) option_super_free_spins_* states
+3) option_feature_max_* states
+
+For every clickable:
+Normal -> Hover -> Pressed -> Release.
+After Release, trigger the relevant action.
+If pointer remains over the control, return to Hover after release.
+Use pointer events for mouse/touch.
+
+POSITION LOCK:
+All four state assets for the same control must occupy the exact same wrapper dimensions and anchor. Never let image dimensions cause layout shift. object-fit: contain. Do not stretch.
+
+PRELOAD:
+Preload every state image before enabling UI. Prevent double activation.
+
+POPUP MOTION:
+Backdrop fade 120-180ms.
+Popup scale/fade 0.97 -> 1.0.
+No internal artwork animation.
+
+RESPONSIVE:
+Scale the popup as one composition. Keep the three options aligned equally. Preserve original aspect ratios.
+
+ART:
+Use all PNGs exactly as supplied. No CSS recoloring, gradients, replacement fonts or generic buttons.

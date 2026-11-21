@@ -61,20 +61,24 @@ console.log(`Round wins       : 0 ${pct(buckets[0] / rounds)}, <1x ${pct(buckets
 console.log(`Win banners      : ${CONFIG.winTiers.map((t, i) => t.id + ' 1 in ' + (tiers[i] ? Math.round(rounds / tiers[i]) : '-')).join(', ')}`);
 console.log(`Max win seen     : ${maxX.toFixed(1)}x   (cap ${CONFIG.maxWin}x, capped ${capped} times)`);
 
-// ---- feature buy: price CONFIG.buy.price x bet, trigger spin with weighted 3/4/5 Scatters, bought free spins
+// ---- feature buy: each option of CONFIG.buy.options (price x bet, spins); trigger spin with weighted 3/4/5
+// Scatters, then the option's number of bought free spins (retriggers add as usual)
 if (CONFIG.buy && CONFIG.buy.enabled) {
-  let ret = 0, under = 0, spinsTot = 0; const res = [];
-  for (let i = 0; i < buys; i++) {
-    const base = eng.resolveSpin(eng.buyGrid(), { bet });
-    let win = base.total, left = base.freeSpins; const special = eng.pickSpecial();
-    while (left > 0) {
-      left--; spinsTot++;
-      const r = eng.resolveSpin(eng.randomGrid({ fs: true, special, bought: true }), { bet, inFreeSpins: true, special });
-      win += r.total; if (r.freeSpins) left += r.freeSpins;
-      if (win >= CONFIG.maxWin * bet) { win = CONFIG.maxWin * bet; break; }
+  const opts = CONFIG.buy.options || [{ id: 'buy', spins: CONFIG.freeSpins, price: CONFIG.buy.price }];
+  for (const o of opts) {
+    let ret = 0, under = 0, spinsTot = 0; const res = [];
+    for (let i = 0; i < buys; i++) {
+      const base = eng.resolveSpin(eng.buyGrid(), { bet });
+      let win = base.total, left = o.spins; const special = eng.pickSpecial();
+      while (left > 0) {
+        left--; spinsTot++;
+        const r = eng.resolveSpin(eng.randomGrid({ fs: true, special, bought: true }), { bet, inFreeSpins: true, special });
+        win += r.total; if (r.freeSpins) left += r.freeSpins;
+        if (win >= CONFIG.maxWin * bet) { win = CONFIG.maxWin * bet; break; }
+      }
+      ret += win; res.push(win); if (win < o.price) under++;
     }
-    ret += win; res.push(win); if (win < CONFIG.buy.price) under++;
+    res.sort((a, b) => a - b);
+    console.log(`Feature buy ${o.id.padEnd(16)}: RTP ${pct(ret / (buys * o.price * bet))} over ${buys.toLocaleString()} buys at ${o.price}x (${o.spins} spins); median ${res[buys >> 1].toFixed(1)}x, mean ${(ret / buys).toFixed(1)}x, below price ${pct(under / buys)}, ${(spinsTot / buys).toFixed(1)} spins per buy`);
   }
-  res.sort((a, b) => a - b);
-  console.log(`Feature buy      : RTP ${pct(ret / (buys * CONFIG.buy.price * bet))} over ${buys.toLocaleString()} buys at ${CONFIG.buy.price}x; median ${res[buys >> 1].toFixed(1)}x, mean ${(ret / buys).toFixed(1)}x, below price ${pct(under / buys)}, ${(spinsTot / buys).toFixed(1)} spins per buy`);
 }

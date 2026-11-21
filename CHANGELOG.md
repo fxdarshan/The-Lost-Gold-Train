@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: Buy Feature: one BUY FREE SPINS button (four-state art) opens a popup with Free Spins (10, 100×), Super Free Spins (20, 300×) and Feature Max (30, 1500×), close button, fade/scale 0.97→1, pointer and touch, keyboard (Tab/arrows, Enter, Esc), one purchase per click. Simulator reports each option.
 - 2026-11-21: smooth reels (eased start, decelerating stop with a soft overshoot, speed-based blur); progressive big win banner climbing tier by tier; Dynamite and Power Dynamite win animations without the smoke silhouette and pale disc.
 - 2026-11-19: paylines from the reference paytable screen (lines 6/7 and 8/9 swapped back, new line 10); RTP unchanged within noise: 96.8-97.9% (4 × 5M, average 97.4%), buy 95.6-96.7%, hit rate 21.4%.
 - 2026-11-19: all symbol win animations at 30 fps, 1.5 s loops of 45 frames; three loops per win display. Mascot 15 fps stored, played in 30 fps steps. Symbol-win cheat uses a random payline.
