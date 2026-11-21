@@ -115,8 +115,10 @@ async def main():
         r = await pg.evaluate("""(async () => { Game.G.balance = 5000; const b0 = Game.G.balance, bet = Game.bet();
             await Game.buy(); return [b0, bet, Game.G.balance, Game.G.win, Game.G.fs.played]; })()""")
         check('feature buy: balance = before - 100x bet + round win, free spins played', abs(r[2] - (r[0] - 100 * r[1] + r[3])) < 0.005 and r[4] >= 10, str(r))
-        r = await pg.evaluate("""(async () => { Game.G.balance = 50; const ok = await Game.buy(); return [ok, Game.G.balance, Game.G.busy]; })()""")
-        check('feature buy without enough cash: refused, balance unchanged', r[0] is False and r[1] == 50 and r[2] is False, str(r))
+        # demo: a buy above the credit tops the credit up to start balance + price, then plays (Darshan 2026-11-21)
+        r = await pg.evaluate("""(async () => { Game.G.balance = 50; const bet = Game.bet(); const ok = await Game.buy();
+            return [ok, Game.G.balance, Game.G.busy, Game.G.fs.played, Game.C.startBalance, Game.G.win]; })()""")
+        check('feature buy without enough cash: demo credit topped up, round played', r[0] is True and r[2] is False and r[3] >= 10 and abs(r[1] - (r[4] + r[5])) < 0.005, str(r))
         await pg.evaluate("Game.G.balance = 5000")
         # 11 retrigger on the last free spin still plays the 10 extra spins
         n = await pg.evaluate("""(async () => { Game.G.queue = [{type:'trigger'}, ...Array(9).fill({type:'nowin'}), {type:'retrigger'}];
