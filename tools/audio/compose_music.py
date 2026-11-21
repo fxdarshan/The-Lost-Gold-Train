@@ -2,14 +2,17 @@
 
   python3 tools/audio/compose_music.py            -> assets/audio/bgm_basegame_loop.mp3, bgm_freegame_loop.mp3
 
-Base game: "Dust on the Rails" - A minor, 92 BPM, 16 bars. Whistled lead (spaghetti-western), galloping nylon
-guitar, plucked bass, brushed snare and hoof clip-clops, a distant bell, warm room reverb.
-Free spins: "Gold Rush Express" - A minor, 128 BPM, 16 bars. Brass lead, choir pad, train-rhythm snare, driving
-bass ostinato, timpani, strummed guitar, whip cracks at the phrase starts.
+v2 (2026-11-21, Darshan: "should be wild west rough"):
+Base game: "Rattlesnake Ridge" - E minor with the flat-second (Phrygian) bite, 84 BPM, 16 bars. Overdriven twangy
+baritone guitar riff through a spring reverb, a raw harmonica lead with bends, stomps and hand claps, a low drone,
+desert wind, jaw-harp boings, an anvil clank and a rattlesnake rattle at the phrase ends.
+Free spins: "Gold Train Heist" - A minor, 144 BPM, 16 bars, set on a running gold train: rail joints clacking,
+steam chuffs in eighths, wheel rumble, a steam whistle at each phrase, palm-muted overdriven guitar chugs, galloping
+toms, a gritty brass lead, brass stabs and gunshots.
 
 Loops are seamless: every voice is rendered on a circular timeline (tails wrap to the start) and the file carries
 PRE seconds of the loop's end before it and PRE seconds of its start after it. The game loops the region
-[PRE, PRE + loop length] (C.music), so encoder padding never causes a click.
+[PRE, PRE + loop length] (ASSET_MANIFEST.music), so encoder padding never causes a click.
 """
 import os, subprocess
 import numpy as np
@@ -177,68 +180,234 @@ def render(tr, name, bars, bpm):
     print(name, f'{tr.n / SR:.3f}s loop, {bars} bars at {bpm} BPM ->', mp3, os.path.getsize(mp3) // 1024, 'KB')
     return tr.n / SR
 
-# ---------------------------------------------------------------- base game: "Dust on the Rails"
-def base_game():
-    bpm = 92; beat = 60 / bpm; bars = 16; tr = Track(bars * 4 * beat)
-    chords = ['Am', 'Am', 'G', 'Am', 'F', 'G', 'Am', 'E', 'Am', 'Am', 'Dm', 'Am', 'F', 'G', 'E', 'Am']
-    for b, c in enumerate(chords):
-        t0 = b * 4 * beat; r, th, fi = chord_tones(c, 3)
-        # galloping guitar: (eighth, two sixteenths) x4 on chord tones
-        pat = [r * 2, fi, th * 2, fi * 2, r * 2, th * 2]
-        k = 0
-        for q in range(4):
-            for off, dur, acc in ((0, .5, 1), (.5, .25, .7), (.75, .25, .75)):
-                f = pat[k % len(pat)]; k += 1
-                tr.add(pluck(f, .6, .55, .995), t0 + (q + off) * beat, .3 * acc, -.35)
-        # bass on 1 and 3 (root, fifth)
-        tr.add(bass(r / 2, beat * 1.8), t0, .32, 0); tr.add(bass(fi / 2, beat * 1.8), t0 + 2 * beat, .26, 0)
-        # brushes on 2 and 4, shaker on eighths, hooves like a trotting horse
-        for q in range(4):
-            if q in (1, 3): tr.add(snare(.18), t0 + q * beat, .22, .1)
-            tr.add(shaker(), t0 + q * beat + beat / 2, .1, .5)
-            tr.add(hoof(.06, 1000), t0 + q * beat + beat * .75, .14, -.6); tr.add(hoof(.06, 820), t0 + q * beat + beat, .12, -.6) if q < 3 else None
-        if b % 4 == 0: tr.add(kick(), t0, .35, 0)
-    # a distant mission bell at the top of each 8-bar phrase
-    for b in (0, 8): tr.add(bell(hz('E5'), 3.0), b * 4 * beat, .09, .5)
-    mel = [('E5', 2), ('A5', 1), ('B5', 1), ('C6', 1.5), ('B5', .5), ('A5', 2), ('G5', 1), ('E5', 1), ('D5', 1), ('E5', 1), ('A4', 4),
-           ('F5', 2), ('E5', 1), ('D5', 1), ('D5', 1.5), ('E5', .5), ('G5', 2), ('E5', 1), ('C5', 1), ('B4', 1), ('C5', 1), ('B4', 2), ('E5', 2),
-           ('A5', 3), ('G5', 1), ('E5', 2), ('D5', 1), ('C5', 1), ('D5', 2), ('F5', 1), ('A5', 1), ('E5', 4),
-           ('F5', 1), ('E5', 1), ('F5', 1), ('A5', 1), ('G5', 2), ('F5', 1), ('E5', 1), ('B5', 2), ('G#5', 2), ('A5', 3.5), ('r', .5)]
-    place_melody(tr, mel, beat, 0, whistle, .3, .15)
-    return render(tr, 'bgm_basegame_loop', bars, bpm)
+# ---------------------------------------------------------------- rough instruments (v2)
+def drive(x, k=3.0):
+    return np.tanh(x * k) / np.tanh(k)
 
-# ---------------------------------------------------------------- free spins: "Gold Rush Express"
+def twang(f, dur, gain_drive=2.5, bright=.85):
+    """baritone electric: bright pluck, a little pick noise, overdrive"""
+    x = pluck(f, dur, bright, .997)
+    t = np.arange(len(x)) / SR
+    pick = signal.lfilter(*signal.butter(2, 3000 / (SR / 2), 'high'), rng.normal(0, 1, len(x))) * np.exp(-t * 300) * .25
+    x = drive((x + pick) * 1.2, gain_drive)
+    x = signal.lfilter(*signal.butter(2, 4200 / (SR / 2)), x)          # amp cabinet roll-off
+    return x * env_adsr(len(x), .001, 0, 1, .03)
+
+def chug(f, dur):
+    """palm-muted overdriven chug"""
+    x = pluck(f, dur, .9, .985); t = np.arange(len(x)) / SR
+    x = x * np.exp(-t * 14)
+    x = drive(x * 2.5, 4.0); x = signal.lfilter(*signal.butter(2, 2600 / (SR / 2)), x)
+    return x * env_adsr(len(x), .001, 0, 1, .02)
+
+def harmonica(f, dur, bend=0.0):
+    """reed: pulse wave with a nasal formant, breath and a bend up into the note"""
+    L = int(dur * SR); t = np.arange(L) / SR
+    bendc = 2 ** (-bend / 12 * np.exp(-t / .09)) if bend else 1
+    vib = 1 + .012 * np.sin(2 * np.pi * 6.2 * t) * np.clip((t - .25) / .3, 0, 1)
+    ph = np.cumsum(f * bendc * vib) / SR % 1
+    x = np.where(ph < .32, 1.0, -.47)
+    x = x + signal.lfilter(*signal.butter(2, [f / (SR / 2), min(.95, 3 * f / (SR / 2))], 'band'), rng.normal(0, 1, L)) * .25
+    y = np.zeros(L)
+    for fc, q, g in ((1100, 3, 1), (2400, 4, .6), (500, 2, .4)):
+        b, a = signal.iirpeak(fc / (SR / 2), q); y += g * signal.lfilter(b, a, x)
+    y = drive(y * .8, 1.8)
+    return y * env_adsr(L, .03, .12, .8, min(.1, dur * .25)) * .5
+
+def stomp(dur=.3):
+    L = int(dur * SR); t = np.arange(L) / SR
+    body = np.sin(2 * np.pi * np.cumsum(70 + 60 * np.exp(-t * 40)) / SR) * np.exp(-t * 12)
+    wood = signal.lfilter(*signal.butter(2, [150 / (SR / 2), 900 / (SR / 2)], 'band'), rng.normal(0, 1, L)) * np.exp(-t * 35) * 1.5
+    return drive(body + wood, 1.5)
+
+def clap(dur=.2):
+    L = int(dur * SR); t = np.arange(L) / SR; n = rng.normal(0, 1, L)
+    n = signal.lfilter(*signal.butter(2, [900 / (SR / 2), 4000 / (SR / 2)], 'band'), n)
+    e = sum(np.exp(-np.clip(t - d, 0, None) * 120) * (t >= d) for d in (0, .011, .022)) + np.exp(-t * 18) * .6
+    return n * e * .6
+
+def wind(seconds):
+    L = int(seconds * SR); t = np.arange(L) / SR; n = rng.normal(0, 1, L)
+    out = np.zeros(L)
+    for fc, rate, ph in ((500, .07, 0), (900, .11, 2), (1500, .05, 4)):
+        b, a = signal.iirpeak(fc / (SR / 2), 4); y = signal.lfilter(b, a, n)
+        out += y * (.5 + .5 * np.sin(2 * np.pi * rate * t + ph)) ** 2
+    return out * .25
+
+def drone(f, seconds):
+    L = int(seconds * SR); t = np.arange(L) / SR; out = np.zeros(L)
+    for m, det in ((1, 0), (1, .003), (1.5, -.002), (2, .001)):
+        out += 2 * ((np.cumsum(np.full(L, f * m * (1 + det))) / SR) % 1) - 1
+    out = signal.lfilter(*signal.butter(2, 500 / (SR / 2)), out)
+    return out * (.6 + .4 * np.sin(2 * np.pi * .05 * t) ** 2) * .15
+
+def jawharp(f, dur=.6):
+    L = int(dur * SR); t = np.arange(L) / SR
+    x = 2 * ((f * t) % 1) - 1
+    fc = 600 + 1400 * (.5 - .5 * np.cos(2 * np.pi * 3 * t)) * np.exp(-t * 2)   # the "boing" vowel sweep
+    y = np.zeros(L); z1 = z2 = 0.0
+    for i in range(0, L, 128):
+        b, a = signal.iirpeak(min(.95, fc[i] / (SR / 2)), 6); seg, _ = signal.lfilter(b, a, x[i:i + 128], zi=[z1, z2]); y[i:i + 128] = seg; z1, z2 = _
+    return y * np.exp(-t * 4) * .8
+
+def anvil(dur=1.5):
+    L = int(dur * SR); t = np.arange(L) / SR
+    return sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t * d) for f, a, d in ((1180, 1, 3), (2710, .6, 4), (3920, .4, 6), (5300, .25, 9))) * .4
+
+def rattle(dur=1.2):
+    """rattlesnake: fast noise pulses, swelling"""
+    L = int(dur * SR); t = np.arange(L) / SR
+    n = signal.lfilter(*signal.butter(2, 5000 / (SR / 2), 'high'), rng.normal(0, 1, L))
+    am = (.5 + .5 * np.sign(np.sin(2 * np.pi * 55 * t))) * np.clip(t / dur * 1.3, 0, 1) * np.clip((dur - t) / .1, 0, 1)
+    return n * am * .35
+
+def clack(dur=.12):
+    """wheel over a rail joint: metal knock + low thump"""
+    L = int(dur * SR); t = np.arange(L) / SR
+    metal = sum(a * np.sin(2 * np.pi * f * t) for f, a in ((1650, 1), (2870, .5), (4100, .3))) * np.exp(-t * 60)
+    thump = np.sin(2 * np.pi * 90 * t) * np.exp(-t * 35)
+    knock = signal.lfilter(*signal.butter(2, [400 / (SR / 2), 2500 / (SR / 2)], 'band'), rng.normal(0, 1, L)) * np.exp(-t * 80)
+    return (metal * .5 + thump + knock * 1.2) * .7
+
+def chuff(dur=.22):
+    L = int(dur * SR); t = np.arange(L) / SR
+    n = signal.lfilter(*signal.butter(2, [200 / (SR / 2), 2200 / (SR / 2)], 'band'), rng.normal(0, 1, L))
+    return n * (1 - np.exp(-t * 200)) * np.exp(-t * 16) * .8
+
+def rumble(seconds):
+    L = int(seconds * SR); n = rng.normal(0, 1, L)
+    low = signal.lfilter(*signal.butter(2, 110 / (SR / 2)), n) * 3
+    hiss = signal.lfilter(*signal.butter(2, [2500 / (SR / 2), 7000 / (SR / 2)], 'band'), n) * .08
+    return (low + hiss) * .5
+
+def steam_whistle(dur=1.8):
+    """three-chime steam whistle: a chord of breathy pipes rising into pitch"""
+    L = int(dur * SR); t = np.arange(L) / SR; out = np.zeros(L)
+    for f in (hz('B4'), hz('D5'), hz('F#5')):
+        ff = f * (1 - .06 * np.exp(-t / .12)); ph = np.cumsum(ff) / SR
+        out += np.sin(2 * np.pi * ph) + .3 * np.sin(4 * np.pi * ph)
+        b, a = signal.iirpeak(f / (SR / 2), 12); out += signal.lfilter(b, a, rng.normal(0, 1, L)) * .6
+    return out * env_adsr(L, .08, .2, .85, .35) * .22
+
+def tom(f, dur=.4):
+    L = int(dur * SR); t = np.arange(L) / SR
+    ff = f * (1 + .6 * np.exp(-t * 25))
+    return (np.sin(2 * np.pi * np.cumsum(ff) / SR) * np.exp(-t * 8) + signal.lfilter(*signal.butter(2, 600 / (SR / 2)), rng.normal(0, 1, L)) * np.exp(-t * 50) * .4) * .8
+
+def gunshot(dur=1.2):
+    L = int(dur * SR); t = np.arange(L) / SR; n = rng.normal(0, 1, L)
+    crack = n * np.exp(-t * 90) * 1.5
+    boom = signal.lfilter(*signal.butter(2, 400 / (SR / 2)), n) * np.exp(-t * 5) * 2.5
+    echo = np.zeros(L); d = int(.28 * SR); echo[d:] = (crack + boom)[:-d] * .25
+    return drive((crack + boom + echo) * .8, 2.0) * .6
+
+def spring(x, mix=.35):
+    """spring-reverb flavour for the guitar stem: dispersive allpass chirp + short metallic decay, circular"""
+    L = int(1.4 * SR); t = np.arange(L) / SR
+    ir = rng.normal(0, 1, L) * np.exp(-t * 5)
+    for d in (.031, .037):
+        k = int(d * SR); ir[k:] += ir[:-k] * .5
+    ir = signal.lfilter(*signal.butter(2, [400 / (SR / 2), 4500 / (SR / 2)], 'band'), ir); ir /= np.sqrt((ir ** 2).sum())
+    out = x.copy()
+    for ch in range(2):
+        wet = signal.fftconvolve(np.concatenate([x[ch], x[ch][:L]]), ir)[:len(x[ch]) + L]
+        w = wet[:len(x[ch])].copy(); w[:L] += wet[len(x[ch]):len(x[ch]) + L]
+        out[ch] = x[ch] + mix * w
+    return out
+
+def mixdown(stems, name, bars, bpm, rev=.14, master_drive=2.2):
+    n = stems[0].n; x = np.zeros((2, n))
+    for st in stems: x += st.buf
+    x = reverb(x, 1.1, rev)
+    x = x / (np.abs(x).max() + 1e-9)
+    x = drive(x * 1.1, master_drive) * .9                          # rough, tape-like saturation
+    P = int(PRE * SR)
+    full = np.concatenate([x[:, -P:], x, x[:, :P]], axis=1)
+    from scipy.io import wavfile
+    wav = f'/tmp/{name}.wav'; wavfile.write(wav, SR, (full.T * 32767).astype(np.int16))
+    mp3 = os.path.join(ROOT, f'assets/audio/{name}.mp3')
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-codec:a', 'libmp3lame', '-b:a', '160k', mp3], check=True)
+    print(name, f'{n / SR:.4f}s loop, {bars} bars at {bpm} BPM ->', os.path.getsize(mp3) // 1024, 'KB')
+    return n / SR
+
+RIFF = {   # baritone guitar riffs in beats, relative to the bar's root
+    'a': [(0, 1), (0, .5), (3, .5), (5, 1), (6, .5), (5, .5)],          # root, root, m3, 4, b5, 4
+    'b': [(0, 1), (0, .5), (-2, .5), (0, 1), (3, .5), (0, .5)],
+}
+
+# ---------------------------------------------------------------- base game: "Rattlesnake Ridge"
+def base_game():
+    bpm = 84; beat = 60 / bpm; bars = 16; L = bars * 4 * beat
+    gtr, drm, lead, amb = Track(L), Track(L), Track(L), Track(L)
+    roots = ['E2', 'E2', 'F2', 'E2', 'E2', 'E2', 'D2', 'E2', 'A2', 'E2', 'F2', 'E2', 'C2', 'B1', 'F2', 'E2']
+    amb.add(wind(L + .5), 0, .25, 0)
+    amb.add(drone(hz('E1'), L + .5), 0, .45, 0)
+    for b, r in enumerate(roots):
+        t0 = b * 4 * beat; f0 = hz(r)
+        riff = RIFF['a' if b % 2 == 0 else 'b']; t = t0
+        for semi_, d in riff:
+            gtr.add(twang(f0 * 2 ** (semi_ / 12), d * beat * 1.4), t, .29, -.25); t += d * beat
+        # stomp-clap: stomp 1, the "and" of 2, 3; claps on 2 and 4
+        for q, g in ((0, .9), (1.5, .55), (2, .8)): drm.add(stomp(), t0 + q * beat, g * 1.0, 0)
+        for q in (1, 3): drm.add(clap(), t0 + q * beat, .62, .2)
+        for q in range(8): drm.add(shaker(.05), t0 + q * beat / 2, .07 if q % 2 else .04, .55)
+        if b < 4 and b % 2 == 1: amb.add(jawharp(hz('E2') * 2, .7), t0 + 3 * beat, .35, -.5)
+        if b in (7, 15): amb.add(rattle(1.3), t0 + 4 * beat - 1.3, .5, .6)
+    for b in (0, 8): amb.add(anvil(), b * 4 * beat, .14, .45)
+    mel = [('r', 16),
+           ('B4', 2), ('A4', 1), ('G4', 1), ('Bb4', 1.5), ('A4', .5), ('G4', 2), ('E4', 1), ('G4', 1), ('A4', 1), ('D5', 1), ('B4', 4),
+           ('E5', 3), ('D5', 1), ('B4', 2), ('G4', 2), ('A4', 1), ('C5', 1), ('A4', 1), ('F4', 1), ('E4', 4),
+           ('E5', 2), ('D5', 1), ('B4', 1), ('C5', 1.5), ('B4', .5), ('A4', 2), ('B4', 1), ('A4', 1), ('F4', 1), ('A4', 1), ('E4', 3.5), ('r', .5)]
+    t = 0
+    for n, d in mel:
+        if n != 'r': lead.add(harmonica(hz(n), d * beat * .96, bend=1.5 if d >= 1.5 else 0), t, 1.1, .15)
+        t += d * beat
+    gtr.buf = spring(gtr.buf)
+    return mixdown([gtr, drm, lead, amb], 'bgm_basegame_loop', bars, bpm, rev=.12)
+
+# ---------------------------------------------------------------- free spins: "Gold Train Heist"
 def free_spins():
-    bpm = 128; beat = 60 / bpm; bars = 16; tr = Track(bars * 4 * beat)
-    chords = ['Am', 'F', 'G', 'E', 'Am', 'F', 'Dm', 'E', 'Am', 'C', 'G', 'E', 'F', 'G', 'E', 'Am']
-    for b, c in enumerate(chords):
-        t0 = b * 4 * beat; r, th, fi = chord_tones(c, 3)
-        # driving bass ostinato in eighths: root root fifth root
-        for e8, f in enumerate([r, r, fi, r] * 2):
-            tr.add(bass(f / 2, beat * .48), t0 + e8 * beat / 2, .24 if e8 % 2 == 0 else .17, 0)
-        # train rhythm: brushed sixteenths with accents on the "chug"
-        for s16 in range(16):
-            acc = 1.0 if s16 % 4 == 0 else .55 if s16 % 2 == 0 else .35
-            tr.add(snare(.09), t0 + s16 * beat / 4, .16 * acc, .15)
-        tr.add(snare(.2, brush=False), t0 + beat, .2, -.05); tr.add(snare(.2, brush=False), t0 + 3 * beat, .2, -.05)
-        tr.add(kick(), t0, .42, 0); tr.add(kick(), t0 + 2 * beat, .35, 0)
-        # strummed guitar on the off-beats
+    bpm = 144; beat = 60 / bpm; bars = 16; L = bars * 4 * beat
+    trn, gtr, drm, lead = Track(L), Track(L), Track(L), Track(L)
+    roots = ['A2', 'A2', 'G2', 'A2', 'F2', 'G2', 'E2', 'E2', 'A2', 'A2', 'C3', 'G2', 'F2', 'E2', 'A2', 'E2']
+    trn.add(rumble(L + .5), 0, 1.0, 0)
+    for b, r in enumerate(roots):
+        t0 = b * 4 * beat; f0 = hz(r)
+        # train: steam chuffs on eighths (accent on the beat), rail-joint double clacks on 1 and 3
+        for e8 in range(8): trn.add(chuff(), t0 + e8 * beat / 2, .85 if e8 % 2 == 0 else .5, -.3 if e8 % 2 else .3)
+        for q in (0, 2):
+            trn.add(clack(), t0 + q * beat, .95, -.2); trn.add(clack(), t0 + q * beat + beat / 4, .8, .2)
+        # palm-muted chugs in eighths, open accent on 1
+        for e8 in range(8):
+            f = f0 * (2 ** (3 / 12) if e8 == 6 else 2 ** (7 / 12) if e8 == 7 else 1)
+            gtr.add(chug(f, beat * .5), t0 + e8 * beat / 2, .55 if e8 == 0 else .38, -.3)
+            gtr.add(chug(f, beat * .5), t0 + e8 * beat / 2 + .012, .3, .3)
+        gtr.add(twang(f0 * 2, beat * 1.5), t0, .22, .3)
+        # galloping toms (1, a-1... feel) and stomps
         for q in range(4):
-            for j, f in enumerate([r * 2, fi * 2, th * 4]):
-                tr.add(pluck(f, .35, .7, .992), t0 + (q + .5) * beat + j * .012, .2, .45)
-        # choir pad holding the chord (second half louder)
-        tr.add(choir([r * 2, th * 2, fi * 2], 4 * beat * 1.02), t0, 1.5 if b >= 8 else .9, -.2)
-        if b % 4 == 0:
-            tr.add(timpani(r / 2), t0, .28, 0)
-            if b in (0, 8): tr.add(whip(), t0 - .12, .12, .6)
-    tr.add(timpani(hz('E2'), 1.5), 15 * 4 * beat - 2 * beat, .22, 0)
-    mel = [('A4', 1.5), ('C5', .5), ('E5', 2), ('F5', 1.5), ('E5', .5), ('C5', 2), ('D5', 1), ('B4', 1), ('G4', 1), ('B4', 1), ('E5', 4),
-           ('A5', 1.5), ('G5', .5), ('E5', 2), ('F5', 1), ('E5', 1), ('D5', 1), ('C5', 1), ('D5', 2), ('F5', 1), ('A5', 1), ('G#5', 2), ('B5', 2),
-           ('E5', 1), ('A5', 1), ('C6', 2), ('E5', 1), ('G5', 1), ('C6', 2), ('B5', 1.5), ('A5', .5), ('G5', 2), ('G#5', 2), ('E5', 2),
-           ('A5', 1.5), ('G5', .5), ('F5', 1), ('A5', 1), ('B5', 1.5), ('A5', .5), ('G5', 2), ('G#5', 1), ('B5', 1), ('E5', 2), ('A5', 3.5), ('r', .5)]
-    place_melody(tr, mel, beat, 0, brass, .55, -.1)
-    return render(tr, 'bgm_freegame_loop', bars, bpm)
+            drm.add(tom(hz('A2')), t0 + q * beat, .45, -.1)
+            drm.add(tom(hz('E2')), t0 + q * beat + beat * .75, .3, .1)
+        drm.add(stomp(), t0, .7, 0); drm.add(stomp(), t0 + 2 * beat, .6, 0)
+        drm.add(clap(), t0 + beat, .35, 0); drm.add(clap(), t0 + 3 * beat, .35, 0)
+        if b in (3, 11): drm.add(gunshot(), t0 + 3.5 * beat, .5, .5)
+        if b in (7, 15): drm.add(gunshot(), t0 + 3 * beat, .45, -.5); drm.add(gunshot(), t0 + 3.5 * beat, .5, .4)
+    for b in (0, 8): trn.add(steam_whistle(2.2), b * 4 * beat, .8, .4)
+    # brass stabs on the "and" of 4 every two bars, gritty brass lead from bar 3
+    for b in range(1, 16, 2):
+        r = hz(roots[b]) * 2
+        for f in (r * 2, r * 2 ** (19 / 12), r * 2 ** (24 / 12) / 2):
+            lead.add(drive(brass(f, beat * .45) * 2, 2), b * 4 * beat + 3.5 * beat, .18, -.15)
+    mel = [('r', 8),
+           ('E5', 1.5), ('D5', .5), ('C5', 1), ('B4', 1), ('A4', 2), ('C5', 1), ('E5', 1), ('F5', 1.5), ('E5', .5), ('D5', 1), ('C5', 1), ('D5', 2), ('B4', 2),
+           ('G#4', 1), ('B4', 1), ('E5', 2), ('E5', 4),
+           ('A5', 1.5), ('G5', .5), ('E5', 2), ('A4', 1), ('C5', 1), ('E5', 1), ('A5', 1), ('G5', 1.5), ('E5', .5), ('C5', 2), ('B4', 1), ('D5', 1), ('G5', 2),
+           ('A5', 1.5), ('G5', .5), ('F5', 1), ('C5', 1), ('B4', 2), ('G#4', 2), ('A4', 1), ('C5', 1), ('E5', 1), ('A5', 1), ('G#5', 2), ('E5', 1.5), ('r', .5)]
+    t = 0
+    for n, d in mel:
+        if n != 'r': lead.add(drive(brass(hz(n), d * beat * .95) * 2.2, 1.8), t, .4, .1)
+        t += d * beat
+    return mixdown([trn, gtr, drm, lead], 'bgm_freegame_loop', bars, bpm, rev=.1, master_drive=2.6)
 
 if __name__ == '__main__':
     a = base_game(); b = free_spins()
-    print(f"C.music loops: base {a:.4f}s, free spins {b:.4f}s, pre-roll {PRE}s")
+    print(f"ASSET_MANIFEST.music: base {a:.4f}s, free spins {b:.4f}s, pre-roll {PRE}s")

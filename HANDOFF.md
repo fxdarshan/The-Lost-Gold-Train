@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (40)
+- Music v2 after Darshan found v1 too soft: rough Western base loop, train-heist free spins loop. Still not listened to by Claude.
 ### 2026-11-21 · claude.ai chat (39)
 - Music: two original loops from `tools/audio/compose_music.py` (not listened to by Claude: checked by levels, spectrogram and loop points only). Sound effects are still the synthesised placeholders in `src/audio.js`.
 ### 2026-11-21 · claude.ai chat (38)
