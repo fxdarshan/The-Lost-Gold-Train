@@ -31,7 +31,7 @@ function embedImages(js) {
     return `'data:audio/mpeg;base64,${fs.readFileSync(file).toString('base64')}'`;
   });
 }
-html = html.replace(/<script src="([^"]+)"><\/script>/g, (m, src) => {
+html = html.replace(/<script src="([^"?]+)(?:\?v=\w+)?"><\/script>/g, (m, src) => {
   let js = fs.readFileSync(path.join(root, src), 'utf8');
   if (src === 'assets/manifest.js') js = embedImages(js);
   return `<script>\n/* ${src} */\n${safe(js)}\n</script>`;

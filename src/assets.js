@@ -21,7 +21,7 @@
       const im = new Image();
       im.onload = () => res(im);
       im.onerror = () => res(null);
-      im.src = src;
+      im.src = src.startsWith('data:') || !root.BUILD_VERSION ? src : src + '?v=' + root.BUILD_VERSION;   // never a stale cached file
     });
   }
   function placeholder(key) {

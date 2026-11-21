@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: music fixes: every file and script now carries a build version, so a browser can no longer keep playing an old cached copy (Darshan heard the base theme in free spins); music starts on the first tap; a spin never restarts the base theme during free spins; the demo panel shows which track is playing and the build.
 - 2026-11-21: Darshan's base game and free spins music in the game; each plays from the top once, then loops its repeating section seamlessly (cut before the fade-out).
 - 2026-11-21: music v2, rougher: base game "Rattlesnake Ridge" (twangy overdriven guitar, harmonica, stomps, wind, rattlesnake) and free spins "Gold Train Heist" (train clacks, steam chuffs, whistle, chugging guitar, toms, brass, gunshots).
 - 2026-11-21: original music: base game loop "Dust on the Rails" and free spins loop "Gold Rush Express", composed in code, seamless loops, also in the single-file build.

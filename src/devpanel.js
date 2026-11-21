@@ -148,3 +148,16 @@
   });
   try { if (root.claude && root.claude.use) root.claude.use('downloads').then(d => { downloads = d; }).catch(() => {}); } catch (e) {}
 })(window);
+/* music indicator (2026-11-21): which track is playing and the build, so a stale cached copy is easy to spot */
+(function (root) {
+  const panel = document.querySelector('#panel') || document.body;
+  const el = document.createElement('div');
+  el.style.cssText = 'font:12px system-ui,sans-serif;color:#cbb;padding:6px 12px;opacity:.85';
+  panel.appendChild(el);
+  const names = { bgm_basegame_loop: 'Base game theme', bgm_freegame_loop: 'Free spins theme' };
+  setInterval(() => {
+    const A = root.Audio2; let now = 'not started (tap the game)';
+    if (A && A.musicKey) now = (names[A.musicKey] || A.musicKey) + (A.music ? '' : ' (loading)');
+    el.textContent = 'Music: ' + now + ' · build ' + (root.BUILD_VERSION || 'local');
+  }, 400);
+})(window);

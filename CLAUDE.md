@@ -22,7 +22,7 @@ Official rules and pay table > animation spec > asset spec > GDD > screenshots o
 2. Maths changed: `node tools/simulate.js 2000000` with 2 or 3 seeds; report RTP with its run-to-run spread, and update the figures everywhere they appear.
 3. Serve (`python3 -m http.server 8765`) and run `python3 tools/edge-cases.py`: all checks pass. Play the affected feature or scenario in the browser (headless Chrome when no screen); look at screenshots; zero page errors.
 4. Update every doc the change touches (README, CHANGELOG, GDD, spec status sections, `docs/cheats.md`, `assets/README.md`).
-5. `node tools/build-single.js` (single-file build in `dist/`).
+5. `python3 tools/stamp_version.py` (new build version: browsers and GitHub Pages never serve a stale copy), then `node tools/build-single.js` (single-file build in `dist/`).
 6. Update `HANDOFF.md`.
 7. Commit (clear message) and push to `main`.
 

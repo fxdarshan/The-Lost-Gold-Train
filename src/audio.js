@@ -18,8 +18,8 @@
       // over http every sound file loads; from a local file only embedded (data:) sounds can
       const web = location.protocol.startsWith('http');
       Object.entries((manifest && manifest.sounds) || {}).filter(([k, src]) => web || src.startsWith('data:')).forEach(([k, src]) => {
-        fetch(src).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(b => A.ctx.decodeAudioData(b))
-          .then(buf => { A.buffers[k] = buf; if (k === A.musicKey) A.playMusic(k, true); }).catch(() => {});
+        fetch(src.startsWith('data:') || !root.BUILD_VERSION ? src : src + '?v=' + root.BUILD_VERSION).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(b => A.ctx.decodeAudioData(b))
+          .then(buf => { A.buffers[k] = buf; if (k === A.musicKey && !A.music) A.playMusic(k, true); }).catch(() => {});
       });
     }
   };

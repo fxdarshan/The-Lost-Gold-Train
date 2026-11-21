@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (42)
+- Free spins music: code was switching correctly; added cache-busting (`tools/stamp_version.py`, `BUILD_VERSION`), music from first tap, and a 'Music: … · build …' line in the demo panel.
 ### 2026-11-21 · claude.ai chat (41)
 - Darshan's own music in (`art/audio/`), looped by `tools/audio/make_loop.py` (intro once, then the repeating section). Code-made music retired.
 ### 2026-11-21 · claude.ai chat (40)

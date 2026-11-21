@@ -248,6 +248,7 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
   <button id="showPanel" class="show-panel" hidden>Demo controls</button>
 </div>
 
+<script>window.BUILD_VERSION = '202611211208';</script>
 <script>
 /* src/config.js */
 /*
@@ -1161,7 +1162,7 @@ window.ASSET_MANIFEST = {
       const im = new Image();
       im.onload = () => res(im);
       im.onerror = () => res(null);
-      im.src = src;
+      im.src = src.startsWith('data:') || !root.BUILD_VERSION ? src : src + '?v=' + root.BUILD_VERSION;   // never a stale cached file
     });
   }
   function placeholder(key) {
@@ -1234,8 +1235,8 @@ window.ASSET_MANIFEST = {
       // over http every sound file loads; from a local file only embedded (data:) sounds can
       const web = location.protocol.startsWith('http');
       Object.entries((manifest && manifest.sounds) || {}).filter(([k, src]) => web || src.startsWith('data:')).forEach(([k, src]) => {
-        fetch(src).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(b => A.ctx.decodeAudioData(b))
-          .then(buf => { A.buffers[k] = buf; if (k === A.musicKey) A.playMusic(k, true); }).catch(() => {});
+        fetch(src.startsWith('data:') || !root.BUILD_VERSION ? src : src + '?v=' + root.BUILD_VERSION).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(b => A.ctx.decodeAudioData(b))
+          .then(buf => { A.buffers[k] = buf; if (k === A.musicKey && !A.music) A.playMusic(k, true); }).catch(() => {});
       });
     }
   };
@@ -3032,7 +3033,7 @@ window.ASSET_MANIFEST = {
       first = { type: 'buy', option: typeof opts.buy === 'string' ? opts.buy : 'free_spins' };
       ensureBuyFunds(spinCost(first));
     } else ensureFunds();
-    G.busy = true; G.onChange(); SND.init(root.ASSET_MANIFEST); SND.playMusic('bgm_basegame_loop');
+    G.busy = true; G.onChange(); SND.init(root.ASSET_MANIFEST); if (!G.fs.active) SND.playMusic('bgm_basegame_loop');
     try {
       first = first || nextItem();
       if (first.type === 'buy' && G.balance < spinCost(first) - 1e-9) { first = { type: 'random' }; ensureFunds(); }   // a queued buy the balance can't cover plays as a spin
@@ -3118,6 +3119,7 @@ window.ASSET_MANIFEST = {
   /* ------------------------------------------------------------ input */
   cv.addEventListener('pointerdown', e => {
     SND.init(root.ASSET_MANIFEST);
+    if (!SND.musicKey) SND.playMusic(G.fs.active ? 'bgm_freegame_loop' : 'bgm_basegame_loop');   // music from the first tap
     const rc = cv.getBoundingClientRect(), x = (e.clientX - rc.left) / rc.width * W, y = (e.clientY - rc.top) / rc.height * H;
     if (G.info) { G.info = false; return; }
     if (buyDown(x, y, e)) return;
@@ -3310,6 +3312,19 @@ window.ASSET_MANIFEST = {
     $('#assetList').innerHTML = inf.missing.map(k => `<li>${k}: ${root.ASSET_MANIFEST.images[k]}</li>`).join('');
   });
   try { if (root.claude && root.claude.use) root.claude.use('downloads').then(d => { downloads = d; }).catch(() => {}); } catch (e) {}
+})(window);
+/* music indicator (2026-11-21): which track is playing and the build, so a stale cached copy is easy to spot */
+(function (root) {
+  const panel = document.querySelector('#panel') || document.body;
+  const el = document.createElement('div');
+  el.style.cssText = 'font:12px system-ui,sans-serif;color:#cbb;padding:6px 12px;opacity:.85';
+  panel.appendChild(el);
+  const names = { bgm_basegame_loop: 'Base game theme', bgm_freegame_loop: 'Free spins theme' };
+  setInterval(() => {
+    const A = root.Audio2; let now = 'not started (tap the game)';
+    if (A && A.musicKey) now = (names[A.musicKey] || A.musicKey) + (A.music ? '' : ' (loading)');
+    el.textContent = 'Music: ' + now + ' · build ' + (root.BUILD_VERSION || 'local');
+  }, 400);
 })(window);
 
 </script>
