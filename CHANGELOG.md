@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: removed the ambient sparks drifting over the backgrounds (the only background particles; base game had none). Win, anticipation, mascot and banner effects are unchanged.
 - 2026-11-21: Buy Feature UI from the clean final pack: board with title and chains hanging from the top of the screen, larger option cards, new scale values (1.04 / 0.97 / 1.02; close 1.08 / 0.92 / 1.03).
 - 2026-11-21: fix: buy options did nothing at the default bet (price above the $500 demo credit); the demo credit now tops up for a buy.
 - 2026-11-21: Buy Feature UI from the simplified pack: one image per control with scale-only hover/press, board hanging on chains up to the top of the screen, simpler open/close (overlay 120 ms, board 0.98→1 over 140 ms).

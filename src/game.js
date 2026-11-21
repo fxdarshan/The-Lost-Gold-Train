@@ -215,8 +215,7 @@
       ctx.fillStyle = g; ctx.fillRect(lx - 150, ly - 150, 300, 300);
     });
     ctx.restore();
-    // free spins: warm sparks drift up either side
-    if (G.env > .5 && Math.random() < .03) emit('spark', Math.random() < .5 ? 40 + Math.random() * 150 : W - 190 + Math.random() * 150, H * .8, 1, { angle: -Math.PI / 2, spread: .2, speed: 60, gravity: -5, life: 6, size: 12, color: ['#ffb84a', '#ffd27a'] });
+    // (no ambient particles over the backgrounds: Darshan 2026-11-21)
   }
 
   /* ------------------------------------------------------------ mascot */
