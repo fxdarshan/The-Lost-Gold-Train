@@ -64,15 +64,15 @@ console.log(`Max win seen     : ${maxX.toFixed(1)}x   (cap ${CONFIG.maxWin}x, ca
 // ---- feature buy: each option of CONFIG.buy.options (price x bet, spins); trigger spin with weighted 3/4/5
 // Scatters, then the option's number of bought free spins (retriggers add as usual)
 if (CONFIG.buy && CONFIG.buy.enabled) {
-  const opts = CONFIG.buy.options || [{ id: 'buy', spins: CONFIG.freeSpins, price: CONFIG.buy.price }];
+  const only = process.env.BUY; const opts = (CONFIG.buy.options || [{ id: 'buy', spins: CONFIG.freeSpins, price: CONFIG.buy.price }]).filter(o => !only || o.id === only);
   for (const o of opts) {
     let ret = 0, under = 0, spinsTot = 0; const res = [];
     for (let i = 0; i < buys; i++) {
       const base = eng.resolveSpin(eng.buyGrid(), { bet });
-      let win = base.total, left = o.spins; const special = eng.pickSpecial();
+      let win = base.total, left = o.spins; const special = eng.pickSpecial(o.specialPool);
       while (left > 0) {
         left--; spinsTot++;
-        const r = eng.resolveSpin(eng.randomGrid({ fs: true, special, bought: true }), { bet, inFreeSpins: true, special });
+        const r = eng.resolveSpin(eng.randomGrid({ fs: true, special, bought: o.id }), { bet, inFreeSpins: true, special });
         win += r.total; if (r.freeSpins) left += r.freeSpins;
         if (win >= CONFIG.maxWin * bet) { win = CONFIG.maxWin * bet; break; }
       }

@@ -18,7 +18,7 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 
 ## Log
 ### 2026-11-21 · claude.ai chat (32)
-- Buy Feature popup from Darshan's final PNGs (`drawBuyMain`, `drawBuyPopup`, `C.buyUI`, `C.buy.options`). **Waiting for Darshan:** rules for Super Free Spins and Feature Max (now the same feature with 20/30 spins: return 61% / 18%); clean re-exports of the three card release images and the Super pressed image (supplied files are cut through the card).
+- Buy Feature popup from Darshan's final PNGs (`drawBuyMain`, `drawBuyPopup`, `C.buyUI`, `C.buy.options`). Super/Max rules ASSUMED and TUNED (2026-11-21, ~96%); popup buy goes straight to the transition; outside click closes. **Waiting for Darshan:** approval of the Super/Max rules; clean re-exports of the three card release images and the Super pressed image (supplied files are cut through the card).
 ### 2026-11-21 · claude.ai chat (31)
 - Smooth reel motion (`updateReels`, `C.spin.windup/accel/settle`), progressive big win (`drawBanner`, `frames.bannerStep`), Dynamite smoke and Power Dynamite disc removed (`anim_from_video2.py --degrey`, white mode composites the still symbol over the video's fire; `--drop 49-59` for the bad blast frames).
 ### 2026-11-19 · claude.ai chat (30)

@@ -374,13 +374,14 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
       price: 100,                              // REF: 100x total bet
       scatterWeights: { 3: 85, 4: 13, 5: 2 },  // TUNED (REF: "weighted", values not published)
       specialShare: 1.04,                      // TUNED: bought free spins use 1.04x the natural specialShare (buy RTP about 96.5%)
-      // The Buy Feature popup (Darshan's UI art, 2026-11-21): three options. Spins and prices are from the art.
-      // Free spins work the same in all three (ASSUMED: the art gives no other rule), so the dearer options pay
-      // back far less than their price until Darshan says what they add. See the README "Decisions".
+      // The Buy Feature popup (Darshan's UI art, 2026-11-21): three options; spins and prices from the art.
+      // Super and Max rules are ASSUMED (Darshan 2026-11-21: "go ahead and implement"): the dearer options make the
+      // expanding symbol land more often (specialShare, TUNED to about 96% each), and Feature Max also picks the
+      // expanding symbol from the four top symbols only.
       options: [
-        { id: 'free_spins',       spins: 10, price: 100 },    // REF: 10 free spins for 100x
-        { id: 'super_free_spins', spins: 20, price: 300 },    // art: 20 spins, 300x (rules ASSUMED)
-        { id: 'feature_max',      spins: 30, price: 1500 }    // art: 30 spins, 1500x (rules ASSUMED)
+        { id: 'free_spins',       spins: 10, price: 100,  specialShare: 1.04 },     // REF: 10 free spins for 100x
+        { id: 'super_free_spins', spins: 20, price: 300,  specialShare: 1.24 },      // TUNED (96%)
+        { id: 'feature_max',      spins: 30, price: 1500, specialShare: 1.61, specialPool: [0, 1, 2, 3] }   // TUNED (96%)
       ]
     },
 
@@ -701,12 +702,13 @@ window.ASSET_MANIFEST = {
     // (CONFIG.specialShare, TUNED), so a premium special lands as often as a low one and pays more.
     // Bought free spins use CONFIG.buy.specialShare (REF: bought free spins have their own reels per special).
     function table(fs, special, bought) {
-      const key = fs ? (bought ? 'buy' : 'fs') + (special ?? '') : 'base';
+      const key = fs ? (bought ? 'buy' + (typeof bought === 'string' ? bought : '') : 'fs') + (special ?? '') : 'base';
       if (tables[key]) return tables[key];
       const w = (fs && C.weightsFreeSpins) || C.weights;
       let share = C.specialShare;
       if (share && typeof share === 'object') share = share[special];   // per-symbol shares
-      if (share && bought && C.buy && C.buy.specialShare) share *= C.buy.specialShare;   // bought free spins: a fraction of it
+      if (share && bought && C.buy) share *= buyOpt(bought).specialShare ?? C.buy.specialShare ?? 1;   // bought free spins: the option's boost
+      share = Math.min(share || 0, .6) || share;
       return (tables[key] = w.map(row => {
         const others = row.reduce((t, x, s) => t + (s === special ? 0 : x), 0);
         const sw = fs && special != null && share ? others * share / (1 - share) : null;
@@ -840,7 +842,16 @@ window.ASSET_MANIFEST = {
       return { start: clone(startGrid), end: grid, steps, total: round2(mult * bet), mult, freeSpins };
     }
 
-    function pickSpecial() { return Number(pickWeighted(C.specialWeights)); }
+    /** The expanding symbol. pool: allowed symbol ids (Feature Max picks from the top symbols only). */
+    function pickSpecial(pool) {
+      if (!pool) return Number(pickWeighted(C.specialWeights));
+      const w = {}; pool.forEach(s => { w[s] = C.specialWeights[s] || 1; }); return Number(pickWeighted(w));
+    }
+    /** A feature buy option from CONFIG.buy.options by id (true or unknown: the standard buy). */
+    function buyOpt(id) {
+      const o = C.buy && (C.buy.options || []).find(x => x.id === id);
+      return o || { id: 'free_spins', spins: C.freeSpins, price: C.buy ? C.buy.price : 100, specialShare: C.buy && C.buy.specialShare };
+    }
 
     /** Index into CONFIG.winTiers for a win, or -1 when it is below the first banner. */
     function tierOf(total, bet) {
@@ -849,7 +860,7 @@ window.ASSET_MANIFEST = {
       return t;
     }
 
-    return { isWild, multOf, randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
+    return { isWild, multOf, randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, buyOpt, tierOf, clone, pickWeighted, minCount };
   }
 
   const Engine = { create };
@@ -941,7 +952,7 @@ window.ASSET_MANIFEST = {
 
     /** Build an outcome. ctx = { bet, inFreeSpins, special, bought } */
     function build(item, ctx) {
-      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special, bought = !!ctx.bought;
+      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special, bought = ctx.bought || false;
       const base = { bet, inFreeSpins: fs, special };
       const rg = (o = {}) => engine.randomGrid(Object.assign({ fs, special, bought, noScatter: true }, o));
       const quiet = () => ({ grid: rg(), opts: base });
@@ -2374,7 +2385,7 @@ window.ASSET_MANIFEST = {
   Object.keys(BW).forEach(k => { BUY.st[k] = 'normal'; });
   const buyImg = (k, st) => A.get('ui_buy_' + BW[k] + '_' + st);
   const buyReady = () => !!A.real['ui_buy_buy_btn_normal'];
-  const buyOption = id => (C.buy.options || []).find(o => o.id === id) || { id: 'free_spins', spins: C.freeSpins, price: C.buy.price };
+  const buyOption = id => engine.buyOpt(id);
   function bodyX(img) {                          // left/right edge of the painted body (columns mostly opaque)
     const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
     const g = c.getContext('2d'); g.drawImage(img, 0, 0); const d = g.getImageData(0, 0, c.width, c.height).data;
@@ -2456,7 +2467,7 @@ window.ASSET_MANIFEST = {
     const o = buyOption(id);
     if (G.balance < o.price * bet() - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return; }
     BUY.lock = true; closeBuy();
-    try { await wait(BU.fadeOut); await play({ buy: id }); } finally { BUY.lock = false; }
+    try { await wait(BU.fadeOut); await play({ buy: id, direct: true }); } finally { BUY.lock = false; }
   }
   function buyAction(k) {
     if (k === 'main') openBuy();
@@ -2467,7 +2478,10 @@ window.ASSET_MANIFEST = {
   function buyDown(x, y, e) {
     const k = buyWidgetAt(x, y); if (!k) return false;
     BUY.kbd = false; BUY.ptr = e.pointerType || 'mouse';
-    if (k === 'backdrop') return true;                       // clicks outside the popup do nothing (only X closes)
+    if (k === 'backdrop') {                                  // outside the wooden board: close, back to the base game
+      if (!buyInside(buyLayout().frame, x, y) && !BUY.lock) closeBuy();
+      return true;
+    }
     if (BUY.st[k] === 'release' || BUY.lock) return true;
     BUY.press = k; BUY.st[k] = 'pressed';
     try { cv.setPointerCapture(e.pointerId); } catch (err) {}
@@ -2959,9 +2973,21 @@ window.ASSET_MANIFEST = {
     try {
       first = first || nextItem();
       if (first.type === 'buy' && G.balance < spinCost(first) - 1e-9) { first = { type: 'random' }; ensureFunds(); }   // a queued buy the balance can't cover plays as a spin
-      const base = await spinOnce(first, false);
+      let base, direct = false;
+      if (first.type === 'buy' && opts.direct) {
+        // bought from the popup (Darshan 2026-11-21): no visible trigger spin, the transition plays straight away.
+        // The bought trigger board (3-5 Scatters, CONFIG.buy.scatterWeights) is still drawn and paid, so the maths
+        // is the same as a spun buy; it is put on the reels while the transition covers the screen.
+        base = director.build(first, { bet: bet(), inFreeSpins: false, special: null, bought: false });
+        G.balance = Math.round((G.balance - spinCost(first)) * 100) / 100; setWin(0, true); G.fx = newFx(); G.onChange();
+        direct = base;
+      } else base = await spinOnce(first, false);
       let roundWin = base.total;
-      if (base.freeSpins) roundWin = await freeSpins(first.type === 'buy' ? buyOption(first.option).spins : base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial(), first.type === 'buy');
+      if (base.freeSpins) {
+        const bo = first.type === 'buy' ? buyOption(first.option) : null;
+        const special = base.special != null ? base.special : engine.pickSpecial(bo && bo.specialPool);
+        roundWin = await freeSpins(bo ? bo.spins : base.freeSpins, roundWin, special, bo ? bo.id : false, direct);
+      }
       roundWin = Math.min(roundWin, C.maxWin * bet());
       G.balance = Math.round((G.balance + roundWin) * 100) / 100;
       setWin(roundWin, true);
@@ -2974,13 +3000,22 @@ window.ASSET_MANIFEST = {
     G.busy = false; G.onChange(); applySpeed();
     return true;
   }
-  async function freeSpins(count, roundWin, special, bought) {
+  async function freeSpins(count, roundWin, special, bought, direct) {
     const fs = G.fs, baseWin = roundWin;
-    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
+    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: bought || false });
     shoot();
-    await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
-    await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
-    await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });
+    const enter = () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); };
+    if (direct) {
+      // popup buy: transition first, then the expanding symbol pick inside free spins; the trigger's Scatter pay
+      // shows in the win box
+      await transition('toFree', () => { G.board = direct.end.map(c => c.slice()); enter(); fs.special = null; if (direct.total) setWin(direct.total, true); });   // the card shows after the pick
+      await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
+      fs.special = special;
+    } else {
+      await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
+      await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
+      await transition('toFree', enter);
+    }
     while (fs.left > 0) {
       fs.left--; fs.played++;
       await wait(.35 / G.speed);

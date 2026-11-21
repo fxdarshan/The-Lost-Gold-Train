@@ -122,13 +122,14 @@
       price: 100,                              // REF: 100x total bet
       scatterWeights: { 3: 85, 4: 13, 5: 2 },  // TUNED (REF: "weighted", values not published)
       specialShare: 1.04,                      // TUNED: bought free spins use 1.04x the natural specialShare (buy RTP about 96.5%)
-      // The Buy Feature popup (Darshan's UI art, 2026-11-21): three options. Spins and prices are from the art.
-      // Free spins work the same in all three (ASSUMED: the art gives no other rule), so the dearer options pay
-      // back far less than their price until Darshan says what they add. See the README "Decisions".
+      // The Buy Feature popup (Darshan's UI art, 2026-11-21): three options; spins and prices from the art.
+      // Super and Max rules are ASSUMED (Darshan 2026-11-21: "go ahead and implement"): the dearer options make the
+      // expanding symbol land more often (specialShare, TUNED to about 96% each), and Feature Max also picks the
+      // expanding symbol from the four top symbols only.
       options: [
-        { id: 'free_spins',       spins: 10, price: 100 },    // REF: 10 free spins for 100x
-        { id: 'super_free_spins', spins: 20, price: 300 },    // art: 20 spins, 300x (rules ASSUMED)
-        { id: 'feature_max',      spins: 30, price: 1500 }    // art: 30 spins, 1500x (rules ASSUMED)
+        { id: 'free_spins',       spins: 10, price: 100,  specialShare: 1.04 },     // REF: 10 free spins for 100x
+        { id: 'super_free_spins', spins: 20, price: 300,  specialShare: 1.24 },      // TUNED (96%)
+        { id: 'feature_max',      spins: 30, price: 1500, specialShare: 1.61, specialPool: [0, 1, 2, 3] }   // TUNED (96%)
       ]
     },
 

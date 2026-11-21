@@ -33,12 +33,13 @@
     // (CONFIG.specialShare, TUNED), so a premium special lands as often as a low one and pays more.
     // Bought free spins use CONFIG.buy.specialShare (REF: bought free spins have their own reels per special).
     function table(fs, special, bought) {
-      const key = fs ? (bought ? 'buy' : 'fs') + (special ?? '') : 'base';
+      const key = fs ? (bought ? 'buy' + (typeof bought === 'string' ? bought : '') : 'fs') + (special ?? '') : 'base';
       if (tables[key]) return tables[key];
       const w = (fs && C.weightsFreeSpins) || C.weights;
       let share = C.specialShare;
       if (share && typeof share === 'object') share = share[special];   // per-symbol shares
-      if (share && bought && C.buy && C.buy.specialShare) share *= C.buy.specialShare;   // bought free spins: a fraction of it
+      if (share && bought && C.buy) share *= buyOpt(bought).specialShare ?? C.buy.specialShare ?? 1;   // bought free spins: the option's boost
+      share = Math.min(share || 0, .6) || share;
       return (tables[key] = w.map(row => {
         const others = row.reduce((t, x, s) => t + (s === special ? 0 : x), 0);
         const sw = fs && special != null && share ? others * share / (1 - share) : null;
@@ -172,7 +173,16 @@
       return { start: clone(startGrid), end: grid, steps, total: round2(mult * bet), mult, freeSpins };
     }
 
-    function pickSpecial() { return Number(pickWeighted(C.specialWeights)); }
+    /** The expanding symbol. pool: allowed symbol ids (Feature Max picks from the top symbols only). */
+    function pickSpecial(pool) {
+      if (!pool) return Number(pickWeighted(C.specialWeights));
+      const w = {}; pool.forEach(s => { w[s] = C.specialWeights[s] || 1; }); return Number(pickWeighted(w));
+    }
+    /** A feature buy option from CONFIG.buy.options by id (true or unknown: the standard buy). */
+    function buyOpt(id) {
+      const o = C.buy && (C.buy.options || []).find(x => x.id === id);
+      return o || { id: 'free_spins', spins: C.freeSpins, price: C.buy ? C.buy.price : 100, specialShare: C.buy && C.buy.specialShare };
+    }
 
     /** Index into CONFIG.winTiers for a win, or -1 when it is below the first banner. */
     function tierOf(total, bet) {
@@ -181,7 +191,7 @@
       return t;
     }
 
-    return { isWild, multOf, randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, tierOf, clone, pickWeighted, minCount };
+    return { isWild, multOf, randomGrid, randomSymbol, buyGrid, evaluate, scatters, expansion, resolveSpin, pickSpecial, buyOpt, tierOf, clone, pickWeighted, minCount };
   }
 
   const Engine = { create };

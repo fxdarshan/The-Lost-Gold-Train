@@ -79,7 +79,7 @@
 
     /** Build an outcome. ctx = { bet, inFreeSpins, special, bought } */
     function build(item, ctx) {
-      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special, bought = !!ctx.bought;
+      const bet = ctx.bet, fs = !!ctx.inFreeSpins, special = ctx.special, bought = ctx.bought || false;
       const base = { bet, inFreeSpins: fs, special };
       const rg = (o = {}) => engine.randomGrid(Object.assign({ fs, special, bought, noScatter: true }, o));
       const quiet = () => ({ grid: rg(), opts: base });

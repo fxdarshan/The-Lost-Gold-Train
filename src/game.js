@@ -674,7 +674,7 @@
   Object.keys(BW).forEach(k => { BUY.st[k] = 'normal'; });
   const buyImg = (k, st) => A.get('ui_buy_' + BW[k] + '_' + st);
   const buyReady = () => !!A.real['ui_buy_buy_btn_normal'];
-  const buyOption = id => (C.buy.options || []).find(o => o.id === id) || { id: 'free_spins', spins: C.freeSpins, price: C.buy.price };
+  const buyOption = id => engine.buyOpt(id);
   function bodyX(img) {                          // left/right edge of the painted body (columns mostly opaque)
     const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
     const g = c.getContext('2d'); g.drawImage(img, 0, 0); const d = g.getImageData(0, 0, c.width, c.height).data;
@@ -756,7 +756,7 @@
     const o = buyOption(id);
     if (G.balance < o.price * bet() - 1e-9) { G.notice = { text: 'NOT ENOUGH CASH TO BUY', t0: performance.now() }; return; }
     BUY.lock = true; closeBuy();
-    try { await wait(BU.fadeOut); await play({ buy: id }); } finally { BUY.lock = false; }
+    try { await wait(BU.fadeOut); await play({ buy: id, direct: true }); } finally { BUY.lock = false; }
   }
   function buyAction(k) {
     if (k === 'main') openBuy();
@@ -767,7 +767,10 @@
   function buyDown(x, y, e) {
     const k = buyWidgetAt(x, y); if (!k) return false;
     BUY.kbd = false; BUY.ptr = e.pointerType || 'mouse';
-    if (k === 'backdrop') return true;                       // clicks outside the popup do nothing (only X closes)
+    if (k === 'backdrop') {                                  // outside the wooden board: close, back to the base game
+      if (!buyInside(buyLayout().frame, x, y) && !BUY.lock) closeBuy();
+      return true;
+    }
     if (BUY.st[k] === 'release' || BUY.lock) return true;
     BUY.press = k; BUY.st[k] = 'pressed';
     try { cv.setPointerCapture(e.pointerId); } catch (err) {}
@@ -1259,9 +1262,21 @@
     try {
       first = first || nextItem();
       if (first.type === 'buy' && G.balance < spinCost(first) - 1e-9) { first = { type: 'random' }; ensureFunds(); }   // a queued buy the balance can't cover plays as a spin
-      const base = await spinOnce(first, false);
+      let base, direct = false;
+      if (first.type === 'buy' && opts.direct) {
+        // bought from the popup (Darshan 2026-11-21): no visible trigger spin, the transition plays straight away.
+        // The bought trigger board (3-5 Scatters, CONFIG.buy.scatterWeights) is still drawn and paid, so the maths
+        // is the same as a spun buy; it is put on the reels while the transition covers the screen.
+        base = director.build(first, { bet: bet(), inFreeSpins: false, special: null, bought: false });
+        G.balance = Math.round((G.balance - spinCost(first)) * 100) / 100; setWin(0, true); G.fx = newFx(); G.onChange();
+        direct = base;
+      } else base = await spinOnce(first, false);
       let roundWin = base.total;
-      if (base.freeSpins) roundWin = await freeSpins(first.type === 'buy' ? buyOption(first.option).spins : base.freeSpins, roundWin, base.special != null ? base.special : engine.pickSpecial(), first.type === 'buy');
+      if (base.freeSpins) {
+        const bo = first.type === 'buy' ? buyOption(first.option) : null;
+        const special = base.special != null ? base.special : engine.pickSpecial(bo && bo.specialPool);
+        roundWin = await freeSpins(bo ? bo.spins : base.freeSpins, roundWin, special, bo ? bo.id : false, direct);
+      }
       roundWin = Math.min(roundWin, C.maxWin * bet());
       G.balance = Math.round((G.balance + roundWin) * 100) / 100;
       setWin(roundWin, true);
@@ -1274,13 +1289,22 @@
     G.busy = false; G.onChange(); applySpeed();
     return true;
   }
-  async function freeSpins(count, roundWin, special, bought) {
+  async function freeSpins(count, roundWin, special, bought, direct) {
     const fs = G.fs, baseWin = roundWin;
-    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: !!bought });
+    Object.assign(fs, { left: count, played: 0, total: 0, awarded: count, capped: false, special: null, bought: bought || false });
     shoot();
-    await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
-    await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
-    await transition('toFree', () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); });
+    const enter = () => { fs.active = true; fs.special = special; G.envTarget = 1; G.env = 1; G.fuses = []; G.fx = newFx(); SND.playMusic('bgm_freegame_loop'); };
+    if (direct) {
+      // popup buy: transition first, then the expanding symbol pick inside free spins; the trigger's Scatter pay
+      // shows in the win box
+      await transition('toFree', () => { G.board = direct.end.map(c => c.slice()); enter(); fs.special = null; if (direct.total) setWin(direct.total, true); });   // the card shows after the pick
+      await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
+      fs.special = special;
+    } else {
+      await modal({ kind: 'intro', text1: 'YOU HAVE WON', text2: `${count} FREE SPINS` });
+      await modal({ kind: 'pick', special, start: Math.floor(Math.random() * C.regular.length) });
+      await transition('toFree', enter);
+    }
     while (fs.left > 0) {
       fs.left--; fs.played++;
       await wait(.35 / G.speed);
