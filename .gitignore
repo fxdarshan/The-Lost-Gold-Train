@@ -1,9 +1,4 @@
 .DS_Store
 node_modules/
-*.webm
-*.mp4
 __pycache__/
 *.pyc
-
-# source videos for the animation sheets are kept (each under 25 MB)
-!assets/source/originals/anims/video/*.mp4
