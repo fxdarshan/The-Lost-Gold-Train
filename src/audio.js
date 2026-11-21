@@ -8,13 +8,16 @@
 
   A.init = function (manifest) {
     if (A.ctx) { if (A.ctx.state === 'suspended') A.ctx.resume().catch(() => {}); return; }
+    A.loops = (manifest && manifest.music) || {};
     try {
       A.ctx = new (root.AudioContext || root.webkitAudioContext)();
       A.master = A.ctx.createGain(); A.master.gain.value = A.muted ? 0 : .6; A.master.connect(A.ctx.destination);
       A.recDest = A.ctx.createMediaStreamDestination(); A.master.connect(A.recDest);
     } catch (e) { A.ctx = null; return; }
-    if (location.protocol.startsWith('http')) {
-      Object.entries((manifest && manifest.sounds) || {}).forEach(([k, src]) => {
+    {
+      // over http every sound file loads; from a local file only embedded (data:) sounds can
+      const web = location.protocol.startsWith('http');
+      Object.entries((manifest && manifest.sounds) || {}).filter(([k, src]) => web || src.startsWith('data:')).forEach(([k, src]) => {
         fetch(src).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(b => A.ctx.decodeAudioData(b))
           .then(buf => { A.buffers[k] = buf; if (k === A.musicKey) A.playMusic(k, true); }).catch(() => {});
       });
@@ -25,7 +28,9 @@
   function file(key, vol = 1, loop = false) {
     const buf = A.buffers[key]; if (!buf || !A.ctx) return null;
     const s = A.ctx.createBufferSource(), g = A.ctx.createGain();
-    s.buffer = buf; s.loop = loop; g.gain.value = vol; s.connect(g); g.connect(A.master); s.start();
+    s.buffer = buf; s.loop = loop; g.gain.value = vol; s.connect(g); g.connect(A.master);
+    const lp = loop && A.loops[key];                    // music: loop between its loop points, start on the downbeat
+    if (lp) { s.loopStart = lp.start; s.loopEnd = lp.start + lp.length; s.start(0, lp.start); } else s.start();
     return { s, g };
   }
   function tone(f, dur, o = {}) {
@@ -79,7 +84,7 @@
     if (A.musicKey === key && !force) return;
     A.musicKey = key;
     if (A.music) { const m = A.music; try { m.g.gain.setTargetAtTime(0, A.ctx.currentTime, .3); m.s.stop(A.ctx.currentTime + 1.2); } catch (e) {} A.music = null; }
-    if (A.buffers[key]) A.music = file(key, .5, true);
+    if (A.buffers[key]) { A.music = file(key, .5, true); if (A.music) { A.music.g.gain.setValueAtTime(.0001, A.ctx.currentTime); A.music.g.gain.exponentialRampToValueAtTime(.5, A.ctx.currentTime + .6); } }
   };
 
   root.Audio2 = A;

@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-21: original music: base game loop "Dust on the Rails" and free spins loop "Gold Rush Express", composed in code, seamless loops, also in the single-file build.
 - 2026-11-21: Big Win screens from Darshan's art, progressing Nice → Big → Mega → Super → Epic (five tiers, Epic from 250×); Free Spins outro rebuilt from his background, board, ribbon and gold pile with live amount and spins count.
 - 2026-11-21: free spins: the chosen expanding symbol shows on Darshan's wooden plank (`decor_wood_plank.png`) at the top right, above the Outlaw, instead of the code-drawn card on the left (`C.specialBoard`).
 - 2026-11-21: removed the ambient sparks drifting over the backgrounds (the only background particles; base game had none). Win, anticipation, mascot and banner effects are unchanged.

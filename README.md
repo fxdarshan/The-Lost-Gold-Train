@@ -98,6 +98,10 @@ Or open `index.html` directly. `node tools/build-single.js` writes one self-cont
 - Big Win uses Darshan's five screens (Nice, Big, Mega, Super, Epic), one at a time, with the amount counting up below. The old six-step ladder is now five: **SENSATIONAL is merged into EPIC and EPIC starts at 250× (ASSUMED; was 500×)**. Presentation only, no RTP change. Measured: Nice 1 in ~125 spins, Big ~240, Mega ~505, Super ~870, Epic ~3,150. Timing from his spec: in 0.88→1 over 350 ms, tier swap (out 1→1.05 in 180 ms, next 0.92→1 in 280 ms), hold with 1.015 breathing, out 1→0.96 in 250 ms; light coin drift on Mega and above only.
 - Free Spins outro uses his background, board, ribbon and gold pile; FREE SPINS, TOTAL WIN, the amount and IN n FREE SPINS are drawn in code from the round result. The pieces came as crops of a presentation sheet: the dark sheet background and labels were keyed out, and the board's cut-off right edge was completed by mirroring its left half (`tools/asset-pipeline/prep_bigwin_outro.py`). The supplied files are small (screens ~290 px, board 340 px, background 560×114), so they look soft at full screen.
 
+
+### Music (2026-11-21)
+Original music composed and synthesised in code (`tools/audio/compose_music.py`; no samples, no third-party material). Base game: "Dust on the Rails" (A minor, 92 BPM, 41.7 s loop): whistled lead, galloping guitar, plucked bass, brushes, hoof clip-clops, a distant bell. Free spins: "Gold Rush Express" (A minor, 128 BPM, 30 s loop): brass lead, choir, train-rhythm snare, driving bass, timpani, strummed guitar, whip cracks. Both loop seamlessly (0.5 s pre/post-roll, loop points in `ASSET_MANIFEST.music`), fade in over 0.6 s and cross-fade on switching. Embedded in the single-file build too. Edit the notes or mix in the script and rerun it.
+
 ## Sample game maths
 `node tools/simulate.js 4000000 <seed>`: RTP 95.9% to 98.2% across six seeds (average about 96.6%; target 96.50%), free spins about 1 in 163, base hit rate about 28%, max win capped at 5,500×. The spread is the game's high volatility, not a bug: tune a real game over several seeds.
 

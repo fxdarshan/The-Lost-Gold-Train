@@ -137,6 +137,12 @@ window.ASSET_MANIFEST = {
     char_outlaw_win: { cols: 20, rows: 8, frames: 151, fps: 15 }
   },
 
+  // music loop points (s): each file has 0.5 s of the loop's end before it and 0.5 s of its start after it, so the
+  // loop [start, start + length] is seamless whatever padding the MP3 encoder adds (tools/audio/compose_music.py)
+  music: {
+    bgm_basegame_loop: { start: 0.5, length: 41.7391 },   // "Dust on the Rails", 92 BPM, 16 bars
+    bgm_freegame_loop: { start: 0.5, length: 30.0 }       // "Gold Rush Express", 128 BPM, 16 bars
+  },
   sounds: {
     bgm_basegame_loop:      'assets/audio/bgm_basegame_loop.mp3',
     bgm_freegame_loop:      'assets/audio/bgm_freegame_loop.mp3',

@@ -4,8 +4,8 @@
  * Anyone can double-click the result to play, with no server or install.
  *   node tools/build-single.js            -> dist/<title>-prototype.html (title from CONFIG.title)
  * Every image listed in assets/manifest.js that exists on disk is embedded as a
- * data URI, so the single file shows the real art. Sounds are not embedded
- * (the single file uses the synthesised placeholder sounds).
+ * data URI, so the single file shows the real art. The two music loops are embedded too; the other sounds
+ * stay synthesised placeholders in the single file.
  */
 const fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..');
@@ -25,6 +25,10 @@ function embedImages(js) {
     if (!mime || !fs.existsSync(file)) return m;
     embedded++;
     return `'data:${mime};base64,${fs.readFileSync(file).toString('base64')}'`;
+  }).replace(/'(assets\/audio\/bgm_[^']+\.mp3)'/g, (m, rel) => {      // music loops
+    const file = path.join(root, rel); if (!fs.existsSync(file)) return m;
+    embedded++;
+    return `'data:audio/mpeg;base64,${fs.readFileSync(file).toString('base64')}'`;
   });
 }
 html = html.replace(/<script src="([^"]+)"><\/script>/g, (m, src) => {

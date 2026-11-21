@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (39)
+- Music: two original loops from `tools/audio/compose_music.py` (not listened to by Claude: checked by levels, spectrogram and loop points only). Sound effects are still the synthesised placeholders in `src/audio.js`.
 ### 2026-11-21 · claude.ai chat (38)
 - Big Win screens + Free Spins outro from Darshan's packs. Ladder now five tiers (Sensational merged, Epic 250×, ASSUMED). **Ask Darshan:** higher-resolution files (screens ~290 px, outro background 560 px wide) and the thematic tier names (WANTED → OUTLAW LEGEND) if he prefers them.
 ### 2026-11-21 · claude.ai chat (37)

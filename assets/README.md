@@ -10,3 +10,6 @@ The game loads only what `assets/manifest.js` lists, from `assets/images/` and `
 
 ## Buy Feature UI (2026-11-21)
 Supplied clean final pack in `art/ui/buy/supplied/`; game copies in `assets/images/ui/buy/` made by `python3 tools/asset-pipeline/clean_buy_ui_final.py art/ui/buy/supplied assets/images/ui/buy` (trims neighbour slivers only). Drop in new PNGs with the same names and rerun.
+
+## Music (2026-11-21)
+`assets/audio/bgm_*.mp3` are made by `python3 tools/audio/compose_music.py`. Replace them with final music of any length: set its loop points in `ASSET_MANIFEST.music` (or remove the entry to loop the whole file).
