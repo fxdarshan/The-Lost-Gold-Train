@@ -1,0 +1,33 @@
+MAGNIFIC PROMPT — FREE SPINS OUTRO BOARD
+
+Animate only the supplied centered Free Spins outro board artwork.
+
+No character.
+
+Preserve the exact Western art direction, wood, brass, gold, red ribbon, colors, proportions, typography areas, lighting and rendering style.
+
+Target useful animation: 1.5 seconds.
+Final delivery target: 45 frames at 30 FPS.
+
+Camera completely locked.
+
+Animation:
+- Board starts slightly smaller, around 94–96% scale.
+- Smoothly settles to 100%.
+- Very subtle board weight / impact on settle.
+- Small gold highlight travels once along the brass frame.
+- Red ribbon gives one small natural follow-through movement.
+- If gold pile is present, 1–2 coins may make a tiny settling movement.
+- End in a stable neutral pose.
+
+Do not animate the background.
+Do not add characters.
+Do not add new props.
+Do not add heavy particles.
+No camera shake.
+No zoom other than controlled board scale.
+No texture swimming.
+No warping.
+No text distortion.
+
+The win amount and Free Spins count will be added dynamically in code by Claude, so do NOT generate fixed numbers in the animation.

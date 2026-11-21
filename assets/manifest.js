@@ -88,12 +88,17 @@ window.ASSET_MANIFEST = {
     fx_scatter_full:        'assets/images/fx/fx_scatter_full.webp',
     fx_lantern:             'assets/images/fx/fx_lantern.webp',
 
-    banner_win_nice:        'assets/images/banners/banner_win_nice.webp',
-    banner_win_big:         'assets/images/banners/banner_win_big.webp',
-    banner_win_mega:        'assets/images/banners/banner_win_mega.webp',
-    banner_win_superb:      'assets/images/banners/banner_win_superb.webp',
-    banner_win_sensational: 'assets/images/banners/banner_win_sensational.webp',
-    banner_win_epic:        'assets/images/banners/banner_win_epic.webp',
+    // Big Win screens (Darshan 2026-11-21): one full illustration per tier, the amount is drawn below in code
+    banner_win_nice:        'assets/images/banners/bigwin/bigwin_nice.webp',
+    banner_win_big:         'assets/images/banners/bigwin/bigwin_big.webp',
+    banner_win_mega:        'assets/images/banners/bigwin/bigwin_mega.webp',
+    banner_win_super:       'assets/images/banners/bigwin/bigwin_super.webp',
+    banner_win_epic:        'assets/images/banners/bigwin/bigwin_epic.webp',
+    // Free Spins outro (Darshan 2026-11-21): background, board, ribbon, gold; all text drawn in code from the result
+    ui_outro_bg:            'assets/images/ui/outro/bg_outro.webp',
+    ui_outro_board:         'assets/images/ui/outro/board_main.png',
+    ui_outro_ribbon:        'assets/images/ui/outro/ribbon_free_spins.png',
+    ui_outro_gold:          'assets/images/ui/outro/gold_pile.png',
 
     ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp',
     // Buy Feature UI: Darshan's clean final PNGs (Lost_Gold_Train_Buy_Feature_CLEAN_FINAL.zip, 2026-11-21), one image

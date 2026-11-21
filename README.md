@@ -93,6 +93,11 @@ Or open `index.html` directly. `node tools/build-single.js` writes one self-cont
 - **ASSUMED rules for Super Free Spins and Feature Max** (Darshan 2026-11-21: "go ahead and implement"): the expanding symbol lands more often (`C.buy.options[].specialShare`, TUNED), and Feature Max also picks the expanding symbol from the four top symbols only (Outlaw, Steam Train, Gold Bars, Sheriff's Star). Measured: Free Spins 95.3–96.8%, Super Free Spins 95.7–96.2% (4 × 200,000 buys), Feature Max 96.2–96.4% (2 × 200,000 buys). The base game RTP is unchanged.
 - Buying from the popup skips the visible trigger spin: the transition plays at once, the bought trigger board (3–5 Scatters) is placed and paid under it, then the expanding symbol is picked inside free spins. Clicking outside the wooden board closes the popup.
 
+
+### Big Win and Free Spins outro (2026-11-21)
+- Big Win uses Darshan's five screens (Nice, Big, Mega, Super, Epic), one at a time, with the amount counting up below. The old six-step ladder is now five: **SENSATIONAL is merged into EPIC and EPIC starts at 250× (ASSUMED; was 500×)**. Presentation only, no RTP change. Measured: Nice 1 in ~125 spins, Big ~240, Mega ~505, Super ~870, Epic ~3,150. Timing from his spec: in 0.88→1 over 350 ms, tier swap (out 1→1.05 in 180 ms, next 0.92→1 in 280 ms), hold with 1.015 breathing, out 1→0.96 in 250 ms; light coin drift on Mega and above only.
+- Free Spins outro uses his background, board, ribbon and gold pile; FREE SPINS, TOTAL WIN, the amount and IN n FREE SPINS are drawn in code from the round result. The pieces came as crops of a presentation sheet: the dark sheet background and labels were keyed out, and the board's cut-off right edge was completed by mirroring its left half (`tools/asset-pipeline/prep_bigwin_outro.py`). The supplied files are small (screens ~290 px, board 340 px, background 560×114), so they look soft at full screen.
+
 ## Sample game maths
 `node tools/simulate.js 4000000 <seed>`: RTP 95.9% to 98.2% across six seeds (average about 96.6%; target 96.50%), free spins about 1 in 163, base hit rate about 28%, max win capped at 5,500×. The spread is the game's high volatility, not a bug: tune a real game over several seeds.
 

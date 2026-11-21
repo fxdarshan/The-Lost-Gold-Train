@@ -1,0 +1,68 @@
+CLAUDE IMPLEMENTATION PROMPT — THE LOST GOLD TRAIN BIG WIN
+
+Use the five supplied screen PNGs as the approved Big Win artwork.
+
+FILES:
+01_nice_win_screen.png
+02_big_win_screen.png
+03_mega_win_screen.png
+04_super_win_screen.png
+05_epic_win_screen.png
+
+PROGRESSION:
+1. Nice Win — smallest visual scale; outlaw only.
+2. Big Win — outlaw + stronger action.
+3. Mega Win — outlaw + train + first major gold reveal.
+4. Super Win — outlaw + large gold cargo + train.
+5. Epic Win — largest composition; outlaw + train + massive gold + strongest lighting.
+
+IMPLEMENTATION:
+- Use ONE screen PNG at a time.
+- Keep each asset centered and preserve aspect ratio.
+- Do not recolor or redraw the artwork.
+- Do not add extra glow, blur, smoke layers, or heavy particles.
+- Win amount is dynamic UI text rendered separately below the Big Win title.
+- Amount text should count up while the screen holds.
+- Keep the same font/color system used by the game UI.
+
+ANIMATION PER STAGE:
+IN:
+- opacity 0 -> 1
+- scale 0.88 -> 1.00
+- duration about 350 ms
+- ease-out
+
+HOLD:
+- 2.0–3.0 sec
+- very subtle scale breathing only: 1.00 -> 1.015 -> 1.00
+- optional tiny coin drift only on Mega/Super/Epic
+
+OUT:
+- opacity 1 -> 0
+- scale 1.00 -> 0.96
+- duration about 250 ms
+
+PROGRESSION BETWEEN TIERS:
+If the win crosses the next threshold while the current screen is active:
+- current screen scales to 1.05 and fades out over 180 ms
+- next screen enters immediately from 0.92 -> 1.00 over 280 ms
+- do not blank the screen between tiers
+
+PERFORMANCE:
+- Preload all 5 PNGs.
+- Use CSS transforms and opacity only.
+- No video textures.
+- No canvas particle engine.
+- No blur filters.
+- No duplicated artwork layers.
+- Keep lightweight for desktop and mobile.
+
+POSITION:
+- Fixed center anchor.
+- No wobble or layout shift.
+- Responsive max size, preserving aspect ratio.
+- Ensure the largest Epic screen never clips on mobile.
+
+STORY FEEL:
+The sequence should feel like one robbery escalating:
+Outlaw appears -> confrontation -> train and gold revealed -> heist peaks -> outlaw becomes a legend.

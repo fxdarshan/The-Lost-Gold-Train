@@ -841,41 +841,52 @@
     if (fx === 'fireworks' || fx === 'epic' || fx === 'lasers') { if (p(fx === 'epic' ? 3 : 1.8)) emit('rocket', W * (.15 + Math.random() * .7), H, 1, { spread: .25, speed: 1100, gravity: 600, life: .9 + Math.random() * .4, burst: ['#ff5a5a', '#ffd34a', '#ff9a3a', '#ffffff'][Math.floor(Math.random() * 4)] }); }
     // (the firecrackers thrown here in New Year Crackers are gone: gold coins only)
   }
-  // progressive big win (2026-11-21): the tally counts up from 0 and the banner climbs tier by tier (NICE -> BIG ->
-  // MEGA ...) as the amount passes each threshold, each step with its own pop, sound and effects; then a hold on the
-  // final tier and out. Skip jumps straight to the final tier and amount.
+  // progressive big win with Darshan's Big Win screens (2026-11-21): one illustration at a time, centred. The amount
+  // counts up below it; each time it passes the next threshold the current screen scales to 1.05 and fades out
+  // (180 ms) while the next enters from 0.92 (280 ms), with no blank between. First screen in: 0.88 -> 1 over 350 ms;
+  // hold with a slight breathing scale; out: 1 -> 0.96 over 250 ms. Light coin drift on Mega and above. Skip jumps to
+  // the final screen and amount.
   function drawBanner(t, dt) {
     const b = G.banner; if (!b) return;
-    const f = (t - b.t0) * C.fps * G.speed, [fi, fl, fo] = FR.banner, step = FR.bannerStep;
-    const n = b.tier + 1, countEnd = fi + n * step, holdEnd = countEnd + fl, total = holdEnd + fo;
-    if (G.skip !== b.tok) { b.tok = G.skip; if (f < countEnd) b.t0 = t - sec(countEnd); }
-    // which tier the count has reached, and the amount shown
-    const cu = clamp((f - fi * .5) / (n * step), 0, 1) * n, k = Math.min(b.tier, Math.floor(cu)), su = cu - k;
+    const sp = G.speed, el = (t - b.t0) * sp, [inT, in0] = FR.bigWinIn || [.35, .88], [outT, out1] = FR.bigWinOut || [.25, .96];
+    const [swOut, swOutS, swIn, swIn0] = FR.bigWinSwap || [.18, 1.05, .28, .92], step = FR.bannerStep / C.fps, n = b.tier + 1;
+    const countEnd = inT + n * step, holdEnd = countEnd + (FR.bigWinHold || 2.5), total = holdEnd + outT;
+    if (G.skip !== b.tok) { b.tok = G.skip; if (el < countEnd) b.t0 = t - countEnd / sp; }
+    const cu = clamp((el - inT * .5) / (n * step), 0, 1) * n, k = Math.min(b.tier, Math.floor(cu)), su = cu - k;
     const lo = k === 0 ? 0 : C.winTiers[k].min * bet(), hi = k === b.tier ? b.amount : C.winTiers[k + 1].min * bet();
     const shown = cu >= n ? b.amount : lo + (hi - lo) * (k === b.tier ? ease.out(su) : su);
-    if (b.k !== k) { b.k = k; b.kT = f; SND.play('banner_hit'); }
-    const tier = C.winTiers[k], fk = f - b.kT;
-    let dim = .75, scale, alpha = 1, dy = 0;
-    if (f < fi) dim = .75 * f / fi;
-    if (f < holdEnd) {                         // pop on every new tier, then a gentle pulse
-      const u = clamp(fk / 22, 0, 1);
-      scale = (k === 0 && f < fi ? ease.out(f / fi) : 1) * (u < 1 ? (u < .5 ? 1 + .35 * ease.out(u / .5) : 1.35 - .35 * ease.inOut((u - .5) / .5)) : 1 + .03 * Math.sin((fk - 22) / 30 * Math.PI * 2));
-    } else { const u = clamp((f - holdEnd) / fo, 0, 1); dim = .75 * (1 - u); scale = 1 + .3 * u; alpha = 1 - u; dy = -120 * u; }
+    if (b.k !== k) { b.prevK = b.k; b.k = k; b.kT = el; SND.play('banner_hit'); }
     if (cu < n && t - (b.tick || 0) > .07) { b.tick = t; SND.play('sfx_countup_loop'); }
-    if (cu >= n && !b.ended) { b.ended = true; SND.play('sfx_countup_end'); setWin(G.spinBaseWin + b.amount, true); }
+    if (cu >= n && !b.ended) { b.ended = true; b.endT = el; SND.play('sfx_countup_end'); setWin(G.spinBaseWin + b.amount, true); }
+    // backdrop
+    let dim = .75; if (el < inT) dim = .75 * el / inT; if (el > holdEnd) dim = .75 * (1 - clamp((el - holdEnd) / outT, 0, 1));
     dimmer(dim);
-    if (f < holdEnd) tierFx(tier.fx, dt);
-    if (fk < 6 && k > 0 && !b['burst' + k]) { b['burst' + k] = true; emit('spark', W / 2, H * .36, 60 + 20 * k, { spread: Math.PI * 2, speed: 900, drag: 2.5, gravity: 300, life: .9, size: 12, color: ['#fff6c8', '#ffd34a', '#ff8a2a'] }); }
-    ctx.save(); ctx.globalAlpha = alpha;
-    rays(W / 2, H * .42, t, 'rgba(255,200,90,.35)', alpha * .8, tier.fx === 'lasers' || tier.fx === 'epic' ? 24 : 16);
-    const img = A.real['banner_win_' + tier.id] && A.get('banner_win_' + tier.id);
-    const kk = img ? Math.min(W * .5 / img.width, H * .6 / img.height) : 1, ih = img ? img.height * kk : 190, cy = img ? H * .36 : H * .4;
-    ctx.translate(W / 2, cy + dy); ctx.scale(scale, scale);
-    if (img) ctx.drawImage(img, -img.width * kk / 2, -ih / 2, img.width * kk, ih);
-    else { ribbon(0, 0, 1100, 190, ['#e8402a', '#b0101a', '#6a0a0a']); blockText(tier.label, 0, -6, 110, { colors: ['#ffffff', tier.colors[0], tier.colors[1]], maxW: 1000 }); }
-    ctx.restore();
-    blockText(fmt(shown), W / 2, (img ? cy + ih / 2 + 78 : H * .64) + dy, img ? 130 : 150, { alpha, scale: f < fi ? ease.out(f / fi) : 1, maxW: W * .8 });
-    if (f >= total) { const r = b.resolve; G.banner = null; r(); }
+    const tierFxNow = C.winTiers[k].fx;
+    if (el < holdEnd && tierFxNow === 'coins' && Math.random() < 14 * dt) emit('coin', Math.random() * W, -40, 1, { angle: Math.PI / 2, spread: .2, speed: 120, gravity: 500, life: 2.6, size: 22 });
+    const art = id => A.real['banner_win_' + id] ? A.get('banner_win_' + id) : null;
+    const boxH = H * .66, cy = H * .42;
+    const drawScreen = (ti, scale, alpha) => {
+      const tier = C.winTiers[ti], img = art(tier.id);
+      ctx.save(); ctx.globalAlpha = alpha; ctx.translate(W / 2, cy); ctx.scale(scale, scale);
+      if (img) { const kk = Math.min(boxH / img.height, W * .7 / img.width); ctx.drawImage(img, -img.width * kk / 2, -img.height * kk / 2, img.width * kk, img.height * kk); }
+      else { ribbon(0, 0, 1100, 190, ['#e8402a', '#b0101a', '#6a0a0a']); blockText(tier.label, 0, -6, 110, { colors: ['#ffffff', tier.colors[0], tier.colors[1]], maxW: 1000 }); }
+      ctx.restore();
+    };
+    const fk = el - b.kT;
+    // outgoing screen during a swap
+    if (b.prevK != null && fk < swOut) { const u = fk / swOut; drawScreen(b.prevK, 1 + (swOutS - 1) * ease.out(u), 1 - u); }
+    // current screen
+    let sc, al = 1;
+    if (el > holdEnd) { const u = clamp((el - holdEnd) / outT, 0, 1); sc = 1 + (out1 - 1) * ease.out(u); al = 1 - u; }
+    else if (k === 0 && el < inT) { const u = el / inT; sc = in0 + (1 - in0) * ease.out(u); al = u; }
+    else if (b.prevK != null && fk < swIn) { const u = fk / swIn; sc = swIn0 + (1 - swIn0) * ease.out(u); al = clamp(u * 1.6, 0, 1); }
+    else sc = 1 + .0075 * (1 - Math.cos((el - (b.kT || 0)) * Math.PI * 2 / 2.4));     // breathing 1.00 -> 1.015 -> 1.00
+    drawScreen(k, sc, al);
+    // the amount, below the screen; one small pulse when the count ends
+    const pu = b.endT != null ? clamp((el - b.endT) / .3, 0, 1) : 0, pulse = 1 + .06 * Math.sin(pu * Math.PI);
+    const ay = cy + boxH / 2 + 95;
+    blockText(fmt(shown), W / 2, ay, 120, { alpha: al * (el < inT ? el / inT : 1), scale: pulse, maxW: W * .8 });
+    if (el >= total) { const r = b.resolve; G.banner = null; r(); }
   }
   function panel(w, h) {
     ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 40; const g = ctx.createLinearGradient(0, -h / 2, 0, h / 2); g.addColorStop(0, '#c8202a'); g.addColorStop(1, '#5a060c');
@@ -891,6 +902,7 @@
     let f = (t - m.t0) * C.fps * G.speed;
     if (f >= fi + fl && !m.release) { if (C.autoContinueModals || G.autoplay) m.release = true; else { m.t0 = t - sec(fi + fl - 1); f = fi + fl - 1; } }
     if (G.skip !== m.tok) { m.tok = G.skip; if (m.kind !== 'pick' && f > fi * .5 && f < fi + fl) { m.release = true; m.t0 = t - sec(fi + fl); f = fi + fl; } }
+    if (m.kind === 'outro' && A.real.ui_outro_board) { drawOutro(t, m, f, fi, fl, fo); return; }
     const pop = m.kind !== 'outro';
     let scale = 1, alpha = 1, dy = 0, dim = .7;
     if (f < fi) { const u = f / fi; dim = .7 * u; if (pop) scale = ease.elastic(u); else dy = -H * (1 - ease.out(u)); }
@@ -938,6 +950,49 @@
       ctx.save(); ctx.font = `48px ${BLOCK}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff'; ctx.fillText(bl, 0, by + 2); ctx.restore();
     }
     ctx.restore();
+    if (f >= fi + fl && !m.outroCalled) { m.outroCalled = true; if (m.onOutro) m.onOutro(); }
+    if (f >= fi + fl + fo) { const r = m.resolve; G.modal = null; r(); }
+  }
+  // Free Spins outro with Darshan's art (2026-11-21): background, board, ribbon, gold pile; all text from the result.
+  // Open: background 150 ms, board 0.94 -> 1 over 220 ms, ribbon 0.96 -> 1 over 160 ms; the win counts up, pulses once
+  // (1 -> 1.06 -> 1), then IN n FREE SPINS appears on the ribbon. Close: board and ribbon 1 -> 0.97 and out over 180 ms.
+  function drawOutro(t, m, f, fi, fl, fo) {
+    const el = (t - m.t0) * G.speed, inEnd = fi / C.fps, outStart = (fi + fl) / C.fps;
+    const bgA = clamp(el / .15, 0, 1) * (f > fi + fl ? 1 - clamp((f - fi - fl) / fo, 0, 1) : 1);
+    let pa = clamp((el - .1) / .22, 0, 1), ps = .94 + .06 * ease.out(pa), rs = .96 + .04 * ease.out(clamp((el - .2) / .16, 0, 1));
+    if (f > fi + fl) { const u = clamp((el - outStart) / .18, 0, 1); pa = 1 - u; ps = 1 - .03 * u; rs = ps; }
+    // background: the sunset panorama covers the screen
+    const bg = A.get('ui_outro_bg'), kb = Math.max(W / bg.width, H / bg.height);
+    ctx.save(); ctx.globalAlpha = bgA; ctx.drawImage(bg, W / 2 - bg.width * kb / 2, H / 2 - bg.height * kb / 2, bg.width * kb, bg.height * kb);
+    ctx.globalAlpha = bgA * .3; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.restore();
+    const bd = A.get('ui_outro_board'), bw = 1040, bh = bw * bd.height / bd.width, cx = W / 2, cy = H * .46;
+    ctx.save(); ctx.globalAlpha = pa; ctx.translate(cx, cy); ctx.scale(ps, ps);
+    ctx.drawImage(bd, -bw / 2, -bh / 2, bw, bh);
+    const gp = A.get('ui_outro_gold'), gw = 300, gh = gw * gp.height / gp.width;
+    ctx.drawImage(gp, -bw / 2 - 40, bh / 2 - gh * .75, gw, gh); ctx.save(); ctx.scale(-1, 1); ctx.drawImage(gp, -bw / 2 - 40, bh / 2 - gh * .75, gw, gh); ctx.restore();
+    // text on the board
+    const te = el - .32, tu = clamp(te / .9, 0, 1), shown = (m.amount || 0) * ease.out(tu);
+    if (te > 0) {
+      if (tu > 0 && tu < 1 && t - (m.tick || 0) > .07) { m.tick = t; SND.play('sfx_countup_loop'); }
+      if (tu >= 1 && !m.ended) { m.ended = true; m.endEl = el; SND.play('sfx_countup_end'); }
+      blockText('FREE SPINS', 0, -bh * .31, 64, { alpha: pa, maxW: bw * .8 });
+      blockText('TOTAL WIN', 0, -bh * .14, 56, { alpha: pa, colors: ['#ffffff', '#fff0c8'], maxW: bw * .8 });
+      const pu = m.endEl != null ? clamp((el - m.endEl) / .3, 0, 1) : 0;
+      blockText(fmt(shown), 0, bh * .1, 140, { alpha: pa, scale: 1 + .06 * Math.sin(pu * Math.PI), maxW: bw * .82 });
+    }
+    ctx.restore();
+    // ribbon under the board with the spins count
+    const rb = A.get('ui_outro_ribbon'), rw = 760, rh = rw * rb.height / rb.width, ry = cy + bh * .5 * ps + rh * .18;
+    ctx.save(); ctx.globalAlpha = pa; ctx.translate(cx, ry); ctx.scale(rs, rs); ctx.drawImage(rb, -rw / 2, -rh / 2, rw, rh);
+    if (m.endEl != null) {
+      const ra = clamp((el - m.endEl - .2) / .25, 0, 1);
+      blockText(m.capped ? `MAX WIN ${C.maxWin}× REACHED` : `IN ${m.spins} FREE SPINS`, 0, -rh * .12, 44, { alpha: ra * pa, colors: ['#ffffff', '#fff0c8'], maxW: rw * .7 });
+    }
+    ctx.restore();
+    if (m.endEl != null && !m.release && !(C.autoContinueModals || G.autoplay)) {      // waiting for the player
+      const a2 = clamp((el - m.endEl - .6) / .3, 0, 1) * (.75 + .25 * Math.sin(t * 4));
+      uiText('TAP TO COLLECT', W / 2, ry + rh * .62, 30, `rgba(255,240,200,${a2})`, 'center', 800);
+    }
     if (f >= fi + fl && !m.outroCalled) { m.outroCalled = true; if (m.onOutro) m.onOutro(); }
     if (f >= fi + fl + fo) { const r = m.resolve; G.modal = null; r(); }
   }

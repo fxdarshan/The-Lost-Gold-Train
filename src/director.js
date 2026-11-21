@@ -19,7 +19,8 @@
     nice:      { label: 'Nice win banner (10×+)',           color: '#d08a4a' },
     big:       { label: 'Big win banner (20×+)',            color: '#ff9a3c' },
     mega:      { label: 'Mega win banner (50×+)',           color: '#f2b632' },
-    superb:    { label: 'Superb win banner (100×+)',        color: '#3fcf7a' },
+    super:     { label: 'Super win banner (100×+)',         color: '#3fcf7a' },
+    epic:      { label: 'Epic win banner (250×+)',         color: '#ff6a3a' },
     // free spins only (inside free spins they use the round's special symbol)
     expand:    { label: 'Free spin: special expands (3 reels)', color: '#9b6bff', fs: true },
     expand2:   { label: 'Free spin: special expands (2 reels)', color: '#8a6bdf', fs: true },
@@ -129,7 +130,7 @@
           const n = item.type === 'trigger4' ? 4 : item.type === 'trigger5' ? 5 : 3;
           return finish(search(r => (scCount(r.start) === n && (!fs || !stepOf(r, 'expand'))) || 0, () => ({ grid: placeScatters(rg(), n), opts: base }), 50));
         }
-        case 'nice': case 'big': case 'mega': case 'superb': {
+        case 'nice': case 'big': case 'mega': case 'super': case 'epic': {
           // a real board in the tier's range: one to three lines of premiums, no scatter trigger
           const ti = C.winTiers.findIndex(t => t.id === item.type), lo = C.winTiers[ti].min, hi = (C.winTiers[ti + 1] || { min: lo * 3 }).min;
           // the lead symbol rotates through all symbols; low symbols reach the tier with more lines and Wilds

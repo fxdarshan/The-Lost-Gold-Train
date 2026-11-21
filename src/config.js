@@ -142,13 +142,12 @@
     currency: '$',
 
     // ---------------------------------------------------------- big win banners (ASSUMED thresholds, x total bet)
-    winTiers: [
-      { id: 'nice',        min: 10,  label: 'NICE WIN!',        colors: ['#fff4d0', '#f2b632', '#a8320c'], fx: 'fountain' },
-      { id: 'big',         min: 20,  label: 'BIG WIN!',         colors: ['#ffffff', '#ffd25a', '#c2281a'], fx: 'drop' },
-      { id: 'mega',        min: 50,  label: 'MEGA WIN!',        colors: ['#fff4c2', '#f2b632', '#b0102a'], fx: 'cascade' },
-      { id: 'superb',      min: 100, label: 'SUPERB WIN!',      colors: ['#fff2d8', '#ff9a3a', '#b0102a'], fx: 'fireworks' },
-      { id: 'sensational', min: 250, label: 'SENSATIONAL WIN!', colors: ['#fff0f0', '#ff5a5a', '#e8b23a'], fx: 'lasers' },
-      { id: 'epic',        min: 500, label: 'EPIC WIN!',        colors: ['#ffffff', '#ffe27a', '#d6202f'], fx: 'epic' }
+    winTiers: [   // Darshan's Big Win art (2026-11-21) has five screens: SENSATIONAL is merged into EPIC (ASSUMED thresholds)
+      { id: 'nice',  min: 10,  label: 'NICE WIN!',  colors: ['#fff4d0', '#f2b632', '#a8320c'], fx: 'none' },
+      { id: 'big',   min: 20,  label: 'BIG WIN!',   colors: ['#ffffff', '#ffd25a', '#c2281a'], fx: 'none' },
+      { id: 'mega',  min: 50,  label: 'MEGA WIN!',  colors: ['#fff4c2', '#f2b632', '#b0102a'], fx: 'coins' },
+      { id: 'super', min: 100, label: 'SUPER WIN!', colors: ['#fff2d8', '#ff9a3a', '#b0102a'], fx: 'coins' },
+      { id: 'epic',  min: 250, label: 'EPIC WIN!',  colors: ['#ffffff', '#ffe27a', '#d6202f'], fx: 'coins' }
     ],
 
     // ------------------------------------------------------- animation timing (ASSUMED, frames at 30 fps)
@@ -166,7 +165,8 @@
       anticipation: 54,                 // anticipation window per waiting reel after 2 Scatters have landed: the reel eases down to anticSlow of full speed
       banner: [30, 90, 30],             // modals and big win banners
       bannerTally: [30, 105],          // (unused since the progressive banner; kept for older docs)
-      bannerStep: 75,                   // progressive big win: frames of count-up per tier (NICE -> BIG -> MEGA ...)
+      bannerStep: 60,                   // progressive big win: frames of count-up per screen (NICE -> BIG -> MEGA ...)
+      bigWinIn: [.35, .88], bigWinOut: [.25, .96], bigWinSwap: [.18, 1.05, .28, .92], bigWinHold: 2.5,   // Darshan's spec: s, scale
       summaryTally: 75,
       transToFree: [40, 30, 90],     // gunfight: Outlaws fire, bullets meet, smoke covers (40); FREE SPINS (30); smoke clears slowly (90 = 3 s)
       transToBase: 45

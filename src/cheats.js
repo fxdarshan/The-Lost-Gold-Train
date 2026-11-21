@@ -41,7 +41,7 @@
     { id: 'retrigger', label: 'Free spins retrigger', note: '3 Scatters during free spins add 10 more',
       items: [T('trigger'), T('random'), T('retrigger'), T('expand')] },
     { id: 'all-banners', label: 'All win banners', note: 'NICE, BIG, MEGA and SUPERB from real boards, then 5 Scatters (200x)',
-      items: [T('nice'), T('big'), T('mega'), T('superb'), T('trigger5')] },
+      items: [T('nice'), T('big'), T('mega'), T('super'), T('trigger5')] },
     { id: 'max-win', label: 'Max win cap (5,500×)', note: 'The Outlaw special on all 5 reels on every free spin until the cap ends the round',
       items: [T('trigger', { special: 0 }), T('expand5'), T('expand5'), T('expand5'), T('expand5')] },
     { id: 'base-tour', label: 'Base game tour', note: 'No win, line win, several lines, a Wild, Power Dynamite, 2-Scatter tease, Big banner',
@@ -53,7 +53,7 @@
     ['F', T('trigger'), 'Free spins'], ['P', T('trigger', { special: 0 }), 'Free spins, Outlaw special'],
     ['B', T('buy'), 'Feature buy'], ['4', T('trigger4'), '4 Scatters'], ['5', T('trigger5'), '5 Scatters'],
     ['E', T('expand'), 'Expand (3 reels)'], ['T', T('expand5'), 'Expand (5 reels)'], ['R', T('retrigger'), 'Retrigger'],
-    ['1', T('nice'), 'NICE banner'], ['2', T('big'), 'BIG banner'], ['3', T('mega'), 'MEGA banner'], ['6', T('superb'), 'SUPERB banner'],
+    ['1', T('nice'), 'NICE banner'], ['2', T('big'), 'BIG banner'], ['3', T('mega'), 'MEGA banner'], ['6', T('super'), 'SUPER banner'],
     ['A', T('tease'), '2 Scatter tease'], ['X', T('small'), 'Line win'], ['M', T('multi'), 'Several lines'],
     ['W', T('wildwin'), 'Wild in a win'], ['G', T('power'), 'Power Dynamite multiplier'], ['N', T('nowin'), 'No win']
   ];

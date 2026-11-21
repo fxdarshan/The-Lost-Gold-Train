@@ -1,0 +1,28 @@
+MAGNIFIC ANIMATION PROMPT — BIG WIN SCREEN
+
+Animate ONLY the supplied Big Win artwork. Preserve the exact Western comic-book art direction, character identity, colors, proportions, train design, gold, lighting and typography.
+
+Target useful animation: 1.5 seconds, final delivery 45 frames at 30 FPS.
+
+Keep the camera locked. Do not redesign, morph or redraw any element.
+
+Animation:
+- Start slightly smaller at 90–92% scale.
+- Smoothly build to 100% scale with confident ease-out.
+- Outlaw gets a subtle readable body/poncho reaction.
+- Train smoke moves gently only if visible.
+- A few gold coins drift or rotate only if already present.
+- Gold highlight sweeps once across the treasure.
+- Hold the peak briefly.
+- Return toward the neutral pose for a clean loop.
+
+Do not animate the background separately.
+No camera shake.
+No zoom beyond the controlled scale.
+No extra particles.
+No glow bloom.
+No new objects.
+No face morphing.
+No hand deformation.
+No texture swimming.
+Keep motion premium, readable and restrained.

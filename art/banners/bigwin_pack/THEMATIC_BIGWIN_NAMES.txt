@@ -1,0 +1,26 @@
+THEMATIC BIG WIN NAME OPTIONS
+
+Current simple ladder:
+NICE WIN
+BIG WIN
+MEGA WIN
+SUPER WIN
+EPIC WIN
+
+More thematic ladder:
+WANTED
+TRAIN RAID
+GOLD RUSH
+GREAT HEIST
+OUTLAW LEGEND
+
+Alternative:
+FIRST SCORE
+TRAIN TAKEN
+GOLD CLAIMED
+THE GREAT HEIST
+THE OUTLAW LEGEND
+
+Recommendation:
+Use the generic ladder if clarity is the priority.
+Use WANTED -> TRAIN RAID -> GOLD RUSH -> GREAT HEIST -> OUTLAW LEGEND if you want the Big Win sequence to tell the robbery story more strongly.

@@ -1,0 +1,90 @@
+CLAUDE IMPLEMENTATION PROMPT — FREE SPINS OUTRO
+
+Build the Free Spins Outro using ONLY the supplied assets.
+
+LAYOUT
+1. Use `bg_outro.png` as the full-screen background.
+2. Place `board_main.png` exactly in the center of the screen.
+3. Place `ribbon_free_spins.png` centered beneath / overlapping the lower edge of the main board.
+4. Optionally place `gold_pile.png` at the lower edge of the board as a small thematic accent.
+5. Do NOT add a character.
+6. Keep the board as the visual focus.
+
+DYNAMIC GAME TEXT
+All result-dependent text must come from the actual game state.
+
+Render these lines:
+
+FREE SPINS
+
+TOTAL WIN
+
+{WIN_AMOUNT}
+
+IN {FREE_SPIN_COUNT} FREE SPINS
+
+Examples:
+TOTAL WIN
+5,480x
+IN 12 FREE SPINS
+
+or
+
+TOTAL WIN
+842.50
+IN 15 FREE SPINS
+
+IMPORTANT:
+- NEVER hard-code 5,480x.
+- NEVER hard-code 12 Free Spins.
+- Read the final Free Spins win amount from the game result.
+- Read the actual number of Free Spins played / awarded from the game result.
+- Format the number based on the game's normal win-value format.
+- If the game uses multiplier format, append `x`.
+- If it uses currency/credit value, use that same game format.
+
+TEXT PLACEMENT
+- `FREE SPINS`: top area of board, bold uppercase.
+- `TOTAL WIN`: below it, medium-large.
+- `{WIN_AMOUNT}`: largest text on the entire screen, centered.
+- `IN {FREE_SPIN_COUNT} FREE SPINS`: centered on the bottom red ribbon.
+
+STYLE
+Use the game's existing Western UI font/style:
+- warm gold / off-white text
+- dark outline for readability
+- no excessive glow
+- no new fonts if the game already has a matching display font
+
+ANIMATION — SIMPLE ONLY
+Open:
+- Background fade in: 150 ms
+- Board opacity 0 -> 1 and scale 0.94 -> 1.00 over 220 ms ease-out
+- Ribbon scale 0.96 -> 1.00 over 160 ms
+
+Text:
+- FREE SPINS + TOTAL WIN appear immediately after board settles
+- Count win amount from 0 to final over roughly 0.6–1.0 sec
+- When count finishes, amount does one small pulse:
+  scale 1.00 -> 1.06 -> 1.00
+- Then reveal `IN {FREE_SPIN_COUNT} FREE SPINS`
+
+Hold:
+- Keep screen static and readable
+- No constant pulsing
+- No camera motion
+- No looping particles
+
+Close:
+- Board + ribbon scale 1.00 -> 0.97
+- opacity 1 -> 0
+- duration 180 ms
+
+PERFORMANCE
+- Use DOM/CSS only
+- Use transform and opacity
+- No blur filters
+- No heavy particles
+- No duplicated artwork layers
+- Preserve original PNG aspect ratios
+- Keep responsive and centered on desktop/mobile

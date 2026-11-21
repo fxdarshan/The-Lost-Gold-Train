@@ -35,7 +35,7 @@
     });
   }
   const adds = $('#adds');
-  ['nowin', 'small', 'multi', 'wildwin', 'power', 'tease', 'nice', 'big', 'mega', 'superb', 'trigger', 'trigger4', 'trigger5', 'buy', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
+  ['nowin', 'small', 'multi', 'wildwin', 'power', 'tease', 'nice', 'big', 'mega', 'super', 'epic', 'trigger', 'trigger4', 'trigger5', 'buy', 'expand2', 'expand', 'expand5', 'retrigger', 'random'].forEach(k => {
     const b = document.createElement('button'); b.innerHTML = `<span class="dot" style="background:${OUT[k].color}"></span>${OUT[k].label}`;
     b.onclick = () => { G.queue.push({ type: k }); renderQueue(); }; adds.appendChild(b);
   });
