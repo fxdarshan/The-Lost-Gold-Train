@@ -96,13 +96,11 @@ window.ASSET_MANIFEST = {
     banner_win_epic:        'assets/images/banners/banner_win_epic.webp',
 
     ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp',
-    // Buy Feature UI: Darshan's simplified PNGs (Lost_Gold_Train_Buy_Feature_SIMPLE_FIXED.zip, 2026-11-21), one image
-    // per control, unscaled; sheet leftovers removed by tools/asset-pipeline/clean_buy_ui_simple.py (originals in
-    // art/ui/buy/supplied/).
+    // Buy Feature UI: Darshan's clean final PNGs (Lost_Gold_Train_Buy_Feature_CLEAN_FINAL.zip, 2026-11-21), one image
+    // per control, unscaled; neighbour slivers trimmed by tools/asset-pipeline/clean_buy_ui_final.py (originals in
+    // art/ui/buy/supplied/). The board already carries the title and chains long enough to reach the top.
     ui_buy_buy_free_spins_button: 'assets/images/ui/buy/buy_free_spins_button.png',
-    ui_buy_popup_board: 'assets/images/ui/buy/popup_board.png',
-    ui_buy_popup_chain_extension: 'assets/images/ui/buy/popup_chain_extension.png',
-    ui_buy_popup_title_buy_free_spins: 'assets/images/ui/buy/popup_title_buy_free_spins.png',
+    ui_buy_popup_board_with_title: 'assets/images/ui/buy/popup_board_with_title.png',
     ui_buy_option_free_spins: 'assets/images/ui/buy/option_free_spins.png',
     ui_buy_option_super_free_spins: 'assets/images/ui/buy/option_super_free_spins.png',
     ui_buy_option_feature_max: 'assets/images/ui/buy/option_feature_max.png',

@@ -1,60 +1,46 @@
-Implement the Buy Free Spins UI using ONLY the PNGs in this folder.
-
-IMPORTANT:
-Use ONE PNG per clickable control. Do not search for hover/pressed/release artwork and do not generate new states.
+Implement the Buy Feature using ONLY the PNGs in this folder.
 
 MAIN BUTTON
 Asset: buy_free_spins_button.png
-Normal scale 1.00
-Hover scale 1.03
-Pointer down scale 0.98
-Pointer up scale 1.00, then open modal
+Normal 1.00
+Hover 1.04
+Pointer down 0.97
+Pointer up 1.02 for 80ms -> 1.00 -> open popup
 Transition: transform 120ms cubic-bezier(0.2,0.8,0.2,1)
 
 POPUP
 Use popup_overlay_60pct_black.png behind the modal.
-Use popup_board.png as the board.
-Use popup_title_buy_free_spins.png at the top.
-Use these three options:
-- option_free_spins.png
-- option_super_free_spins.png
-- option_feature_max.png
-Each uses the exact same scale interaction:
-1.00 -> 1.03 -> 0.98 -> 1.00
-No glow, no color changes, no extra FX.
+Use popup_board_with_title.png as the popup visual.
+Do NOT add another title on top unless explicitly needed.
+The popup board asset already contains long chains. Position it so the chain ends touch the top edge of the browser/viewport; do not crop the chains.
+
+OPTIONS
+option_free_spins.png
+option_super_free_spins.png
+option_feature_max.png
+
+Each option:
+Normal 1.00
+Hover 1.04
+Pointer down 0.97
+Pointer up 1.02 for 80ms -> 1.00 -> trigger its action
 
 CLOSE
-Use close_button.png with the same scale-only interaction.
+Asset: close_button.png
+Normal 1.00
+Hover 1.08
+Pointer down 0.92
+Pointer up 1.03 for 70ms -> 1.00 -> close popup
 
-CHAINS
-popup_board.png has the lower attached chain pieces.
-Use popup_chain_extension.png above the left and right board chain points.
-Repeat the chain vertically upward until each chain touches the browser/viewport top.
-Do not leave a gap and do not crop the chain before it reaches the top.
-
-POSITION LOCK
-Every control gets one fixed wrapper.
-Scale the image inside the wrapper only.
-Never let scaling change layout or move adjacent UI.
-transform-origin:center.
-object-fit:contain.
-
-POPUP OPEN
-Simple only:
-- overlay fade 120ms
-- board opacity 0 -> 1 and scale 0.98 -> 1.00 over 140ms
-No bounce, no particles, no complex animation.
-
-POPUP CLOSE
-Reverse the same transition.
-
-PERFORMANCE
-Preload these few PNGs once.
-Use CSS transforms only for interaction.
-Do not animate width/height/top/left.
-Do not create duplicate DOM layers for states.
-No filters, no blur, no glow.
-Keep implementation lightweight for desktop and mobile.
-
-ART
-Use supplied PNGs as-is. No recolor, restyle, replacement text, gradients, or generated alternatives.
+IMPLEMENTATION RULES
+- One PNG per control only.
+- Use CSS transforms only for interaction.
+- No glow, blur, brightness, filters, particles, or image swaps.
+- Use fixed-size wrappers so scaling never shifts layout.
+- transform-origin:center.
+- object-fit:contain.
+- Preload the small asset set once.
+- Keep the popup simple and responsive.
+- On open: overlay fade 120ms; popup opacity 0->1 and scale .98->1 over 140ms.
+- On close: reverse over 120ms.
+- Do not animate width, height, top, or left.

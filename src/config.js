@@ -194,14 +194,14 @@
     // is one composition (frame, title, three cards, close) scaled together. Positions are fractions of the frame.
     buyUI: {
       mainW: 214,                                  // main BUY FREE SPINS button width on the stage (height from the art)
-      boardW: 960, cy: 600,                        // popup board width and centre (stage px); the whole popup scales as one
-      chainsX: [101, 499], chainCx: 37,  // chain centres on popup_board.png and on the chain tile (px); chains repeat up to the stage top
-      title: { y: .2, w: .66 },                   // title centre y and width, as fractions of the board
-      close: { x: .835, y: .335, w: .07 },           // close button centre and width
-      cards: { y: .565, h: .28, gap: .03 },        // the three cards: centre y, height (one shared scale), gap
-      hover: 1.03, press: .98, ease: .12,          // scale-only interaction; 120 ms, cubic-bezier(0.2, 0.8, 0.2, 1)
-      fadeIn: .14, fadeOut: .14, overlayIn: .12, dim: .6,   // board 0.98 -> 1 and opacity over 140 ms; 60% black overlay
-      release: .12                                 // seconds at release before the action
+      boardW: 860,                                 // popup_board_with_title width; its top (the chain ends) sits at the stage top
+      close: { x: .93, y: .415, w: .08 },          // close button centre and width, fractions of the board (on the right post)
+      cards: { y: .705, h: .285, gap: .018 },        // the three cards: centre y, height (one shared scale), gap
+      // scale-only interaction (Darshan's spec): hover, pointer down, release (held for ms), then 1.00 and the action
+      scale: { hover: 1.04, press: .97, release: 1.02, hold: 80 },
+      closeScale: { hover: 1.08, press: .92, release: 1.03, hold: 70 },
+      ease: .12,                                   // 120 ms, cubic-bezier(0.2, 0.8, 0.2, 1)
+      fadeIn: .14, fadeOut: .12, overlayIn: .12, dim: .6   // board 0.98 -> 1 and opacity over 140 ms; 60% black overlay
     },
     anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
     hudTop: 985,

@@ -9,4 +9,4 @@ The game loads only what `assets/manifest.js` lists, from `assets/images/` and `
 - **White-background tiles:** `python3 tools/asset-pipeline/cut_white_tiles.py in.png art/symbols/<id>.png`, then `import_art.py`.
 
 ## Buy Feature UI (2026-11-21)
-Supplied simplified pack in `art/ui/buy/supplied/`; game copies in `assets/images/ui/buy/` made by `python3 tools/asset-pipeline/clean_buy_ui_simple.py art/ui/buy/supplied assets/images/ui/buy`. Drop in fixed PNGs with the same names and rerun.
+Supplied clean final pack in `art/ui/buy/supplied/`; game copies in `assets/images/ui/buy/` made by `python3 tools/asset-pipeline/clean_buy_ui_final.py art/ui/buy/supplied assets/images/ui/buy` (trims neighbour slivers only). Drop in new PNGs with the same names and rerun.
