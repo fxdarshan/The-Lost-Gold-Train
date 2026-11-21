@@ -194,12 +194,14 @@
     // is one composition (frame, title, three cards, close) scaled together. Positions are fractions of the frame.
     buyUI: {
       mainW: 214,                                  // main BUY FREE SPINS button width on the stage (height from the art)
-      frameW: 1240, cy: 560,                       // popup frame width and centre (stage px); the whole popup scales as one
-      title: { y: .005, w: .5 },                   // title centre y and width, as fractions of the frame
-      close: { x: .93, y: .14, w: .085 },          // close button centre and width
-      cards: { y: .5, h: .56, gap: .045 },         // the three cards: centre y, height (one shared scale), gap
-      fadeIn: .16, fadeOut: .12, dim: .6,          // seconds; backdrop = popup_overlay_60pct_black.png (60% black)
-      release: .12                                 // seconds the release image shows before the action
+      boardW: 960, cy: 600,                        // popup board width and centre (stage px); the whole popup scales as one
+      chainsX: [101, 499], chainCx: 37,  // chain centres on popup_board.png and on the chain tile (px); chains repeat up to the stage top
+      title: { y: .2, w: .66 },                   // title centre y and width, as fractions of the board
+      close: { x: .835, y: .335, w: .07 },           // close button centre and width
+      cards: { y: .565, h: .28, gap: .03 },        // the three cards: centre y, height (one shared scale), gap
+      hover: 1.03, press: .98, ease: .12,          // scale-only interaction; 120 ms, cubic-bezier(0.2, 0.8, 0.2, 1)
+      fadeIn: .14, fadeOut: .14, overlayIn: .12, dim: .6,   // board 0.98 -> 1 and opacity over 140 ms; 60% black overlay
+      release: .12                                 // seconds at release before the action
     },
     anteSlot: { x: 26, y: 530, w: 236, h: 176 },    // reserved for an ante bet (none in this game yet)
     hudTop: 985,

@@ -1,58 +1,40 @@
-THE LOST GOLD TRAIN - BUY FEATURE UI ASSETS
+THE LOST GOLD TRAIN - BUY FEATURE UI (SIMPLIFIED / LIGHTWEIGHT)
 
-MAIN SCREEN
-buy_btn_normal.png
-buy_btn_hover.png
-buy_btn_pressed.png
-buy_btn_release.png
+This package intentionally uses ONE visual PNG per clickable control.
+DO NOT create or search for separate hover/pressed/release images.
 
-POPUP
-popup_frame.png
-popup_title_buy_free_spins.png
-popup_overlay_60pct_black.png
+ASSETS
+- buy_free_spins_button.png
+- popup_board.png
+- popup_chain_extension.png
+- popup_title_buy_free_spins.png
+- option_free_spins.png
+- option_super_free_spins.png
+- option_feature_max.png
+- close_button.png
+- popup_overlay_60pct_black.png
+- decor_hat.png
+- decor_gold_bars.png
+- decor_money_bag.png
+- decor_bullets.png
+- decor_sheriff_star.png
 
-FREE SPINS OPTION
-option_free_spins_normal.png
-option_free_spins_hover.png
-option_free_spins_pressed.png
-option_free_spins_release.png
+INTERACTION - SCALE ONLY
+Normal:   scale(1.00)
+Hover:    scale(1.03)
+Pressed:  scale(0.98)
+Release:  scale(1.00)
 
-SUPER FREE SPINS OPTION
-option_super_free_spins_normal.png
-option_super_free_spins_hover.png
-option_super_free_spins_pressed.png
-option_super_free_spins_release.png
+Transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1)
 
-FEATURE MAX OPTION
-option_feature_max_normal.png
-option_feature_max_hover.png
-option_feature_max_pressed.png
-option_feature_max_release.png
+NO glow, NO color change, NO extra particles, NO shadow animation.
+Keep transform-origin:center.
+Keep fixed wrappers so nothing jumps.
 
-CLOSE BUTTON
-close_normal.png
-close_hover.png
-close_pressed.png
-close_release.png
+POPUP CHAINS
+popup_board.png already includes short chains attached to the board.
+Use popup_chain_extension.png above each chain attachment and vertically repeat/stretch it until it touches the browser top.
+Hide overflow outside viewport.
+The chain must visually connect to the board, with no gap and no cut top.
 
-OPTIONAL DECOR
-decor_hat.png
-decor_gold_bars.png
-decor_money_bag.png
-decor_bullets.png
-decor_wanted_poster.png
-decor_lantern.png
-decor_sheriff_star.png
-decor_rope.png
-
-INTERACTION FLOW
-Normal -> Hover -> Pressed on pointer-down -> Release on pointer-up -> action.
-
-IMPORTANT IMPLEMENTATION RULES
-- Use one fixed-size wrapper per clickable element.
-- Swap images inside the wrapper; do not reflow/reposition between states.
-- Preload all states before enabling interaction.
-- Main screen has ONE Buy Free Spins button only.
-- Clicking it opens the modal with 3 options.
-- Dim the underlying game with popup_overlay_60pct_black.png or equivalent CSS rgba(0,0,0,.6).
-- Keep popup centered and scale the whole composition proportionally on smaller screens.
+This system is intentionally simple to keep implementation light and fast.

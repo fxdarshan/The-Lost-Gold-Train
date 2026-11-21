@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-21 · claude.ai chat (33)
+- Buy UI switched to Darshan's simplified pack (one PNG per control, scale-only, chains to the top). The four-state art and its open questions are gone.
 ### 2026-11-21 · claude.ai chat (32)
 - Buy Feature popup from Darshan's final PNGs (`drawBuyMain`, `drawBuyPopup`, `C.buyUI`, `C.buy.options`). Super/Max rules ASSUMED and TUNED (2026-11-21, ~96%); popup buy goes straight to the transition; outside click closes. **Waiting for Darshan:** approval of the Super/Max rules; clean re-exports of the three card release images and the Super pressed image (supplied files are cut through the card).
 ### 2026-11-21 · claude.ai chat (31)

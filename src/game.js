@@ -661,45 +661,44 @@
   }
 
   /* ------------------------------------------------------------ Buy Feature UI (2026-11-21)
-     One BUY FREE SPINS button on the left and a popup with three purchase cards and a close button, all from
-     Darshan's PNGs (manifest ui_buy_<name>_<state>). Every widget has a fixed box computed once from its normal
-     image; the four state images are swapped inside that box (no layout from content bounds, no jumping).
-     States: normal, hover, pressed (pointer down), release (shown C.buyUI.release s, then the action). */
+     Darshan's simplified pack: one PNG per control, interaction by scale only (normal 1.00, hover 1.03, pressed 0.98,
+     release 1.00; 120 ms, cubic-bezier(0.2, 0.8, 0.2, 1)). Every control has a fixed box computed once; the image is
+     scaled inside it around its centre, so nothing else moves. The board hangs on chains repeated up to the top. */
   const BU = C.buyUI || {};
   const BW = {                                   // widget -> image name
-    main: 'buy_btn', close: 'close',
+    main: 'buy_free_spins_button', close: 'close_button',
     free_spins: 'option_free_spins', super_free_spins: 'option_super_free_spins', feature_max: 'option_feature_max'
   };
-  const BUY = { open: false, closing: false, t0: 0, st: {}, rel: {}, press: null, hover: null, ptr: 'mouse', lock: false, focus: 'main', kbd: false };
-  Object.keys(BW).forEach(k => { BUY.st[k] = 'normal'; });
-  const buyImg = (k, st) => A.get('ui_buy_' + BW[k] + '_' + st);
-  const buyReady = () => !!A.real['ui_buy_buy_btn_normal'];
+  const BUY = { open: false, closing: false, t0: 0, st: {}, sc: {}, press: null, hover: null, ptr: 'mouse', lock: false, focus: 'main', kbd: false };
+  Object.keys(BW).forEach(k => { BUY.st[k] = 'normal'; BUY.sc[k] = { from: 1, to: 1, t0: 0 }; });
+  const buyImg = k => A.get('ui_buy_' + BW[k]);
+  const buyReady = () => !!A.real['ui_buy_buy_free_spins_button'];
   const buyOption = id => engine.buyOpt(id);
-  function bodyX(img) {                          // left/right edge of the painted body (columns mostly opaque)
-    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
-    const g = c.getContext('2d'); g.drawImage(img, 0, 0); const d = g.getImageData(0, 0, c.width, c.height).data;
-    let l = -1, r = -1;
-    for (let x = 0; x < c.width; x++) { let n = 0; for (let y = 0; y < c.height; y++) if (d[(y * c.width + x) * 4 + 3] > 230) n++; if (n > c.height * .3) { if (l < 0) l = x; r = x + 1; } }
-    return l < 0 ? [0, img.width] : [l, r];
+  // cubic-bezier(0.2, 0.8, 0.2, 1): solved for y at a given x
+  const bez = (x1, y1, x2, y2) => u => { let t = u; for (let i = 0; i < 6; i++) { const x = 3 * (1 - t) * (1 - t) * t * x1 + 3 * (1 - t) * t * t * x2 + t * t * t - u, dx = 3 * (1 - t) * (1 - t) * x1 + 6 * (1 - t) * t * (x2 - x1) + 3 * t * t * (1 - x2); if (Math.abs(dx) < 1e-6) break; t = clamp(t - x / dx, 0, 1); } return 3 * (1 - t) * (1 - t) * t * y1 + 3 * (1 - t) * t * t * y2 + t * t * t; };
+  const btnEase = bez(.2, .8, .2, 1);
+  function buyScaleNow(k) { const s = BUY.sc[k], u = clamp((now() - s.t0) / (BU.ease || .12), 0, 1); return s.from + (s.to - s.from) * btnEase(u); }
+  function setBuyState(k, st) {
+    if (BUY.st[k] === st) return;
+    BUY.st[k] = st; const to = st === 'hover' ? (BU.hover || 1.03) : st === 'pressed' ? (BU.press || .98) : 1;
+    BUY.sc[k] = { from: buyScaleNow(k), to, t0: now() };
   }
   let buyBoxes = null;
-  function buyLayout() {                         // fixed boxes, from the normal images, computed once
+  function buyLayout() {                         // fixed boxes, computed once
     if (buyBoxes) return buyBoxes;
     const box = (img, cx, cy, w) => { const h = w * img.height / img.width; return { x: cx - w / 2, y: cy - h / 2, w, h }; };
-    const mi = buyImg('main', 'normal'), mw = BU.mainW || buyBtn.w, b = {};
+    const mi = buyImg('main'), mw = BU.mainW || buyBtn.w, b = {};
     b.main = { x: buyBtn.x + (buyBtn.w - mw) / 2, y: buyBtn.y, w: mw, h: mw * mi.height / mi.width };
-    const fr = A.get('ui_buy_popup_frame'), fw = BU.frameW, fh = fw * fr.height / fr.width, fx = W / 2 - fw / 2, fy = BU.cy - fh / 2;
-    b.frame = { x: fx, y: fy, w: fw, h: fh };
-    const ti = A.get('ui_buy_popup_title_buy_free_spins');
-    b.title = box(ti, W / 2, fy + fh * BU.title.y, fw * BU.title.w);
-    b.close = box(buyImg('close', 'normal'), fx + fw * BU.close.x, fy + fh * BU.close.y, fw * BU.close.w);
-    // the three cards share one scale (same height), so the composition keeps the art's own proportions
-    // spaced by the cards' painted bodies (the PNGs have uneven transparent margins): equal gaps between the cards
+    const bd = A.get('ui_buy_popup_board'), fw = BU.boardW, k = fw / bd.width, fh = bd.height * k, fx = W / 2 - fw / 2, fy = BU.cy - fh / 2;
+    b.frame = { x: fx, y: fy, w: fw, h: fh, k };
+    b.title = box(A.get('ui_buy_popup_title_buy_free_spins'), W / 2, fy + fh * BU.title.y, fw * BU.title.w);
+    b.close = box(buyImg('close'), fx + fw * BU.close.x, fy + fh * BU.close.y, fw * BU.close.w);
+    // the three cards share one scale (same height) and equal gaps
     const ids = ['free_spins', 'super_free_spins', 'feature_max'], ch = fh * BU.cards.h;
-    const info = ids.map(k => { const im = buyImg(k, 'normal'), sc = ch / im.height, bb = bodyX(im); return { w: im.width * sc, l: bb[0] * sc, r: bb[1] * sc }; });
-    const gap = fw * BU.cards.gap, tot = info.reduce((a, v) => a + (v.r - v.l), 0) + gap * 2;
+    const ws = ids.map(id => { const im = buyImg(id); return ch * im.width / im.height; });
+    const gap = fw * BU.cards.gap, tot = ws.reduce((a, v) => a + v, 0) + gap * 2;
     let x = W / 2 - tot / 2;
-    ids.forEach((k, i) => { const f = info[i]; b[k] = { x: x - f.l, y: fy + fh * BU.cards.y - ch / 2, w: f.w, h: ch }; x += f.r - f.l + gap; });
+    ids.forEach((id, i) => { b[id] = { x, y: fy + fh * BU.cards.y - ch / 2, w: ws[i], h: ch }; x += ws[i] + gap; });
     return (buyBoxes = b);
   }
   const buyInside = (b, x, y) => b && x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
@@ -710,15 +709,12 @@
     if (!BUY.open && mainEnabled() && buyInside(L.main, x, y)) return 'main';
     return null;
   }
-  // draw one widget: the state image in the fixed box; the only extra motion is the tiny scale the spec allows
   function drawBuyWidget(k, alpha = 1) {
-    const b = buyLayout()[k], t = now(); let st = BUY.st[k];
-    if (BUY.kbd && BUY.focus === k && st === 'normal') st = 'hover';          // keyboard focus shows the hover art
-    let sc = st === 'hover' ? 1.01 : st === 'pressed' ? .98 : 1;
-    if (st === 'release') { const u = clamp((t - BUY.rel[k]) / (BU.release || .12), 0, 1); sc = .98 + .02 * ease.out(u); }
-    const img = buyImg(k, st);
+    const b = buyLayout()[k];
+    let sc = buyScaleNow(k);
+    if (BUY.kbd && BUY.focus === k && BUY.st[k] === 'normal') sc = BU.hover || 1.03;     // keyboard focus = hover scale
     ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(b.x + b.w / 2, b.y + b.h / 2); ctx.scale(sc, sc);
-    ctx.drawImage(img, -b.w / 2, -b.h / 2, b.w, b.h); ctx.restore();
+    ctx.drawImage(buyImg(k), -b.w / 2, -b.h / 2, b.w, b.h); ctx.restore();
   }
   function drawBuyMain() {
     if (!buyReady()) return;
@@ -727,14 +723,19 @@
   }
   function drawBuyPopup() {
     if (!BUY.open || !buyReady()) return;
-    const t = now(), L = buyLayout();
-    let p = clamp((t - BUY.t0) / (BUY.closing ? BU.fadeOut : BU.fadeIn), 0, 1);
-    if (BUY.closing) { if (p >= 1) { BUY.open = false; BUY.closing = false; BUY.focus = 'main'; return; } p = 1 - p; }
-    const e = ease.out(p);
-    dimmer(BU.dim * e);                                                          // game stays visible, only darkened
-    ctx.save(); ctx.globalAlpha = e;
-    const s = .97 + .03 * e; ctx.translate(W / 2, BU.cy); ctx.scale(s, s); ctx.translate(-W / 2, -BU.cy);   // the whole popup as one piece
-    const f = L.frame; ctx.drawImage(A.get('ui_buy_popup_frame'), f.x, f.y, f.w, f.h);
+    const t = now(), L = buyLayout(), dt0 = t - BUY.t0;
+    let p = clamp(dt0 / (BUY.closing ? BU.fadeOut : BU.fadeIn), 0, 1), po = clamp(dt0 / (BU.overlayIn || .12), 0, 1);
+    if (BUY.closing) { if (p >= 1 && po >= 1) { BUY.open = false; BUY.closing = false; BUY.focus = 'main'; return; } p = 1 - p; po = 1 - po; }
+    dimmer((BU.dim || .6) * po);                                                 // 60% black overlay, game stays visible
+    ctx.save(); ctx.globalAlpha = p;
+    const s = .98 + .02 * p; ctx.translate(W / 2, BU.cy); ctx.scale(s, s); ctx.translate(-W / 2, -BU.cy);   // one piece
+    const f = L.frame, ch = A.get('ui_buy_popup_chain_extension');
+    // chains: repeated from the board's chain points up past the top of the screen (no gap, no cut end in view)
+    const cw = ch.width * f.k, chh = ch.height * f.k, topY = (0 - BU.cy) / s + BU.cy - chh;
+    (BU.chainsX || []).forEach(px => {
+      const cx = f.x + px * f.k, ox = (BU.chainCx ?? ch.width / 2) * f.k; for (let y = f.y - chh + 1; y > topY; y -= chh - 1) ctx.drawImage(ch, cx - ox, y, cw, chh);
+    });
+    ctx.drawImage(A.get('ui_buy_popup_board'), f.x, f.y, f.w, f.h);
     const ti = L.title; ctx.drawImage(A.get('ui_buy_popup_title_buy_free_spins'), ti.x, ti.y, ti.w, ti.h);
     ['free_spins', 'super_free_spins', 'feature_max', 'close'].forEach(k => drawBuyWidget(k));
     ctx.restore();
@@ -742,14 +743,14 @@
   function openBuy() {
     if (BUY.open || !mainEnabled()) return;
     BUY.open = true; BUY.closing = false; BUY.t0 = now(); BUY.focus = 'free_spins';
-    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => { BUY.st[k] = 'normal'; });
+    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => setBuyState(k, 'normal'));
     SND.play('sfx_spin_button_click');
   }
   function closeBuy() {
     if (!BUY.open || BUY.closing) return;
     BUY.closing = true; BUY.t0 = now();
-    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => { BUY.st[k] = 'normal'; });
-    BUY.st.main = BUY.hover === 'main' ? 'hover' : 'normal'; BUY.focus = 'main';   // focus goes back to the main button
+    ['close', 'free_spins', 'super_free_spins', 'feature_max'].forEach(k => setBuyState(k, 'normal'));
+    setBuyState('main', BUY.hover === 'main' ? 'hover' : 'normal'); BUY.focus = 'main';   // focus goes back to the main button
   }
   async function buyChoose(id) {
     if (BUY.lock) return;                                   // one purchase at a time: no double buy from rapid clicks
@@ -772,7 +773,7 @@
       return true;
     }
     if (BUY.st[k] === 'release' || BUY.lock) return true;
-    BUY.press = k; BUY.st[k] = 'pressed';
+    BUY.press = k; setBuyState(k, 'pressed');
     try { cv.setPointerCapture(e.pointerId); } catch (err) {}
     return true;
   }
@@ -780,11 +781,11 @@
     const k = BUY.press; if (!k) return BUY.open;
     BUY.press = null;
     const over = buyInside(buyLayout()[k], x, y);
-    if (!over) { BUY.st[k] = 'normal'; return true; }
-    BUY.st[k] = 'release'; BUY.rel[k] = now();
+    if (!over) { setBuyState(k, 'normal'); return true; }
+    setBuyState(k, 'release');
     setTimeout(() => {
-      // after the release image: hover if the cursor is still over it (mouse), otherwise normal; then the action
-      BUY.st[k] = BUY.ptr === 'mouse' && BUY.hover === k ? 'hover' : 'normal';
+      // after release (scale back to 1.00): hover if the cursor is still over it (mouse), otherwise normal; then the action
+      setBuyState(k, BUY.ptr === 'mouse' && BUY.hover === k ? 'hover' : 'normal');
       buyAction(k);
     }, (BU.release || .12) * 1000);
     return true;
@@ -793,9 +794,9 @@
     const k = e.pointerType === 'touch' ? null : buyWidgetAt(x, y);
     const h = k && k !== 'backdrop' ? k : null;
     if (h !== BUY.hover) {
-      if (BUY.hover && BUY.st[BUY.hover] === 'hover') BUY.st[BUY.hover] = 'normal';
+      if (BUY.hover && BUY.st[BUY.hover] === 'hover') setBuyState(BUY.hover, 'normal');
       BUY.hover = h;
-      if (h && BUY.st[h] === 'normal' && !BUY.press) BUY.st[h] = 'hover';
+      if (h && BUY.st[h] === 'normal' && !BUY.press) setBuyState(h, 'hover');
     }
     if (BUY.press && BUY.press !== h && BUY.st[BUY.press] === 'pressed') { /* keep pressed until release, like a real button */ }
     cv.style.cursor = h ? 'pointer' : '';
@@ -817,8 +818,8 @@
   }
   function keyPress(k) {
     if (BUY.st[k] === 'release' || BUY.lock) return;
-    BUY.st[k] = 'pressed';
-    setTimeout(() => { BUY.st[k] = 'release'; BUY.rel[k] = now(); setTimeout(() => { BUY.st[k] = 'normal'; buyAction(k); }, (BU.release || .12) * 1000); }, 90);
+    setBuyState(k, 'pressed');
+    setTimeout(() => { setBuyState(k, 'release'); setTimeout(() => { setBuyState(k, 'normal'); buyAction(k); }, (BU.release || .12) * 1000); }, 90);
   }
 
   /* ------------------------------------------------------------ banners & modals */
@@ -1359,8 +1360,8 @@
   const stageXY = e => { const rc = cv.getBoundingClientRect(); return [(e.clientX - rc.left) / rc.width * W, (e.clientY - rc.top) / rc.height * H]; };
   cv.addEventListener('pointermove', e => { const [x, y] = stageXY(e); buyMove(x, y, e); });
   cv.addEventListener('pointerup', e => { const [x, y] = stageXY(e); buyUp(x, y); });
-  cv.addEventListener('pointercancel', () => { if (BUY.press) { BUY.st[BUY.press] = 'normal'; BUY.press = null; } });
-  cv.addEventListener('pointerleave', () => { if (BUY.hover && BUY.st[BUY.hover] === 'hover') BUY.st[BUY.hover] = 'normal'; BUY.hover = null; cv.style.cursor = ''; });
+  cv.addEventListener('pointercancel', () => { if (BUY.press) { setBuyState(BUY.press, 'normal'); BUY.press = null; } });
+  cv.addEventListener('pointerleave', () => { if (BUY.hover && BUY.st[BUY.hover] === 'hover') setBuyState(BUY.hover, 'normal'); BUY.hover = null; cv.style.cursor = ''; });
   document.addEventListener('keydown', e => {
     const tg0 = e.target.tagName; if (tg0 === 'INPUT' || tg0 === 'SELECT' || tg0 === 'BUTTON' || tg0 === 'TEXTAREA') return;
     if (buyKey(e)) { e.preventDefault(); return; }
