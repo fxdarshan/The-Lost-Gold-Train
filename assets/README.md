@@ -13,3 +13,6 @@ Supplied clean final pack in `art/ui/buy/supplied/`; game copies in `assets/imag
 
 ## Music (2026-11-21)
 Supplied tracks in `art/audio/`. Game files: `python3 tools/audio/make_loop.py intro art/audio/basegame_loop_bgm.wav assets/audio/bgm_basegame_loop.mp3 36.67 90.0` and `python3 tools/audio/make_loop.py intro art/audio/freegame_loop_bgm.mp3 assets/audio/bgm_freegame_loop.mp3 3.6027 10.4597`, then copy the printed loop points into `ASSET_MANIFEST.music`.
+
+## Transition video (2026-11-23)
+`video/trans_to_free.webm` and `.mp4`: the free spins transition, made from Darshan's green-screen Magnific clip by `tools/asset-pipeline/transition_from_video.py` (opacity per frame in `manifest.video.trans_to_free.alpha`). Source in `source/originals/transitions/`.

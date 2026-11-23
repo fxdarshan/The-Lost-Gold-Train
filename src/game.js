@@ -1011,9 +1011,54 @@
     if (f >= fi + fl && !m.outroCalled) { m.outroCalled = true; if (m.onOutro) m.onOutro(); }
     if (f >= fi + fl + fo) { const r = m.resolve; G.modal = null; r(); }
   }
-  // to free spins: a wall of locomotive steam; back to base: zoom out
+  // free spins transition video (Darshan 2026-11-23): the train hold-up from Magnific. A plain video element drawn on
+  // the canvas; manifest.video.trans_to_free gives one opacity per frame (its green start and end become a cross-fade
+  // over the game), the frame to switch to free spins underneath, and the gunshot frames for the sound.
+  const TV = { el: null, ready: false, err: false, m: null };
+  function transVideo() {
+    const m = (root.ASSET_MANIFEST.video || {}).trans_to_free;
+    if (!m || typeof document === 'undefined') return null;
+    if (!TV.el) {
+      const v = document.createElement('video');
+      v.muted = true; v.playsInline = true; v.preload = 'auto'; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+      const src = v.canPlayType('video/webm; codecs="vp9"') ? m.webm : m.mp4;
+      v.src = src + (/^data:/.test(src) || !root.BUILD_VERSION ? '' : '?v=' + root.BUILD_VERSION);
+      v.addEventListener('canplaythrough', () => { TV.ready = true; });
+      v.addEventListener('loadeddata', () => { if (v.readyState >= 3) TV.ready = true; });
+      v.addEventListener('error', () => { TV.err = true; });
+      v.load(); TV.el = v; TV.m = m;
+    }
+    return TV.ready && !TV.err ? TV : null;
+  }
+  function drawVideoTransition(tr, t) {
+    const v = tr.vid.el, m = tr.vid.m;
+    const fi = Math.min(m.frames - 1, Math.max(0, Math.floor(v.currentTime * m.fps + 1e-3)));
+    const al = m.alpha[fi] || 0;
+    if (al > .003 && v.readyState >= 2) {
+      const s = Math.max(W / v.videoWidth, H / v.videoHeight), vw = v.videoWidth * s, vh = v.videoHeight * s;
+      ctx.save(); ctx.globalAlpha = al; ctx.drawImage(v, (W - vw) / 2, (H - vh) / 2, vw, vh); ctx.restore();
+    }
+    tr.shot = tr.shot || 0;
+    while (tr.shot < m.shots.length && fi >= m.shots[tr.shot]) { tr.shot++; SND.play('sfx_cracker_pop'); }
+    if (!tr.swapped && fi >= m.swap) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
+    // done when the clip ends; a guard in case the video stalls (hidden tab, decoder hiccup)
+    const late = t - tr.t0 > m.frames / m.fps / (G.speed || 1) + 3;
+    if (v.ended || fi >= m.frames - 1 || late) {
+      if (!tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
+      v.pause(); G.trans = null; tr.resolve();
+    }
+  }
+  // to free spins: the train hold-up video (gunfight in code if the video can't play); back to base: zoom out
   function drawTransition(t) {
     const tr = G.trans; if (!tr) return;
+    if (tr.kind === 'toFree' && tr.vid === undefined) {
+      const tv = transVideo(); tr.vid = tv || false;
+      if (tv) {
+        tv.el.currentTime = 0; tv.el.playbackRate = G.speed || 1;
+        const p = tv.el.play(); if (p && p.catch) p.catch(() => { tr.vid = false; tr.t0 = now(); });
+      }
+    }
+    if (tr.kind === 'toFree' && tr.vid) { drawVideoTransition(tr, t); return; }
     const f = (t - tr.t0) * C.fps * G.speed;
     if (tr.kind === 'toFree') {
       // gunfight (re-uses the Outlaw mascot art, no extra asset): an Outlaw slides in on each side, they fire at each
@@ -1450,6 +1495,7 @@
     try { await Promise.race([Promise.all([document.fonts.load(`80px ${BLOCK}`), document.fonts.load(`700 40px ${UIF}`)]), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
     try { G.assetInfo = await A.load(root.ASSET_MANIFEST, W, H, L, splash && splash.progress); }
     catch (e) { console.error('asset load failed, starting with placeholders', e); G.assetInfo = G.assetInfo || { missing: [], loaded: 0 }; }
+    try { transVideo(); } catch (e) {}         // start loading the transition video in the background
     requestAnimationFrame(frame);
     G.onChange();
     if (splash) splash.finish();

@@ -268,5 +268,6 @@ NEGATIVE: camera movement, zoom, cut, close-up, slow motion, reverse motion, der
 | `trans_b_eyes.png` | B, optional | full image |
 
 ## Prototype implementation status
-- Not in the game yet: waiting for the images. Until then the current code-built gunfight (into free spins) and zoom-out (back to base) stay.
+- 2026-11-23: Concept A is in the game as Darshan's Magnific video (`assets/video/trans_to_free.*`, see README "Free spins transition video"). Into free spins only; back to base still uses the code zoom-out. Concept B not made yet.
+- The code-built gunfight stays as the fallback if the video can't play.
 - ChatGPT's largest landscape size is 1536×1024 (3:2). I scale the plates to fill the 1920×1080 stage, which crops the top and bottom a little, so the prompts keep the important parts in the middle.

@@ -141,6 +141,14 @@ window.ASSET_MANIFEST = {
 
   // music (Darshan's tracks, 2026-11-21): each plays from the top once (intro: true), then loops [start, start + length].
   // Loop points measured by tools/audio/make_loop.py: the section that repeats in the music, cut before its fade-out.
+  // free spins transition video (Darshan 2026-11-23, Magnific/MiniMax): green start/end turned into one opacity per
+  // frame by tools/asset-pipeline/transition_from_video.py; the game draws each frame with alpha[i] over the reels.
+  // swap: frame where the game switches to free spins underneath (scene fully opaque); shots: muzzle-flash frames.
+  video: {
+    trans_to_free: { webm: 'assets/video/trans_to_free.webm', mp4: 'assets/video/trans_to_free.mp4', fps: 24, frames: 216,
+      swap: 60, shots: [86, 106, 118, 130],
+      alpha: [0,0.003,0.006,0.01,0.017,0.024,0.035,0.051,0.089,0.124,0.173,0.223,0.285,0.324,0.375,0.414,0.458,0.488,0.523,0.551,0.587,0.614,0.647,0.676,0.708,0.73,0.756,0.775,0.799,0.817,0.84,0.857,0.876,0.89,0.909,0.922,0.943,0.962,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.949,0.926,0.896,0.871,0.842,0.818,0.788,0.761,0.73,0.705,0.674,0.646,0.613,0.582,0.546,0.517,0.478,0.445,0.392,0.346,0.289,0.244,0.201,0.165,0.128,0.104,0.082,0.065,0.05,0.04,0.031,0.026,0.022,0.017,0.015,0.012,0.01,0.008,0.006,0.004,0.002,0] }
+  },
   music: {
     bgm_basegame_loop: { start: 36.67, length: 53.3198, intro: true },   // 108 BPM, 24-bar section; full track 0-90 s first
     bgm_freegame_loop: { start: 3.6027, length: 6.871, intro: true }     // 140 BPM, 4-bar section; 0-10.5 s first

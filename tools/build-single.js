@@ -25,6 +25,10 @@ function embedImages(js) {
     if (!mime || !fs.existsSync(file)) return m;
     embedded++;
     return `'data:${mime};base64,${fs.readFileSync(file).toString('base64')}'`;
+  }).replace(/'(assets\/video\/[^']+\.(webm|mp4))'/g, (m, rel, ext) => {     // transition video
+    const file = path.join(root, rel); if (!fs.existsSync(file)) return m;
+    embedded++;
+    return `'data:video/${ext};base64,${fs.readFileSync(file).toString('base64')}'`;
   }).replace(/'(assets\/audio\/bgm_[^']+\.mp3)'/g, (m, rel) => {      // music loops
     const file = path.join(root, rel); if (!fs.existsSync(file)) return m;
     embedded++;

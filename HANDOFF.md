@@ -14,11 +14,12 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
   4. Key-pose sheets for the A and Power Dynamite. Darshan finds the current animations soulless: new acted key-pose prompt with a timing chart in `docs/keypose-prompt-outlaw.md`; the Outlaw is done that way (with `--timing`); waiting for Darshan's verdict before redoing the other symbols.
   5. Higher-resolution symbols (about 2×) for final.
   6. Strongbox reveal for the pick: wanted?
-  7. Transition art: ChatGPT prompts in `docs/transition-image-prompts.md` (A "The Hold-Up" into free spins, B "High Noon Duel" back to base). Waiting for the PNGs in `art/transitions/`; then animate the layers in `drawTransition`.
+  7. Transition: A "The Hold-Up" is in the game as a video (into free spins). Optional: B "High Noon Duel" for back to base (prompts in `docs/transition-image-prompts.md`); a FREE SPINS title over the video if wanted.
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
 ### 2026-11-23 · claude.ai chat (45)
+- Free spins transition video from Darshan's Magnific clip (`transition_from_video.py`: per-frame opacity from the green cross-fade, opaque webm + mp4; `drawVideoTransition` in game.js, `manifest.video`). Single build embeds both videos.
 - Transition image prompts (docs/transition-image-prompts.md): layered key art, plates and cut-outs for a train hold-up and a sunset duel. No code change.
 ### 2026-11-23 · claude.ai chat (44)
 - Logo animation v2 in (`logo_from_video.py /tmp/frames 12 243 --fade 12 --fps 8 --width 512`).
