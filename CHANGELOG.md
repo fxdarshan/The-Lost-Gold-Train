@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-23: new logo animation (Darshan's logo_animation.mp4): subtle, no intro blast, 9.6 s seamless loop over the reels.
 - 2026-11-23: animated logo: Darshan's Magnific video looped seamlessly over the reels (intro blast removed); logo prompt v2 for a subtle loop with identical first and last frames.
 - 2026-11-21: music fixes: every file and script now carries a build version, so a browser can no longer keep playing an old cached copy (Darshan heard the base theme in free spins); music starts on the first tap; a spin never restarts the base theme during free spins; the demo panel shows which track is playing and the build.
 - 2026-11-21: Darshan's base game and free spins music in the game; each plays from the top once, then loops its repeating section seamlessly (cut before the fade-out).

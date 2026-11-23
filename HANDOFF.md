@@ -17,6 +17,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-23 · claude.ai chat (44)
+- Logo animation v2 in (`logo_from_video.py /tmp/frames 12 243 --fade 12 --fps 8 --width 512`).
 ### 2026-11-23 · claude.ai chat (43)
 - Animated logo in game (`ui_logo_anim`, `logo_from_video.py`, source video in `assets/source/originals/logo/`). Logo prompt v2 (subtle loop) in `docs/logo-animation-prompts.md`; when Darshan sends the v2 video, rebuild with `logo_from_video.py DIR START END`.
 ### 2026-11-21 · claude.ai chat (42)
