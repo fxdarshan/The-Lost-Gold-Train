@@ -66,5 +66,46 @@ FINAL CHECK (regenerate if any fails):
 OUTPUT: 4 seconds, 30 fps, 16:9, no audio.
 ```
 
+## 3. Subtle seamless loop, v2 (2026-11-23): use this one
+Darshan's first Magnific result (minimax, 10 s) opened with a dust blast that covered the green, and the chimney smoke grew far bigger than in the art and never returned to its first shape, so the clip couldn't loop cleanly. This version asks for no reveal at all, small motion only, and identical first and last frames.
+
+```text
+Animate the attached image: a Wild West slot game logo reading "THE LOST GOLD TRAIN" on a wooden sign, with a black steam locomotive and carriages on top against a sunset sky, a brown cowboy hat on the left, a coiled rope on the right, two crossed revolvers and a gold sheriff's star at the bottom, and a torn red ribbon behind the word "TRAIN". It sits on a flat pure green screen background.
+
+Make a SUBTLE, calm, premium IDLE animation that LOOPS PERFECTLY. This is not an intro: there is no reveal, no blast, no dust, no explosion, no flash at the start. The video starts on exactly the attached image and ends on exactly the attached image.
+
+CAMERA AND BACKGROUND:
+- Static tripod shot: the camera never moves, pans, tilts, zooms or shakes.
+- The logo stays on exactly the same pixels in every frame. It never scales, slides, rotates, wobbles or bounces.
+- The background stays flat pure green (#00FF00) in every frame: no dust, no smoke, no glow, no shadow, no light on the green.
+- Do not add any frame, border, vignette or background.
+
+ONLY THESE SMALL MOVEMENTS (gentle, slow, nothing big):
+1. CHIMNEY SMOKE: the smoke plume above the locomotive's chimney stays the SAME SIZE and shape as in the image; it only swirls and drifts gently in place, then returns to exactly its starting shape. It never grows, never covers the sky or the letters, and never leaves the logo.
+2. HEADLAMPS: the two round headlamps glow a little brighter and back, once.
+3. GOLD SHINE: one soft light sweep crosses the gold letters "LOST GOLD" from left to right, with two or three tiny sparkles. The letters never change.
+4. SMALL GLINTS: the sheriff's star catches one small glint; the red ribbon's torn edges flutter very slightly.
+
+TIMING (6 seconds, one calm cycle): 0-1.5 s the headlamps glow up and down while the smoke swirls; 1.5-3 s the gold shine crosses "LOST GOLD"; 3-4 s the star glints; 4-6 s everything eases back to exactly the first frame. Movement stays small and smooth the whole time; the last second is almost still.
+
+KEEP: the exact text "THE LOST GOLD TRAIN", letter for letter, same font, colours and position; the exact design, colours, size and painted style of every element, including the size of the smoke.
+
+DO NOT: add any intro, blast, explosion, dust cloud, shockwave, flash or fire; make the smoke bigger, darker or taller; move, scale, zoom, rotate or shake the logo or the camera; make the train drive or jump; put anything on the green; add a frame, border, background, ground or shadow; add new objects, characters, hands or text; change, misspell or redraw any letter; fade to black or white; end on a different image than the start.
+
+NEGATIVE PROMPT: intro, reveal, blast, explosion, dust, dust cloud, debris, shockwave, flash, fire, sparks shower, growing smoke, huge smoke, smoke covering logo, camera movement, pan, zoom, camera shake, logo moving, logo scaling, logo rotating, train moving, train jumping, background, scenery on green, shadow on green, added frame, border, vignette, morphing, melting, distorted letters, misspelled text, new text, extra objects, characters, hands, blurry, low quality, flicker, watermark.
+
+FINAL CHECK (regenerate if any fails):
+- No blast, dust or flash anywhere; the green stays clean in every frame.
+- The camera and the logo never moved or changed size.
+- The smoke stayed the same size as in the image.
+- "THE LOST GOLD TRAIN" is spelled exactly right in every frame.
+- The first and last frames are both identical to the attached image, so the loop never breaks.
+
+OUTPUT: 6 seconds, 24 or 30 fps, 16:9, seamless loop, no audio.
+```
+
+If your Magnific model supports an END FRAME, attach the same green-screen logo image as both the start frame and the end frame: that is what guarantees a loop that never breaks.
+
 ## Prototype implementation status
 - 2026-11-23: prompts and green-screen source written. The game still shows the still logo (`ui_splash_logo`) until the videos arrive.
+- 2026-11-23: Darshan's first Magnific logo video is in the game as a looping logo (`ui_logo_anim`): the opening blast is cut, the loop is source frames 90-243 (6.4 s) with a 1 s cross-dissolve into the frames just before frame 90, so it never breaks (`tools/asset-pipeline/logo_from_video.py`). It is drawn at the still logo's size and place (sign width and bottom matched); 10 fps sheet with frame blending. Prompt 3 is the revised, subtle version.

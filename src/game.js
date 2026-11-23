@@ -347,7 +347,22 @@
   function drawLogo(t) {
     const img = A.real.ui_splash_logo ? A.get('ui_splash_logo') : null;
     if (!img || !C.logo) { blockText(C.title.toUpperCase(), x0 + gw / 2, Math.max(48, y0 - 60), 64, { maxW: gw }); return; }
-    const L2 = C.logo, s = 1 + .012 * Math.sin(t * 1.4), k = Math.min(L2.w / img.width, L2.h / img.height) * s, w = img.width * k, h = img.height * k;
+    const L2 = C.logo, lm = (root.ASSET_MANIFEST.anims || {}).ui_logo_anim, li = A.real.ui_logo_anim && A.get('ui_logo_anim');
+    const an = lm && li ? Object.assign({ img: li, fw: li.width / lm.cols, fh: li.height / lm.rows }, lm) : null;
+    if (an) {
+      // looping video logo: same size and place as the still logo (sign width and bottom matched), each frame blended
+      // into the next so the 10 fps sheet plays smoothly
+      const ks = Math.min(L2.w / img.width, L2.h / img.height), sw = img.width * ks * (1558 - 174) / 1754;
+      const m = root.ASSET_MANIFEST.anims.ui_logo_anim, k = sw / (m.body[1] - m.body[0]);
+      const bx = L2.x + L2.w / 2 - (m.body[0] + m.body[1]) / 2 * k, by = L2.y + L2.h / 2 + img.height * ks / 2 - m.bottom * k;
+      const p = (t * an.fps) % an.frames, i = Math.floor(p), f = p - i, j = (i + 1) % an.frames;
+      const cell = n => [(n % an.cols) * an.fw, Math.floor(n / an.cols) * an.fh];
+      const [ax, ay] = cell(i), [cx2, cy2] = cell(j);
+      ctx.drawImage(an.img, ax, ay, an.fw, an.fh, bx, by, an.fw * k, an.fh * k);
+      if (f > .02) { ctx.save(); ctx.globalAlpha = f; ctx.drawImage(an.img, cx2, cy2, an.fw, an.fh, bx, by, an.fw * k, an.fh * k); ctx.restore(); }
+      return;
+    }
+    const s = 1 + .012 * Math.sin(t * 1.4), k = Math.min(L2.w / img.width, L2.h / img.height) * s, w = img.width * k, h = img.height * k;
     ctx.drawImage(img, L2.x + L2.w / 2 - w / 2, L2.y + L2.h / 2 - h / 2, w, h);
   }
 

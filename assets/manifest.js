@@ -101,6 +101,7 @@ window.ASSET_MANIFEST = {
     ui_outro_gold:          'assets/images/ui/outro/gold_pile.png',
 
     ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp',
+    ui_logo_anim:           'assets/images/ui/ui_logo_anim.webp',          // looping logo from Darshan's Magnific video (2026-11-23)
     // Buy Feature UI: Darshan's clean final PNGs (Lost_Gold_Train_Buy_Feature_CLEAN_FINAL.zip, 2026-11-21), one image
     // per control, unscaled; neighbour slivers trimmed by tools/asset-pipeline/clean_buy_ui_final.py (originals in
     // art/ui/buy/supplied/). The board already carries the title and chains long enough to reach the top.
@@ -132,6 +133,7 @@ window.ASSET_MANIFEST = {
     sym_wild_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_scatter_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
     sym_power_win: { cols: 9, rows: 5, frames: 45, fps: 30 },
+    ui_logo_anim: { cols: 8, rows: 8, frames: 64, fps: 10, body: [11, 480], bottom: 361 },   // body: the sign's left/right, bottom: lowest pixel (cell px)
     char_outlaw_idle1: { cols: 14, rows: 6, frames: 77, fps: 15 },
     char_outlaw_idle2: { cols: 14, rows: 6, frames: 77, fps: 15 },
     char_outlaw_win: { cols: 20, rows: 8, frames: 151, fps: 15 }
