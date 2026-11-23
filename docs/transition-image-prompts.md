@@ -229,72 +229,46 @@ Video tools can't make transparent video, so the clip starts and ends on flat gr
 - Start frame and end frame: `assets/source/originals/transitions/green_frame_1536x1024.png`.
 - Reference image: the approved key art, `assets/source/originals/transitions/trans_a_keyart.png`.
 - Length: 8 s or the closest the model offers, 16:9, static camera.
+- Magnific allows at most 7000 characters per prompt; this one is about 5,600.
 
 ```text
-TASK: Create an 8-second, 16:9, 24 fps cinematic TRANSITION video for a premium Wild West slot game called "The Lost Gold Train". It plays over the game screen when free spins start. The attached reference image is the approved art: it shows the exact scene, characters, train, art style, lighting and colours. Every frame must look like that painting brought to life.
+TASK: 8-second, 16:9, 24 fps cinematic TRANSITION video for a Wild West slot game, "The Lost Gold Train". The attached reference image is the approved art: exact scene, characters, train, style, light and colours. Every frame must look like that painting brought to life.
 
-WHAT IS IN THE SCENE (all exactly as in the reference image):
-- THE TRAIN: a heavy black-iron steam locomotive with rivets, brass trim, a tall smokestack, a glowing round headlamp at the front, lit orange cab windows and big spoked driving wheels with connecting rods, pulling an armoured wooden-and-iron gold car. The gold car's sliding door is open; stacks of gold bars and a money sack with a $ sign glow bright gold inside. Older passenger carriages trail behind it.
-- THE OUTLAW: a rugged gunslinger with stubble and a hard stare, wide-brim brown cowboy hat, a torn red poncho with a cream zigzag pattern, tan shirt, brown vest, gun belt with a gold star buckle, leather holster, brown boots with spurs, one silver revolver. He rides a dark brown horse with a white blaze, black mane and tail, and a leather bridle and saddle with gold star studs.
-- THE NIGHT DESERT: a huge full moon at the upper right, a deep indigo and blue sky with soft clouds and stars, purple-brown mesas and buttes on the horizon, saguaro cacti, rocks and sage bushes, sandy ground and the railway track running left to right across the lower part of the frame.
+SCENE (exactly as in the reference):
+- TRAIN: heavy black-iron steam locomotive with rivets, brass trim, tall smokestack, glowing round headlamp, lit orange cab windows, big spoked wheels with connecting rods, pulling an armoured gold car whose open sliding door shows glowing gold bars and a $ money sack. Older carriages trail behind.
+- OUTLAW: rugged gunslinger with stubble, wide-brim brown cowboy hat, torn red poncho with a cream zigzag pattern, tan shirt, brown vest, gun belt with a gold star buckle, boots with spurs, ONE silver revolver. He rides a dark brown horse with a white blaze, black mane and tail, saddle and bridle with gold star studs.
+- NIGHT DESERT: huge full moon upper right, deep indigo sky with soft clouds and stars, mesas on the horizon, saguaro cacti, rocks, sage bushes, sandy ground, railway track running left to right across the lower frame.
 
-GREEN SCREEN START AND END (critical):
-- The FIRST frame and the LAST frame are a completely flat, pure green screen (#00FF00), full frame.
-- Wherever the scene is not visible yet, or has already faded away, the green stays perfectly flat and even: no texture, no paper grain, no shadow, no gradient, no vignette, no light, no smoke or dust on it.
-- The train is the first thing to appear on the green; the rest of the scene fades in around it. At the end the scene fades out completely back into flat green.
+GREEN SCREEN (critical): the FIRST and LAST frames are completely flat pure green (#00FF00), full frame. Wherever the scene is not visible, the green is perfectly flat: no texture, grain, shadow, gradient, vignette, light, smoke or dust on it.
 
-CAMERA (critical): ONE continuous STATIC WIDE SHOT on a locked tripod, the same wide framing as the reference image. No pan, tilt, zoom, dolly, orbit, handheld wobble, camera shake or cut at any time. The scene does not scroll. All action moves past the camera from LEFT to RIGHT. Direction never reverses.
+CAMERA (critical): ONE continuous STATIC WIDE SHOT on a locked tripod, same framing as the reference. No pan, tilt, zoom, dolly, shake or cut. The scene never scrolls. All action moves LEFT to RIGHT and never reverses.
 
-STORY, BEAT BY BEAT (8 s):
+STORY (8 s):
+1) 0.0-0.5 s: flat green only.
+2) 0.5-2.5 s, TRAIN ARRIVES: the locomotive bursts IN FROM THE LEFT EDGE, headlamp first, racing right along the rails, so the open gold car rolls into view. Headlamp beam with a soft glow. Thick white-grey steam and black smoke billow from the stack and stream BACKWARDS over the carriages; orange embers spray out. Wheels spin, rods pump, steam hisses from the cylinders, sparks fly from the wheels; the train rocks slightly. AS IT ENTERS, the scene FADES IN around it, replacing the green: sky and moon first, then mesas, then ground, rails, cacti and bushes. By 2.5 s the full scene is visible, as in the reference.
+3) 2.5-5.0 s, THE ATTACK: the Outlaw gallops IN FROM THE LEFT EDGE at full speed beside the track, closer to camera than the train, chasing it. Correct powerful gallop: legs reaching and gathering, mane and tail streaming, breath steaming in the cold air, hooves kicking up sandy dust and pebbles. He leans forward, reins in one hand, and FIRES AT THE GOLD CAR 3 times, half a second apart. Each shot: bright orange-white muzzle flash, short recoil kick of the arm, small grey gunsmoke puff trailing back, thin glowing bullet streak, burst of orange sparks where it hits the iron plates. His red poncho whips violently; his hat stays on. The gold in the open door glints with small sparkles.
+4) 5.0-6.5 s, CHASE LEAVES: the train EXITS OFF THE RIGHT EDGE, carriages last, steam trail after it. The Outlaw spurs on and EXITS OFF THE RIGHT EDGE after it. Their dust, steam and gunsmoke thin out and settle; a few embers float and fade.
+5) 6.5-7.5 s, FADE OUT: the empty scene fades smoothly and evenly back into flat pure green. No smoke, dust or embers remain.
+6) 7.5-8.0 s: flat green only.
 
-1) 0.0-0.5 s | EMPTY
-- Flat pure green screen. Nothing else.
+FX (all hand-painted watercolour, never photoreal): stack steam and smoke streaming back, embers, cylinder steam, wheel sparks, headlamp glow, moon glow, gold glints, hoof dust and pebbles, horse breath, 3 muzzle flashes with recoil, gunsmoke puffs, bullet streaks, impact sparks.
 
-2) 0.5-2.5 s | THE TRAIN ARRIVES, THE WORLD APPEARS
-- The locomotive bursts IN FROM THE LEFT EDGE of the frame, headlamp first, travelling to the right at high speed along the rails, and keeps rolling so the gold car with its open door comes into view.
-- The headlamp throws a long warm beam ahead of the train with a soft lens glow.
-- A thick column of white-grey steam and black smoke pours from the smokestack in heavy rolling billows and streams BACKWARDS (to the left) over the carriages, showing the speed. Orange embers and sparks spray out of the stack and drift back.
-- Wheels spin, connecting rods pump, white steam hisses out from the cylinders at rail level, orange sparks fly from the wheels on the rails. The train rocks slightly on its suspension.
-- AS THE TRAIN ENTERS, the rest of the scene FADES IN smoothly around it, replacing the green: first the sky and the full moon with its soft glow, then the mesas, then the ground, rails, cacti, rocks and bushes. By 2.5 s the whole painted scene is fully visible, as in the reference image.
+LIGHT AND COLOUR: deep indigo, cobalt and dusty teal night; cool silver moonlight from upper right; warm orange-gold from headlamp, windows, firebox, muzzle flashes and gold. The gold is the brightest, warmest thing.
 
-3) 2.5-5.0 s | THE OUTLAW ATTACKS
-- THE OUTLAW gallops IN FROM THE LEFT EDGE on his horse at full speed, chasing the train along the track side, closer to the camera than the train.
-- The horse runs a correct, powerful full gallop: legs reaching and gathering, mane and tail streaming back, nostrils flaring, breath steaming in the cold night air. Hooves throw up clouds of sandy dust and small stones.
-- The Outlaw leans forward out of the saddle, reins in one hand, revolver arm stretched forward, and FIRES AT THE GOLD CAR 3 times, about half a second apart.
-- For each shot: a bright orange-white muzzle flash at the barrel, a short recoil kick of his arm, a small puff of grey gunsmoke trailing back from the gun, a thin glowing bullet streak towards the gold car, and a burst of orange sparks where the bullet hits the iron plates.
-- His torn red poncho whips and flutters violently behind him in the wind; his hat stays on his head.
-- The train keeps speeding to the right. The gold inside the open door gleams and glints with small star-shaped sparkles.
+STYLE (every frame): hand-painted watercolour and ink exactly like the reference: bold, slightly rough dark-brown ink outlines, wet-on-wet washes, pigment blooms, hard dried edges, cold-press paper grain, dry-brush highlights; painterly and cinematic. Smooth motion, no flicker or boiling textures.
 
-4) 5.0-6.5 s | THE CHASE LEAVES
-- The train pulls away and EXITS OFF THE RIGHT EDGE of the frame, the end carriages last, its steam trail stretching after it.
-- The Outlaw spurs his horse on and races after it, still chasing, and also EXITS OFF THE RIGHT EDGE.
-- Behind them, their dust, steam and gunsmoke drift, thin out and settle over the empty track. A few embers float and fade.
-
-5) 6.5-7.5 s | FADE OUT
-- The now-empty night scene (sky, moon, mesas, ground, rails) FADES OUT smoothly and evenly back into the flat pure green screen. All smoke, dust and embers are gone.
-
-6) 7.5-8.0 s | EMPTY
-- Flat pure green screen. Nothing else.
-
-FX SUMMARY: chimney steam and black smoke streaming backwards; embers and sparks from the stack; cylinder steam bursts at the wheels; sparks from the wheels on the rails; headlamp beam and glow; moon glow; gold glints in the open door; horse dust clouds and flying pebbles; breath steam from the horse; 3 muzzle flashes with recoil, gunsmoke puffs, glowing bullet streaks and impact sparks on the gold car. All FX are hand-painted in the same watercolour style (soft washes, inked edges), never photoreal.
-
-LIGHT AND COLOUR: night palette of deep indigo, cobalt and dusty teal, cool silver moonlight from the upper right; warm orange-gold light from the headlamp, cab windows, firebox, muzzle flashes and the gold. The gold is the brightest, warmest thing in the scene.
-
-ART STYLE (every frame): hand-painted watercolour and ink illustration exactly like the reference image: bold, slightly rough dark-brown ink outlines; loose wet-on-wet washes with pigment blooms and hard dried edges; visible cold-press paper grain; dry-brush highlights; richly detailed, painterly, cinematic. Smooth animation with no flicker or boiling textures.
-
-MOOD AND PACE: thrilling, fast and heavy, like the most exciting shot of a Western action-movie trailer: speed, danger, power. Clear readable action, nothing chaotic.
+MOOD: thrilling, fast and heavy, like the best shot of a Western action-movie trailer. Clear, readable action, never chaotic.
 
 GUARDRAILS:
-- One train, one horse, one rider. The horse always has exactly four legs and a natural gallop. The Outlaw always has two arms, two hands and ONE revolver, in the same hand.
-- The Outlaw's face, hat, red poncho and its zigzag pattern, clothes, belt and boots stay exactly as in the reference image in every frame; the hat never falls off.
-- The train stays on the rails, moves only to the right, never jumps, bends, stretches or changes shape, and keeps its design and colours.
-- The background (sky, moon, mesas, ground, rails, cacti) stays fixed in place once it has faded in; it does not move, slide or change.
-- The moon stays at the upper right.
-- The start and end are pure flat green with nothing on them.
+- One train, one horse, one rider. The horse always has four legs and a natural gallop. The Outlaw has two arms, two hands and ONE revolver, always in the same hand.
+- His face, hat, poncho and zigzag pattern, clothes and boots match the reference in every frame; the hat never falls off.
+- The train stays on the rails, only moves right, never jumps, bends or changes shape or colour.
+- Once faded in, the background stays fixed; the moon stays upper right.
+- Start and end are pure flat green with nothing on them.
 
-NEGATIVE PROMPT: camera movement, pan, tilt, zoom, dolly, tracking shot, camera shake, handheld, cut, scene change, close-up, slow motion, freeze frame, reverse motion, train moving left, train derailing, train jumping, train explosion, fire on the train, crash, bent or melting train, extra trains, extra horses, extra riders, people on the train, passengers, guards, two guns, extra arms, extra hands, missing hands, extra legs, missing legs, deformed horse, deformed face, face change, costume change, hat falling off, poncho colour change, text, letters, numbers, title, logo, UI, subtitles, watermark, signature, border, frame, 3D render, CGI, photorealistic, live action, glossy plastic, anime, cartoon, flat vector, pixel art, low detail, blurry, flicker, boiling texture, jitter, morphing, smoke or dust left on the green screen, gradient or texture on the green screen, scenery visible at the first or last frame.
+NEGATIVE: camera movement, pan, tilt, zoom, tracking shot, camera shake, cut, close-up, slow motion, reverse motion, train moving left, derailing, jumping train, explosion, fire, crash, melting or bent train, extra trains, horses or riders, people on the train, two guns, extra or missing arms, hands or legs, deformed horse or face, face or costume change, hat falling off, text, letters, numbers, logo, UI, subtitles, watermark, border, 3D, CGI, photoreal, live action, glossy, anime, cartoon, vector, blurry, flicker, jitter, morphing, smoke or texture on the green screen, scenery in the first or last frame.
 
-FINAL CHECK before you output: the first and last frames are fully flat pure green (#00FF00); the train enters from the left first, while the scene fades in; the Outlaw enters from the left after it and fires 3 shots at the gold car with flashes, smoke and impact sparks; the train exits right and the Outlaw exits right after it; the scene fades back to green; the camera never moves; one train, one horse, one rider, one revolver; the style matches the reference painting in every frame. If anything fails, fix it before finishing.
+FINAL CHECK: first and last frames fully flat green; the train enters from the left first while the scene fades in; the Outlaw enters from the left after it and fires 3 shots at the gold car with flashes, smoke and impact sparks; the train exits right, then the Outlaw; the scene fades back to green; the camera never moves; one train, one horse, one rider, one revolver; style matches the reference in every frame. Fix anything that fails before finishing.
 ```
 
 ## Files, at a glance
