@@ -220,6 +220,40 @@ CHECK before you finish: two strips of equal height filling the whole image; the
 
 ---
 
+---
+
+## Concept A video for Magnific AI (2026-11-23) → `trans_a_video.mp4`
+Darshan's story: the transition starts from a clear screen over the game; the train enters from the left while the rest of the scene fades in; the Outlaw rides in firing at the train; both exit right; the scene fades out.
+
+Video tools can't make transparent video, so the clip starts and ends on flat green, and I key the green in the game so the base game shows through. Settings:
+- Start frame and end frame: `assets/source/originals/transitions/green_frame_1536x1024.png`.
+- Reference image: the approved key art, `assets/source/originals/transitions/trans_a_keyart.png`.
+- Length: 8 s or the closest the model offers, 16:9, static camera.
+
+```text
+Create an 8-second cinematic transition video for a Wild West slot game. The attached reference image shows the exact scene, characters, art style and colours: a black steam locomotive pulling an armoured gold car with an open door full of glowing gold bars, at night in the desert under a full moon, and THE OUTLAW (wide-brim brown cowboy hat, stubble, torn red poncho with a cream zigzag pattern, revolver) galloping on a dark brown horse beside it.
+
+GREEN SCREEN START AND END (very important): the video STARTS on a completely flat pure green screen (#00FF00) and ENDS on the same completely flat pure green screen. The scene appears out of the green and disappears back into the green. Where the scene is not yet visible, the green is perfectly flat and even: no texture, no shadow, no gradient, no light change.
+
+CAMERA: STATIC WIDE TRIPOD SHOT, the same framing as the reference image. The camera never moves, pans, tilts, zooms or follows anyone. Everything moves past the camera from LEFT to RIGHT.
+
+STORY AND TIMING (8 s):
+- 0.0-0.5 s: flat pure green screen only.
+- 0.5-2.5 s: the train thunders IN FROM THE LEFT EDGE, headlamp first, travelling to the right at high speed, steam and sparks pouring from the chimney and streaming backwards. As the train enters, the rest of the scene FADES IN smoothly around it: the night sky, the full moon, the mesas, the cacti, the desert ground and the rails, replacing the green. By 2.5 s the whole scene is fully visible, as in the reference image.
+- 2.5-5.0 s: THE OUTLAW gallops IN FROM THE LEFT EDGE on his horse at full speed, hooves kicking up dust, poncho whipping behind him. He chases the train, leaning forward out of the saddle, and FIRES his revolver at the gold car again and again: bright orange-white muzzle flashes, small puffs of gunsmoke, sparks where the bullets hit the iron plates of the gold car.
+- 5.0-6.5 s: the train speeds on and EXITS OFF THE RIGHT EDGE of the frame, and the Outlaw races after it and also exits off the right edge, still chasing. Their dust and steam drift and settle behind them.
+- 6.5-7.5 s: the empty night scene FADES OUT smoothly back into the flat pure green screen.
+- 7.5-8.0 s: flat pure green screen only.
+
+MOTION: fast, heavy and thrilling, like an action-movie chase: the locomotive's wheels and pistons pump, the train shakes slightly on the rails, the horse runs with a correct full gallop, the Outlaw's arm kicks up with each shot. The gold glows inside the open door. The ground, rails and background stay fixed in place; only the train, the horse and rider, the steam, the dust and the gunfire move.
+
+KEEP: the hand-painted watercolour and ink style of the reference image in every frame (bold dark-brown ink outlines, wet-on-wet washes, paper grain); the same night palette of indigo and teal with warm orange lamp light and gold; the Outlaw's face, hat, red poncho and pattern, clothes and revolver exactly as in the reference; the train's design exactly as in the reference; one rider, one horse, one train.
+
+DO NOT: move or shake the camera; cut to another shot; zoom in on anyone; change the art style to 3D, photoreal or cartoon; add text, letters, logo, title, UI, watermark or subtitles; add other people, riders, horses or trains; give the Outlaw a second gun or extra hands; give the horse extra or missing legs; make the train change direction, jump or leave the rails; add explosions or fire on the train; leave any part of the scene, smoke or dust on the green screen at the start or the end.
+
+CHECK before you finish: the first and last frames are fully flat pure green; the train enters from the left and exits right; the Outlaw enters from the left after the train, fires at it, and exits right after it; the camera never moves; the style matches the reference image.
+```
+
 ## Files, at a glance
 | File | Concept | Background |
 | --- | --- | --- |
