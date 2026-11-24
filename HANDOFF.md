@@ -18,6 +18,8 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 - **Template follow-up:** backport to `slot-starter-template` the generic changes made here (symbol ids from config, feature buy, `specialShare`, Wild/Power multipliers in `evaluate`, `cut_white_tiles.py`, mascot slot, `anim_from_keys.py`).
 
 ## Log
+### 2026-11-24 · claude.ai chat (46)
+- Transition shortened to ~5 s (manifest `start`/`end`/`rate`, speed changed per section in `drawVideoTransition`). Darshan may want it shorter still: raise the rates.
 ### 2026-11-23 · claude.ai chat (45)
 - Free spins transition video from Darshan's Magnific clip (`transition_from_video.py`: per-frame opacity from the green cross-fade, opaque webm + mp4; `drawVideoTransition` in game.js, `manifest.video`). Single build embeds both videos.
 - Transition image prompts (docs/transition-image-prompts.md): layered key art, plates and cut-outs for a train hold-up and a sunset duel. No code change.

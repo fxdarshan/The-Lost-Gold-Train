@@ -3,6 +3,7 @@
 Newest first.
 
 ## 2026-11-19: video prompts revised
+- 2026-11-24: free spins transition shortened from 9 s to about 5 s: fades and the train's entry play at 2×, the Outlaw's attack at 1.4×, the empty first and last frames are skipped.
 - 2026-11-23: free spins transition is now Darshan's train hold-up video (Magnific): the train fades in over the reels, the Outlaw rides in firing at the gold car, both leave right and the scene fades out onto free spins; gunshot sounds on the flashes. Natural trigger and Buy Feature both use it.
 - 2026-11-23: new logo animation (Darshan's logo_animation.mp4): subtle, no intro blast, 9.6 s seamless loop over the reels.
 - 2026-11-23: animated logo: Darshan's Magnific video looped seamlessly over the reels (intro blast removed); logo prompt v2 for a subtle loop with identical first and last frames.

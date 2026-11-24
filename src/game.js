@@ -1030,10 +1030,20 @@
     }
     return TV.ready && !TV.err ? TV : null;
   }
+  function vidRate(m, fi) {                  // playback speed at frame fi (manifest rate list) times the preview speed
+    let r = 1; (m.rate || []).forEach(([f, k]) => { if (fi >= f) r = k; });
+    return r * (G.speed || 1);
+  }
+  function vidSeconds(m) {                   // how long the trimmed, sped-up clip lasts
+    const a = m.start || 0, b = m.end || m.frames - 1; let s = 0;
+    for (let i = a; i < b; i++) s += 1 / m.fps / vidRate(m, i);
+    return s;
+  }
   function drawVideoTransition(tr, t) {
-    const v = tr.vid.el, m = tr.vid.m;
+    const v = tr.vid.el, m = tr.vid.m, last = m.end || m.frames - 1;
     const fi = Math.min(m.frames - 1, Math.max(0, Math.floor(v.currentTime * m.fps + 1e-3)));
-    const al = m.alpha[fi] || 0;
+    const r = vidRate(m, fi); if (Math.abs(v.playbackRate - r) > 1e-3) v.playbackRate = r;
+    const al = (m.alpha[fi] || 0) * Math.max(0, Math.min(1, (last - fi) / 8));   // no pop at the cut end
     if (al > .003 && v.readyState >= 2) {
       const s = Math.max(W / v.videoWidth, H / v.videoHeight), vw = v.videoWidth * s, vh = v.videoHeight * s;
       ctx.save(); ctx.globalAlpha = al; ctx.drawImage(v, (W - vw) / 2, (H - vh) / 2, vw, vh); ctx.restore();
@@ -1042,8 +1052,8 @@
     while (tr.shot < m.shots.length && fi >= m.shots[tr.shot]) { tr.shot++; SND.play('sfx_cracker_pop'); }
     if (!tr.swapped && fi >= m.swap) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
     // done when the clip ends; a guard in case the video stalls (hidden tab, decoder hiccup)
-    const late = t - tr.t0 > m.frames / m.fps / (G.speed || 1) + 3;
-    if (v.ended || fi >= m.frames - 1 || late) {
+    const late = t - tr.t0 > vidSeconds(m) + 3;
+    if (v.ended || fi >= last || late) {
       if (!tr.swapped) { tr.swapped = true; tr.onCovered && tr.onCovered(); }
       v.pause(); G.trans = null; tr.resolve();
     }
@@ -1054,7 +1064,7 @@
     if (tr.kind === 'toFree' && tr.vid === undefined) {
       const tv = transVideo(); tr.vid = tv || false;
       if (tv) {
-        tv.el.currentTime = 0; tv.el.playbackRate = G.speed || 1;
+        tv.el.currentTime = (tv.m.start || 0) / tv.m.fps; tv.el.playbackRate = vidRate(tv.m, tv.m.start || 0);
         const p = tv.el.play(); if (p && p.catch) p.catch(() => { tr.vid = false; tr.t0 = now(); });
       }
     }
