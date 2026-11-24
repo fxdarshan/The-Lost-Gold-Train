@@ -19,7 +19,7 @@ The bridge between sessions (Claude Code at home, claude.ai chat elsewhere). **R
 
 ## Log
 ### 2026-11-24 · claude.ai chat (46)
-- Loading screen rebuilt from Darshan's Stitch export (splash.js, style.css splash block, `ui_splash_bg`, `texts.splashCards`, `splash.clickToStart`). He called the design "not very convincing": expect a round of improvements.
+- Loading screen rebuilt from Darshan's Stitch export (splash.js, style.css splash block, `ui_splash_bg`, `texts.splashCards`, `splash.clickToStart`). He called the design "not very convincing", then "bad output, rebuild on your own": rebuilt from game art (outro board frames + symbol art, dynamite-fuse loading bar, CLICK TO RIDE board). Waiting for his reaction.
 - Transition shortened to ~5 s (manifest `start`/`end`/`rate`, speed changed per section in `drawVideoTransition`). Darshan may want it shorter still: raise the rates.
 ### 2026-11-23 · claude.ai chat (45)
 - Free spins transition video from Darshan's Magnific clip (`transition_from_video.py`: per-frame opacity from the green cross-fade, opaque webm + mp4; `drawVideoTransition` in game.js, `manifest.video`). Single build embeds both videos.

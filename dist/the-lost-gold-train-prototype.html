@@ -112,102 +112,94 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
 .cheat-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- splash / loading screen (DOM over the stage, never recorded) ----------
-   From Darshan's Google Stitch design (2026-11-24, docs/loading-screen-stitch-prompt.md): night train key art, logo with
-   gold glow and light sweep, three parchment feature cards on wood, a railway-track progress bar filled with molten gold
-   and led by a small steam locomotive, "CLICK TO RIDE" sign when ready. Sizes in 1920-wide design px (--u). */
-.splash { --u: .5px; --fade: 700ms; --gold: #F2B13A; --gold-b: #FFD66B; --gold-d: #C08604; --parch: #EAD7B0; --ink: #23140A;
-  --wood: #3B2414; --wood-d: #26160B; --brass: #B8893A; --brass-l: #E3B866; --red: #9E2B25; --night: #0B1326; --mist: #B8C2D6;
-  position: absolute; z-index: 20; overflow: hidden; background: var(--night); color: var(--parch);
+   Built from the game's own art (2026-11-24, after the Stitch version was rejected): the night train key art with a slow
+   push-in, the logo with a gold glow and light sweep, three feature boards (outro board frame + real symbol art), and a
+   lit dynamite fuse as the loading bar: the spark burns from left to right towards the Power Dynamite, throwing sparks.
+   When it reaches the dynamite, the CLICK TO RIDE board appears. Sizes in 1920-wide design px (--u). */
+.splash { --u: .5px; --fade: 700ms; --gold: #F2B13A; --gold-b: #FFD66B; --cream: #F6E7C8; --ink: #1E0F06; --night: #0B1326;
+  position: absolute; z-index: 20; overflow: hidden; background: var(--night); color: var(--cream);
   font-family: 'Bitter', Georgia, serif; transition: opacity var(--fade) ease; }
 .splash[hidden] { display: none; }
 .splash.out { opacity: 0; pointer-events: none; }
-.splash .sp-bg { position: absolute; inset: 0; background: center / cover no-repeat; }
+.splash .sp-bg { position: absolute; inset: -2%; background: center / cover no-repeat; animation: sp-push 24s ease-in-out infinite alternate; }
 .splash .sp-shade { position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(to top, rgba(11,19,38,.96) 0%, rgba(11,19,38,.84) 24%, rgba(11,19,38,0) 50%),
-              linear-gradient(to bottom, rgba(11,19,38,.75) 0%, rgba(11,19,38,0) 12%),
-              radial-gradient(ellipse at 50% 42%, rgba(11,19,38,.08) 38%, rgba(11,19,38,.72) 100%); }
-.splash .sp-moon { position: absolute; top: calc(var(--u) * -60); right: calc(var(--u) * -60); width: calc(var(--u) * 480); height: calc(var(--u) * 480);
-  border-radius: 50%; opacity: .35; pointer-events: none; background: radial-gradient(circle, rgba(255,214,107,.45) 0%, rgba(255,214,107,0) 70%); }
-.splash .sp-snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  background: linear-gradient(to top, rgba(8,10,20,.97) 0%, rgba(8,10,20,.88) 20%, rgba(8,10,20,.35) 42%, rgba(8,10,20,0) 55%),
+              linear-gradient(to bottom, rgba(8,10,20,.7) 0%, rgba(8,10,20,0) 14%),
+              radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 45%, rgba(0,0,0,.6) 100%); }
+.splash .sp-snow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
 .splash .sp-top { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; align-items: center;
-  padding: calc(var(--u) * 30) calc(var(--u) * 40); z-index: 3; }
+  padding: calc(var(--u) * 28) calc(var(--u) * 40); z-index: 5; }
 .splash .sp-brand { display: flex; align-items: center; gap: calc(var(--u) * 10); color: var(--gold-b); font-size: calc(var(--u) * 26);
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,.8)); }
-.splash .sp-brand svg { stroke: var(--ink); stroke-width: 1.2; }
-.splash .sp-brand span { font-size: calc(var(--u) * 17); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
-.splash .sp-btns { display: flex; gap: calc(var(--u) * 10); }
-.splash .sp-btn { width: calc(var(--u) * 52); height: calc(var(--u) * 52); padding: 0; border-radius: 50%; display: grid; place-items: center;
-  font-size: calc(var(--u) * 24); color: var(--gold-b); background: rgba(38,22,11,.85); border: calc(var(--u) * 2.5) solid var(--brass); cursor: pointer;
-  transition: background .18s ease-out, border-color .18s ease-out; }
-.splash .sp-btn:hover { background: var(--wood); border-color: var(--gold-b); }
-.splash .sp-hero { position: absolute; left: 0; right: 0; top: calc(var(--u) * 46); display: flex; justify-content: center; z-index: 2; }
-.splash .sp-logo { position: relative; }
-.splash .sp-halo { position: absolute; inset: calc(var(--u) * -40) calc(var(--u) * -90); border-radius: 50%; pointer-events: none;
-  background: radial-gradient(ellipse at center, rgba(242,177,58,.42) 0%, rgba(255,214,107,.16) 45%, rgba(242,177,58,0) 75%); }
-.splash .sp-logo img { position: relative; display: block; height: calc(var(--u) * 300); width: auto; filter: drop-shadow(0 calc(var(--u) * 14) calc(var(--u) * 26) rgba(11,19,38,.85)); }
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.9)); }
+.splash .sp-brand span { font: calc(var(--u) * 20) 'Rye', serif; letter-spacing: .16em; text-transform: uppercase; }
+.splash .sp-btns { display: flex; gap: calc(var(--u) * 12); }
+.splash .sp-btn { width: calc(var(--u) * 56); height: calc(var(--u) * 56); padding: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  font-size: calc(var(--u) * 24); color: var(--gold-b); border: calc(var(--u) * 3) solid #C9963F;
+  background: radial-gradient(circle at 35% 30%, #5a3418, #2a160a 70%); box-shadow: 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0,0,0,.7), inset 0 0 0 calc(var(--u) * 2) #6b4320; }
+.splash .sp-btn:hover { border-color: var(--gold-b); }
+.splash .sp-hero { position: absolute; left: 0; right: 0; top: calc(var(--u) * 30); display: flex; justify-content: center; z-index: 2; }
+.splash .sp-logo { position: relative; animation: sp-float 5s ease-in-out infinite; }
+.splash .sp-halo { position: absolute; inset: calc(var(--u) * -30) calc(var(--u) * -110); border-radius: 50%; pointer-events: none; animation: sp-glow 3.5s ease-in-out infinite;
+  background: radial-gradient(ellipse at center, rgba(255,190,70,.5) 0%, rgba(255,214,107,.18) 45%, rgba(242,177,58,0) 72%); }
+.splash .sp-logo img { position: relative; display: block; height: calc(var(--u) * 340); width: auto; filter: drop-shadow(0 calc(var(--u) * 14) calc(var(--u) * 24) rgba(0,0,0,.85)); }
 .splash .sp-sweep { position: absolute; inset: 0; overflow: hidden; pointer-events: none;
   -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat; }
 .splash .sp-sweep i { position: absolute; top: 0; bottom: 0; width: 22%; animation: sp-sweep 4.5s ease-in-out infinite;
-  background: linear-gradient(90deg, rgba(255,214,107,0) 0%, rgba(255,240,190,.6) 50%, rgba(255,214,107,0) 100%); }
+  background: linear-gradient(100deg, rgba(255,240,190,0) 0%, rgba(255,248,220,.75) 50%, rgba(255,240,190,0) 100%); }
 .splash .sp-title { font: calc(var(--u) * 120) 'Rye', serif; color: var(--gold-b); text-shadow: 0 calc(var(--u) * 6) 0 var(--ink); }
-.splash .sp-main { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 26); display: flex; flex-direction: column; align-items: center;
-  gap: calc(var(--u) * 26); z-index: 3; }
-.splash .sp-cards { width: calc(var(--u) * 1320); display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--u) * 28); }
-.splash .sp-card { position: relative; padding: calc(var(--u) * 6); background: var(--wood); border: calc(var(--u) * 2.5) solid var(--ink);
-  border-radius: calc(var(--u) * 10); box-shadow: 0 calc(var(--u) * 18) calc(var(--u) * 40) rgba(0,0,0,.6); }
-.splash .sp-card > b { position: absolute; width: calc(var(--u) * 9); height: calc(var(--u) * 9); border-radius: 50%; background: var(--brass-l);
-  border: 1px solid var(--ink); }
-.splash .sp-card > b:nth-of-type(1) { top: calc(var(--u) * 4); left: calc(var(--u) * 4); } .splash .sp-card > b:nth-of-type(2) { top: calc(var(--u) * 4); right: calc(var(--u) * 4); }
-.splash .sp-card > b:nth-of-type(3) { bottom: calc(var(--u) * 4); left: calc(var(--u) * 4); } .splash .sp-card > b:nth-of-type(4) { bottom: calc(var(--u) * 4); right: calc(var(--u) * 4); }
-.splash .sp-card > div { height: 100%; display: flex; align-items: center; gap: calc(var(--u) * 18); padding: calc(var(--u) * 12) calc(var(--u) * 20);
-  background: var(--parch); color: var(--ink); border: 1px solid var(--brass); border-radius: calc(var(--u) * 4);
-  box-shadow: inset 0 0 calc(var(--u) * 22) rgba(120,80,30,.35); }
-.splash .sp-card svg { flex: none; width: calc(var(--u) * 50); height: calc(var(--u) * 50); }
-.splash .sp-card h2 { margin: 0; color: var(--ink); font-weight: 400; font: calc(var(--u) * 21) / 1.15 'Rye', serif; letter-spacing: .05em; text-transform: uppercase; }
-.splash .sp-card p { margin: calc(var(--u) * 3) 0 0; font-size: calc(var(--u) * 17); font-weight: 500; line-height: 1.3; }
-.splash .sp-load { width: calc(var(--u) * 1152); display: flex; flex-direction: column; gap: calc(var(--u) * 4); }
-.splash .sp-status { position: relative; height: calc(var(--u) * 64); display: flex; align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 10); }
-.splash .sp-msg { font: calc(var(--u) * 26) 'Rye', serif; color: var(--parch); filter: drop-shadow(0 2px 3px rgba(0,0,0,.8)); }
-.splash .sp-pct { font: calc(var(--u) * 42) 'Rye', serif; color: var(--gold-b); font-variant-numeric: tabular-nums; filter: drop-shadow(0 2px 3px rgba(0,0,0,.8)); }
-.splash .sp-ride { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; padding: calc(var(--u) * 12) calc(var(--u) * 56);
-  font: calc(var(--u) * 36) 'Rye', serif; letter-spacing: .08em; color: var(--gold-b); background: var(--wood); border: calc(var(--u) * 2.5) solid var(--brass);
-  border-radius: calc(var(--u) * 10); cursor: pointer; text-shadow: 0 2px 3px rgba(0,0,0,.8); animation: sp-cta 2.2s ease-in-out infinite; }
-.splash .sp-ride > b { position: absolute; width: calc(var(--u) * 9); height: calc(var(--u) * 9); border-radius: 50%; background: var(--brass-l); border: 1px solid var(--ink); }
-.splash .sp-ride > b:nth-of-type(1) { top: calc(var(--u) * 6); left: calc(var(--u) * 6); } .splash .sp-ride > b:nth-of-type(2) { top: calc(var(--u) * 6); right: calc(var(--u) * 6); }
-.splash .sp-ride > b:nth-of-type(3) { bottom: calc(var(--u) * 6); left: calc(var(--u) * 6); } .splash .sp-ride > b:nth-of-type(4) { bottom: calc(var(--u) * 6); right: calc(var(--u) * 6); }
-.splash .sp-ride:hover { background: #4a2e1a; }
-.splash.ready .sp-msg, .splash.ready .sp-pct { display: none; }
+/* feature boards: the outro board as a stretchable frame, real symbol art pinned on the left */
+.splash .sp-cards { position: absolute; left: 50%; bottom: calc(var(--u) * 222); transform: translateX(-50%); display: flex; gap: calc(var(--u) * 34); z-index: 3; }
+.splash .sp-card { position: relative; width: calc(var(--u) * 430); height: calc(var(--u) * 170); box-sizing: border-box; display: flex; align-items: center;
+  gap: calc(var(--u) * 16); padding: 0 calc(var(--u) * 30) 0 calc(var(--u) * 26);
+  border: calc(var(--u) * 34) solid transparent; border-image: var(--board) 46 fill / calc(var(--u) * 34) stretch;
+  filter: drop-shadow(0 calc(var(--u) * 14) calc(var(--u) * 18) rgba(0,0,0,.75)); animation: sp-in .7s cubic-bezier(.2,.8,.2,1.2) both; }
+.splash .sp-card:nth-child(2) { animation-delay: .12s; } .splash .sp-card:nth-child(3) { animation-delay: .24s; }
+.splash .sp-card img { flex: none; height: calc(var(--u) * 150); width: auto; max-width: calc(var(--u) * 170); margin: calc(var(--u) * -40) 0 calc(var(--u) * -40) calc(var(--u) * -56);
+  transform: rotate(-5deg); filter: drop-shadow(0 calc(var(--u) * 6) calc(var(--u) * 8) rgba(0,0,0,.7)); }
+.splash .sp-card:nth-child(2) img { transform: rotate(4deg); }
+.splash .sp-card h2 { margin: 0; font: calc(var(--u) * 25) / 1.1 'Rye', serif; color: var(--gold-b); text-transform: uppercase; letter-spacing: .03em;
+  text-shadow: 0 calc(var(--u) * 2) 0 var(--ink), 0 0 calc(var(--u) * 10) rgba(0,0,0,.6); }
+.splash .sp-card p { margin: calc(var(--u) * 6) 0 0; font-size: calc(var(--u) * 17); font-weight: 500; line-height: 1.25; color: var(--cream); text-shadow: 0 1px 2px rgba(0,0,0,.9); }
+/* loading bar: a lit dynamite fuse */
+.splash .sp-load { position: absolute; left: 50%; bottom: calc(var(--u) * 60); width: calc(var(--u) * 1180); transform: translateX(-50%); z-index: 3; }
+.splash .sp-status { position: relative; height: calc(var(--u) * 50); display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 calc(var(--u) * 4) calc(var(--u) * 2); justify-content: flex-start; gap: calc(var(--u) * 22); }
+.splash .sp-msg { font: calc(var(--u) * 26) 'Rye', serif; color: var(--cream); text-shadow: 0 2px 4px rgba(0,0,0,.95); }
+.splash .sp-pct { font: calc(var(--u) * 40) 'Rye', serif; color: var(--gold-b); font-variant-numeric: tabular-nums; text-shadow: 0 2px 0 var(--ink), 0 0 calc(var(--u) * 14) rgba(255,160,40,.6); }
+.splash .sp-track { position: relative; height: calc(var(--u) * 90); display: flex; align-items: center; }
+.splash .sp-fuse { position: relative; flex: 1; height: calc(var(--u) * 20); margin-right: calc(var(--u) * -26); border-radius: calc(var(--u) * 8);
+  background: repeating-linear-gradient(-55deg, #c9a066 0 calc(var(--u) * 6), #8a6332 calc(var(--u) * 6) calc(var(--u) * 9), #b38a52 calc(var(--u) * 9) calc(var(--u) * 14));
+  box-shadow: inset 0 calc(var(--u) * -3) calc(var(--u) * 4) rgba(0,0,0,.45), inset 0 calc(var(--u) * 2) calc(var(--u) * 2) rgba(255,240,200,.35), 0 calc(var(--u) * 4) calc(var(--u) * 8) rgba(0,0,0,.7); }
+.splash .sp-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 2%; border-radius: inherit; transition: width .12s linear;
+  background: linear-gradient(90deg, #120a06 0%, #241208 70%, #6a1e06 92%, #ff7a1a 100%); box-shadow: 0 0 calc(var(--u) * 6) rgba(255,90,20,.35); }
+.splash .sp-spark { position: absolute; right: calc(var(--u) * -26); top: 50%; width: calc(var(--u) * 52); height: calc(var(--u) * 52); margin-top: calc(var(--u) * -26);
+  border-radius: 50%; animation: sp-flick .12s steps(2) infinite alternate;
+  background: radial-gradient(circle, #fff 0%, #fff6c0 14%, #ffc23a 32%, rgba(255,110,20,.55) 52%, rgba(255,80,0,0) 72%); }
+.splash .sp-dyn { position: relative; z-index: 2; flex: none; height: calc(var(--u) * 150); width: auto; filter: drop-shadow(0 calc(var(--u) * 8) calc(var(--u) * 12) rgba(0,0,0,.8)); }
+.splash .sp-dyn.hot { animation: sp-shake .09s linear infinite; }
+.splash .sp-ride { position: absolute; left: 50%; top: 50%; display: none; padding: 0 calc(var(--u) * 50); height: calc(var(--u) * 124); box-sizing: border-box; cursor: pointer;
+  font: calc(var(--u) * 40) 'Rye', serif; letter-spacing: .06em; color: var(--gold-b); background: none;
+  border: calc(var(--u) * 34) solid transparent; border-image: var(--board) 46 fill / calc(var(--u) * 34) stretch;
+  text-shadow: 0 calc(var(--u) * 3) 0 var(--ink), 0 0 calc(var(--u) * 14) rgba(255,170,40,.7);
+  filter: drop-shadow(0 calc(var(--u) * 12) calc(var(--u) * 16) rgba(0,0,0,.8)); animation: sp-cta 1.6s ease-in-out infinite; }
+.splash .sp-ride:hover { color: #fff3c4; }
+.splash.ready .sp-status, .splash.ready .sp-track { visibility: hidden; }
 .splash.ready .sp-ride { display: block; }
-.splash .sp-track { position: relative; display: flex; align-items: center; padding: calc(var(--u) * 16) 0; }
-.splash .sp-cap { position: relative; z-index: 2; flex: none; width: calc(var(--u) * 18); height: calc(var(--u) * 40); display: flex; flex-direction: column;
-  justify-content: space-between; align-items: center; padding: calc(var(--u) * 5) 0; background: var(--brass); border: calc(var(--u) * 2.5) solid var(--ink); }
-.splash .sp-cap:first-child { border-radius: calc(var(--u) * 4) 0 0 calc(var(--u) * 4); } .splash .sp-cap:last-child { border-radius: 0 calc(var(--u) * 4) calc(var(--u) * 4) 0; }
-.splash .sp-cap i { width: calc(var(--u) * 7); height: calc(var(--u) * 7); border-radius: 50%; background: var(--ink); }
-.splash .sp-rail { position: relative; flex: 1; height: calc(var(--u) * 22); background: rgba(38,22,11,.95); border-top: calc(var(--u) * 2.5) solid var(--ink);
-  border-bottom: calc(var(--u) * 2.5) solid var(--ink); }
-.splash .sp-rail::before, .splash .sp-rail::after { content: ''; position: absolute; left: 0; right: 0; height: calc(var(--u) * 2); background: rgba(184,194,214,.28); }
-.splash .sp-rail::before { top: calc(var(--u) * 2); } .splash .sp-rail::after { bottom: calc(var(--u) * 2); }
-.splash .sp-sleepers { position: absolute; left: calc(var(--u) * 8); right: calc(var(--u) * 8); bottom: calc(var(--u) * -11); height: calc(var(--u) * 10);
-  background: repeating-linear-gradient(90deg, var(--wood) 0 calc(var(--u) * 12), transparent calc(var(--u) * 12) calc(var(--u) * 70)); }
-.splash .sp-fill { position: relative; height: 100%; width: 2%; transition: width .12s linear;
-  background: linear-gradient(90deg, var(--gold-d) 0%, var(--gold) 55%, var(--gold-b) 100%); box-shadow: 0 0 calc(var(--u) * 20) rgba(242,177,58,.75); }
-.splash .sp-sheen { position: absolute; inset: 0; overflow: hidden; }
-.splash .sp-sheen::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 30%; animation: sp-sheen 2.5s cubic-bezier(.4,0,.2,1) infinite;
-  background: linear-gradient(90deg, transparent, rgba(255,250,220,.65), transparent); }
-.splash .sp-loco { position: absolute; right: calc(var(--u) * -34); bottom: calc(var(--u) * 4); width: calc(var(--u) * 80); height: calc(var(--u) * 60); }
-.splash.ready .sp-loco { right: 0; }
-.splash .sp-loco svg { position: relative; width: 100%; height: 100%; filter: drop-shadow(0 calc(var(--u) * 4) calc(var(--u) * 6) rgba(0,0,0,.7)); animation: sp-chug .5s ease-in-out infinite; }
-.splash .sp-loco i { position: absolute; left: calc(var(--u) * 46); top: calc(var(--u) * 2); width: calc(var(--u) * 16); height: calc(var(--u) * 16); border-radius: 50%;
-  background: rgba(234,215,176,.8); animation: sp-steam 1.8s ease-out infinite; }
-.splash .sp-loco i:nth-of-type(2) { animation-delay: .6s; } .splash .sp-loco i:nth-of-type(3) { animation-delay: 1.2s; }
-.splash .sp-foot { margin: 0; font-size: calc(var(--u) * 15); letter-spacing: .05em; color: var(--mist); }
-@keyframes sp-sweep { 0%, 65% { left: -30%; opacity: 0; } 75% { opacity: 1; } 90%, 100% { left: 110%; opacity: 0; } }
-@keyframes sp-sheen { from { transform: translateX(-100%); } to { transform: translateX(400%); } }
-@keyframes sp-steam { 0% { transform: translate(0, 0) scale(.5); opacity: .8; } 60% { transform: translate(calc(var(--u) * -14), calc(var(--u) * -24)) scale(1.1); opacity: .45; }
-  100% { transform: translate(calc(var(--u) * -30), calc(var(--u) * -42)) scale(1.5); opacity: 0; } }
-@keyframes sp-chug { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--u) * -1.5)); } }
-@keyframes sp-cta { 0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 calc(var(--u) * 22) rgba(242,177,58,.55), 0 calc(var(--u) * 10) calc(var(--u) * 24) rgba(11,19,38,.85); }
-  50% { transform: translate(-50%, -50%) scale(1.04); box-shadow: 0 0 calc(var(--u) * 38) rgba(255,214,107,.85), 0 calc(var(--u) * 12) calc(var(--u) * 28) rgba(11,19,38,.9); } }
+.splash .sp-flash { position: absolute; inset: 0; z-index: 4; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at var(--fx, 85%) var(--fy, 85%), rgba(255,230,160,.95), rgba(255,140,40,.4) 25%, rgba(255,120,20,0) 55%); }
+.splash.ready .sp-flash { animation: sp-boom .7s ease-out 1; }
+.splash .sp-foot { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 16); margin: 0; text-align: center; z-index: 3;
+  font-size: calc(var(--u) * 15); letter-spacing: .05em; color: rgba(230,220,200,.6); }
+@keyframes sp-push { from { transform: scale(1); } to { transform: scale(1.06) translate(-1%, -1%); } }
+@keyframes sp-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--u) * -8)); } }
+@keyframes sp-glow { 0%, 100% { opacity: .75; } 50% { opacity: 1; } }
+@keyframes sp-sweep { 0%, 60% { left: -30%; opacity: 0; } 70% { opacity: 1; } 88%, 100% { left: 110%; opacity: 0; } }
+@keyframes sp-in { from { opacity: 0; transform: translateY(calc(var(--u) * 40)) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes sp-flick { from { transform: scale(.85); opacity: .85; } to { transform: scale(1.12); opacity: 1; } }
+@keyframes sp-shake { 0% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(calc(var(--u) * 2), calc(var(--u) * -1)) rotate(1deg); }
+  50% { transform: translate(calc(var(--u) * -1), calc(var(--u) * 2)) rotate(-1deg); } 75% { transform: translate(calc(var(--u) * -2), 0) rotate(.5deg); } 100% { transform: translate(0, 0); } }
+@keyframes sp-boom { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes sp-cta { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.06); } }
 
 /* symbol-win dropdowns (cheat menu and demo panel) */
 .cheat-menu .symrow { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 2px; }
@@ -304,7 +296,7 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
   <button id="showPanel" class="show-panel" hidden>Demo controls</button>
 </div>
 
-<script>window.BUILD_VERSION = '202611240555';</script>
+<script>window.BUILD_VERSION = '202611240609';</script>
 <script>
 /* src/config.js */
 /*
@@ -332,8 +324,8 @@ details summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
     texts: {
       brand: 'All Aboard',                          // small line on the splash screen (ASSUMED)
       loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
-      // loading screen (Darshan's Stitch design, 2026-11-24): feature cards [title, line], ready sign, footer. Wording ASSUMED.
-      splashCards: [['Expanding Symbols', 'One symbol takes the reels in free spins'], ['Power Dynamite', 'Blasts in bigger wins'], ['Win up to 5,500x', 'Ride the gold train']],
+      // loading screen (2026-11-24): feature boards [title, line, symbol art], ready sign, footer. Wording ASSUMED.
+      splashCards: [['Free Spins', '3 or more Scatters start 10 free spins', 'sym_scatter_idle'], ['Expanding Symbol', 'One symbol takes over whole reels', 'sym_00_idle'], ['Win up to 5,500x', 'Rob the gold train', 'sym_02_idle']],
       splashGo: 'CLICK TO RIDE',
       splashFoot: '18+ Play responsibly',
       retrigger: 'MORE SCATTERS!',                 // retrigger modal title
@@ -1389,7 +1381,8 @@ window.ASSET_MANIFEST = {
  * Logo: ui_splash_logo when supplied (else the title in text). Backdrop: ui_splash_bg (the night train key art).
  * The bar follows real asset loading but never finishes before CONFIG.splash.minMs,
  * so the screen is always readable. When loading is done a CLICK TO RIDE sign appears; a click anywhere enters the game
- * (CONFIG.splash.clickToStart; the click also unlocks the music). Layout from Darshan's Google Stitch design (2026-11-24).
+ * (CONFIG.splash.clickToStart; the click also unlocks the music). Built from the game's own art (2026-11-24): feature boards
+ * on the outro board frame with real symbol art, and a burning dynamite fuse as the loading bar.
  * Turn it off with CONFIG.splash.enabled = false, or open the page with ?nosplash.
  * "Replay splash screen" in the demo panel runs it again.
  */
@@ -1402,14 +1395,6 @@ window.ASSET_MANIFEST = {
     full: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
   };
 
-  // feature card icons and the progress locomotive, from Darshan's Stitch design (2026-11-24)
-  const CARD_ICON = [
-    '<svg viewBox="0 0 36 36" fill="none"><path d="M18 3l3.9 7.8 8.6 1.3-6.2 6.1 1.5 8.6L18 22.8l-7.8 4 1.5-8.6-6.2-6.1 8.6-1.3L18 3z" fill="#F2B13A" stroke="#23140A" stroke-width="2" stroke-linejoin="round"/><circle cx="18" cy="3" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/><circle cx="30.5" cy="12.1" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/><circle cx="25.8" cy="26.8" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/><circle cx="10.2" cy="26.8" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/><circle cx="5.5" cy="12.1" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/></svg>',
-    '<svg viewBox="0 0 36 36" fill="none"><rect x="8" y="13" width="6" height="17" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"/><rect x="15" y="11" width="6" height="19" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"/><rect x="22" y="13" width="6" height="17" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"/><rect x="7" y="18" width="22" height="4" fill="#3B2414" stroke="#23140A" stroke-width="1.5"/><path d="M18 11 C18 7, 23 6, 26 4" stroke="#23140A" stroke-width="2" stroke-linecap="round"/><circle cx="27" cy="4" r="2.5" fill="#FFD66B" stroke="#9E2B25" stroke-width="1.2"/></svg>',
-    '<svg viewBox="0 0 36 36" fill="none"><polygon points="7,27 11,19 21,19 25,27" fill="#F2B13A" stroke="#23140A" stroke-width="2" stroke-linejoin="round"/><polygon points="15,27 19,19 29,19 33,27" fill="#FFD66B" stroke="#23140A" stroke-width="2" stroke-linejoin="round"/><polygon points="11,19 15,11 25,11 29,19" fill="#FFD66B" stroke="#23140A" stroke-width="2" stroke-linejoin="round"/><path d="M16 14h6" stroke="#23140A" stroke-width="1.5" stroke-linecap="round"/></svg>',
-  ];
-  const LOCO = '<svg viewBox="0 0 64 48" fill="none"><rect x="6" y="16" width="14" height="18" rx="1" fill="#23140A" stroke="#0B1326" stroke-width="1.5"/><rect x="9" y="19" width="7" height="6" fill="#FFD66B" stroke="#23140A" stroke-width="1"/><rect x="4" y="14" width="18" height="3" rx="1" fill="#9E2B25" stroke="#23140A" stroke-width="1.2"/><rect x="20" y="20" width="26" height="14" rx="2" fill="#1A1614" stroke="#0B1326" stroke-width="1.5"/><rect x="24" y="22" width="18" height="2" fill="#B8893A"/><polygon points="38,20 36,10 44,10 42,20" fill="#23140A" stroke="#0B1326" stroke-width="1.5"/><rect x="35" y="8" width="10" height="3" rx="1" fill="#B8893A" stroke="#23140A" stroke-width="1"/><circle cx="47" cy="25" r="3" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"/><polygon points="46,34 56,38 46,38" fill="#9E2B25" stroke="#23140A" stroke-width="1.5"/><circle cx="13" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"/><circle cx="26" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"/><circle cx="38" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"/><line x1="13" y1="37" x2="38" y2="37" stroke="#FFD66B" stroke-width="1.5"/></svg>';
-
   let el, cv, ctx, raf, parts = [], st = null, ro, cfg = { minMs: 2600, fadeMs: 700 };
 
   function build() {
@@ -1418,15 +1403,12 @@ window.ASSET_MANIFEST = {
     el = document.createElement('div');
     el.className = 'splash';
     el.setAttribute('aria-label', 'Loading');
-    const bg = manifest.images.ui_splash_bg || manifest.images.bg_base_main, logo = manifest.images.ui_splash_logo;
-    const rivets = '<b></b><b></b><b></b><b></b>';
-    const card = (icon, h, p) => `<article class="sp-card">${rivets}<div>${icon}<span><h2>${h}</h2><p>${p}</p></span></div></article>`;
+    const im = manifest.images, bg = im.ui_splash_bg || im.bg_base_main, logo = im.ui_splash_logo;
+    const board = im.ui_outro_board ? `url('${new URL(im.ui_outro_board, location.href).href}')` : 'none';   // absolute: the var is used inside style.css
     const cards = (C.texts && C.texts.splashCards) || [];
     el.innerHTML = `
       <div class="sp-bg"${bg ? ` style="background-image:url('${bg}')"` : ''}></div>
       <div class="sp-shade"></div>
-      <div class="sp-moon"></div>
-      <canvas class="sp-snow"></canvas>
       <div class="sp-top">
         <div class="sp-brand">${ICON.star}<span>${(C.texts && C.texts.brand) || C.title}</span></div>
         <div class="sp-btns"><button class="sp-btn" data-act="vol" aria-label="Toggle sound"></button><button class="sp-btn" data-act="full" aria-label="Fullscreen">${ICON.full}</button></div>
@@ -1437,19 +1419,19 @@ window.ASSET_MANIFEST = {
           ${logo ? `<img alt="${C.title}" src="${logo}" onerror="this.outerHTML='<div class=&quot;sp-title&quot;>${C.title.replace(/'/g, '')}</div>'"><div class="sp-sweep" style="--logo:url('${logo}')"><i></i></div>` : `<div class="sp-title">${C.title}</div>`}
         </div>
       </div>
-      <div class="sp-main">
-        <div class="sp-cards" role="group" aria-label="Game features">${cards.map((c, k) => card(CARD_ICON[k % CARD_ICON.length], c[0], c[1])).join('')}</div>
-        <div class="sp-load" role="group" aria-label="Loading progress">
-          <div class="sp-status"><span class="sp-msg" aria-live="polite">${MSG[0]}</span><b class="sp-pct">0%</b>
-            <button class="sp-ride" type="button">${rivets}${(C.texts && C.texts.splashGo) || 'PLAY'}</button></div>
-          <div class="sp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-            <div class="sp-cap"><i></i><i></i></div>
-            <div class="sp-rail"><div class="sp-sleepers"></div><div class="sp-fill"><div class="sp-sheen"></div><div class="sp-loco"><i></i><i></i><i></i>${LOCO}</div></div></div>
-            <div class="sp-cap"><i></i><i></i></div>
-          </div>
+      <div class="sp-cards" role="group" aria-label="Game features" style="--board:${board}">${cards.map(c =>
+        `<div class="sp-card">${im[c[2]] ? `<img alt="" src="${im[c[2]]}">` : ''}<div><h2>${c[0]}</h2><p>${c[1]}</p></div></div>`).join('')}</div>
+      <div class="sp-load" role="group" aria-label="Loading progress" style="--board:${board}">
+        <div class="sp-status"><span class="sp-msg" aria-live="polite">${MSG[0]}</span><b class="sp-pct">0%</b></div>
+        <div class="sp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <div class="sp-fuse"><div class="sp-fill"><i class="sp-spark"></i></div></div>
+          ${im.sym_power_idle ? `<img class="sp-dyn" alt="" src="${im.sym_power_idle}">` : ''}
         </div>
-        <p class="sp-foot">${(C.texts && C.texts.splashFoot) || ''}</p>
-      </div>`;
+        <button class="sp-ride" type="button">${(C.texts && C.texts.splashGo) || 'PLAY'}</button>
+      </div>
+      <div class="sp-flash"></div>
+      <canvas class="sp-snow"></canvas>
+      <p class="sp-foot">${(C.texts && C.texts.splashFoot) || ''}</p>`;
     wrap.appendChild(el);
     cv = el.querySelector('.sp-snow'); ctx = cv.getContext('2d');
     el.addEventListener('click', e => {
@@ -1478,20 +1460,36 @@ window.ASSET_MANIFEST = {
 
   function spawn(first) {                     // embers drifting up from the bottom
     const u = cv.width / 1920;
-    return { x: Math.random() * cv.width, y: first ? Math.random() * cv.height : cv.height + 10, r: (Math.random() * 2.2 + .8) * Math.max(u * 1.3, .6),
-      vy: -(Math.random() * .7 + .3) * Math.max(u * 1.4, .6), vx: (Math.random() - .3) * .4, a: Math.random() * .6 + .2, life: 0 };
+    return { x: Math.random() * cv.width, y: first ? cv.height * (.45 + Math.random() * .55) : cv.height + 10, r: (Math.random() * 2.2 + .8) * Math.max(u * 1.3, .6),
+      vy: -(Math.random() * .7 + .3) * Math.max(u * 1.4, .6), vx: (Math.random() - .3) * .4, a: Math.random() * .6 + .2 };
   }
+  let sparks = [];
   function snow() {
     ctx.clearRect(0, 0, cv.width, cv.height);
+    const u = cv.width / 1920;
+    ctx.shadowBlur = 6; ctx.shadowColor = '#ffb347';
     for (const p of parts) {
       p.y += p.vy; p.x += p.vx + Math.sin(p.y * .01) * .3;
-      if (p.y < cv.height * .25) Object.assign(p, spawn(false));
-      const fade = Math.min(1, (p.y - cv.height * .25) / (cv.height * .3));
+      if (p.y < cv.height * .3) Object.assign(p, spawn(false));
+      const fade = Math.min(1, (p.y - cv.height * .3) / (cv.height * .3));
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7);
-      ctx.fillStyle = `rgba(255,${190 + (p.r * 20 | 0)},90,${p.a * fade})`;
-      ctx.shadowBlur = 6; ctx.shadowColor = '#ffb347';
-      ctx.fill();
+      ctx.fillStyle = `rgba(255,${190 + (p.r * 20 | 0)},90,${p.a * fade})`; ctx.fill();
     }
+    // sparks thrown off the burning end of the fuse
+    const sp = st && !st.ready && el.querySelector('.sp-spark');
+    if (sp) {
+      const a = sp.getBoundingClientRect(), b = el.getBoundingClientRect(), k = cv.width / b.width;
+      const x = (a.left + a.width / 2 - b.left) * k, y = (a.top + a.height / 2 - b.top) * k;
+      for (let n = 0; n < 3; n++) { const ang = -Math.PI / 2 + (Math.random() - .5) * 2.6, v = (2 + Math.random() * 5) * u * 1.6;
+        sparks.push({ x, y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, life: 1, d: .025 + Math.random() * .04 }); }
+    }
+    ctx.shadowColor = '#ffcf5a';
+    for (const s of sparks) {
+      s.x += s.vx; s.y += s.vy; s.vy += .18 * u * 1.6; s.life -= s.d;
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x - s.vx * 1.6, s.y - s.vy * 1.6);
+      ctx.strokeStyle = `rgba(255,${200 + (s.life * 55 | 0)},${120 * s.life | 0},${Math.max(0, s.life)})`; ctx.lineWidth = Math.max(1, 2.2 * u * 1.4); ctx.stroke();
+    }
+    sparks = sparks.filter(s => s.life > 0);
     ctx.shadowBlur = 0;
   }
 
@@ -1508,7 +1506,14 @@ window.ASSET_MANIFEST = {
     const txt = MSG[i];
     if (m.textContent !== txt) m.textContent = txt;
     el.querySelector('.sp-track').setAttribute('aria-valuenow', pct);
-    if (pct >= 100 && st.real >= 1 && !st.ready) { st.ready = true; st.tReady = t; el.classList.add('ready'); }
+    const dyn = el.querySelector('.sp-dyn'); if (dyn) dyn.classList.toggle('hot', pct >= 85 && !st.ready);
+    if (pct >= 100 && st.real >= 1 && !st.ready) {                        // the spark reaches the dynamite: flash, then the board
+      st.ready = true; st.tReady = t;
+      if (dyn) { const a = dyn.getBoundingClientRect(), b = el.getBoundingClientRect();
+        el.style.setProperty('--fx', ((a.left + a.width / 2 - b.left) / b.width * 100) + '%'); el.style.setProperty('--fy', ((a.top + a.height / 2 - b.top) / b.height * 100) + '%'); }
+      el.classList.add('ready');
+      if (root.Audio2 && root.Audio2.play) try { root.Audio2.play('sfx_cracker_pop'); } catch (e) {}
+    }
     if (st.ready && !(cfg.clickToStart && !/[?&]scenario=/.test(location.search)) && t - st.tReady > 450) return leave();
     raf = requestAnimationFrame(tick);
   }
@@ -1527,7 +1532,7 @@ window.ASSET_MANIFEST = {
       cancelAnimationFrame(raf);
       el.hidden = false; el.classList.remove('out', 'ready'); el.style.setProperty('--fade', cfg.fadeMs + 'ms');
       place(); icons();
-      parts = Array.from({ length: 40 }, () => spawn(true));
+      parts = Array.from({ length: 40 }, () => spawn(true)); sparks = [];
       st = { t0: performance.now(), real: 0, shown: 0, ready: false, leaving: false };
       raf = requestAnimationFrame(tick);
     },

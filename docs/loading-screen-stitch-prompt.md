@@ -35,3 +35,4 @@ OUTPUT: two frames of the same screen, "Loading (64%)" and "Ready (Click to Ride
 
 ## Prototype implementation status
 - 2026-11-24: built in the game from the Stitch export (`art/ui/loading_stitch/`), desktop layout only (the stage is always 16:9; the Stitch mobile page isn't used). Darshan finds the design not very convincing yet; it is in to judge in context.
+- 2026-11-24 (later): Darshan: "bad output, rebuild on your own". Replaced by a screen built from the game's art (README "Loading screen"); the Stitch export stays in `art/ui/loading_stitch/` for reference only.

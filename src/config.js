@@ -23,8 +23,8 @@
     texts: {
       brand: 'All Aboard',                          // small line on the splash screen (ASSUMED)
       loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
-      // loading screen (Darshan's Stitch design, 2026-11-24): feature cards [title, line], ready sign, footer. Wording ASSUMED.
-      splashCards: [['Expanding Symbols', 'One symbol takes the reels in free spins'], ['Power Dynamite', 'Blasts in bigger wins'], ['Win up to 5,500x', 'Ride the gold train']],
+      // loading screen (2026-11-24): feature boards [title, line, symbol art], ready sign, footer. Wording ASSUMED.
+      splashCards: [['Free Spins', '3 or more Scatters start 10 free spins', 'sym_scatter_idle'], ['Expanding Symbol', 'One symbol takes over whole reels', 'sym_00_idle'], ['Win up to 5,500x', 'Rob the gold train', 'sym_02_idle']],
       splashGo: 'CLICK TO RIDE',
       splashFoot: '18+ Play responsibly',
       retrigger: 'MORE SCATTERS!',                 // retrigger modal title
