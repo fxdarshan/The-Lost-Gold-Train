@@ -16,3 +16,6 @@ Supplied tracks in `art/audio/`. Game files: `python3 tools/audio/make_loop.py i
 
 ## Transition video (2026-11-23)
 `video/trans_to_free.webm` and `.mp4`: the free spins transition, made from Darshan's green-screen Magnific clip by `tools/asset-pipeline/transition_from_video.py` (opacity per frame in `manifest.video.trans_to_free.alpha`). Source in `source/originals/transitions/`.
+
+## Loading screen (2026-11-24)
+`images/ui/ui_splash_bg.webp`: loading screen backdrop, the approved night train key art (`source/originals/transitions/trans_a_keyart.png`).

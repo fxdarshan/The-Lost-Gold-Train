@@ -1501,7 +1501,7 @@
   /* ------------------------------------------------------------ boot */
   async function boot() {
     const splash = root.Splash && C.splash && C.splash.enabled && !/[?&]nosplash\b/.test(location.search) ? root.Splash : null;
-    if (splash) splash.start(C);
+    if (splash) { splash.start(C); splash.onEnter = () => { SND.init(root.ASSET_MANIFEST); if (!SND.musicKey) SND.playMusic(G.fs.active ? 'bgm_freegame_loop' : 'bgm_basegame_loop'); }; }
     try { await Promise.race([Promise.all([document.fonts.load(`80px ${BLOCK}`), document.fonts.load(`700 40px ${UIF}`)]), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
     try { G.assetInfo = await A.load(root.ASSET_MANIFEST, W, H, L, splash && splash.progress); }
     catch (e) { console.error('asset load failed, starting with placeholders', e); G.assetInfo = G.assetInfo || { missing: [], loaded: 0 }; }

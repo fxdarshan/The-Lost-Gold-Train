@@ -34,4 +34,4 @@ OUTPUT: two frames of the same screen, "Loading (64%)" and "Ready (Click to Ride
 ```
 
 ## Prototype implementation status
-- Prompt only. When the Stitch design comes back, rebuild `src/splash.js` and its CSS to match, re-using the game's art.
+- 2026-11-24: built in the game from the Stitch export (`art/ui/loading_stitch/`), desktop layout only (the stage is always 16:9; the Stitch mobile page isn't used). Darshan finds the design not very convincing yet; it is in to judge in context.

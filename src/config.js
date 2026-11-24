@@ -23,6 +23,10 @@
     texts: {
       brand: 'All Aboard',                          // small line on the splash screen (ASSUMED)
       loading: ['Stoking the Engine...', 'Laying the Tracks...', 'Loading the Gold...', 'Checking the Map...'],
+      // loading screen (Darshan's Stitch design, 2026-11-24): feature cards [title, line], ready sign, footer. Wording ASSUMED.
+      splashCards: [['Expanding Symbols', 'One symbol takes the reels in free spins'], ['Power Dynamite', 'Blasts in bigger wins'], ['Win up to 5,500x', 'Ride the gold train']],
+      splashGo: 'CLICK TO RIDE',
+      splashFoot: '18+ Play responsibly',
       retrigger: 'MORE SCATTERS!',                 // retrigger modal title
       expandedPanel: ['#f0a050', '#f6c98a', '#fbe8c8']   // sunset behind the Outlaw's full-reel art (top to bottom)
     },
@@ -151,7 +155,7 @@
     ],
 
     // ------------------------------------------------------- animation timing (ASSUMED, frames at 30 fps)
-    splash: { enabled: true, minMs: 2600, fadeMs: 700 },
+    splash: { enabled: true, minMs: 2600, fadeMs: 700, clickToStart: true },   // clickToStart: wait for CLICK TO RIDE (Stitch design)
     fps: 30,
     frames: {
       bgBaseLoop: 120,                  // background breathing

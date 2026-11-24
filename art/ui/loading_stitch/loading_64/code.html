@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="en" class="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Lost Gold Train — Loading (64%)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'gold': '#F2B13A',
+        'gold-bright': '#FFD66B',
+        'gold-deep': '#C08604',
+        'parchment': '#EAD7B0',
+        'parchment-edge': '#D5C4AF',
+        'on-parchment': '#23140A',
+        'wood': '#3B2414',
+        'wood-dark': '#26160B',
+        'on-wood': '#FFD66B',
+        'brass': '#B8893A',
+        'brass-light': '#E3B866',
+        'crimson': '#9E2B25',
+        'ink': '#23140A',
+        'night-indigo': '#0B1326',
+        'night-teal': '#0D2430',
+        'muted-mist': '#B8C2D6',
+        'dark-primary': '#F2B13A',
+        'dark-on-primary': '#281900',
+        'dark-primary-container': '#3B2414',
+        'dark-on-primary-container': '#FFD66B',
+        'dark-secondary': '#9E2B25',
+        'dark-on-secondary': '#FFEEDA',
+        'dark-surface': '#0B1326',
+        'dark-surface-container': '#131B2E',
+        'dark-surface-container-high': '#23140A',
+        'dark-on-surface': '#FAF8FF',
+        'dark-on-surface-variant': '#D5C4AF',
+        'dark-outline': '#B8893A',
+        'dark-outline-variant': '#504535',
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '10px',
+        'lg': '14px',
+        'full': '9999px',
+      },
+      spacing: {
+        'xs': '4px',
+        'sm': '8px',
+        'md': '16px',
+        'lg': '24px',
+        'xl': '32px',
+        '2xl': '48px',
+      },
+      fontFamily: {
+        'display': ['"Rye"', 'sans-serif'],
+        'headline': ['"Rye"', 'sans-serif'],
+        'title': ['"Rye"', 'sans-serif'],
+        'label': ['"Bitter"', 'sans-serif'],
+        'body': ['"Bitter"', 'sans-serif'],
+        'caption': ['"Bitter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '46px', letterSpacing: '1.5px', fontWeight: '400' }],
+        'display-lg-mobile': ['24px', { lineHeight: '30px', letterSpacing: '1px', fontWeight: '400' }],
+        'headline-md': ['28px', { lineHeight: '34px', letterSpacing: '1px', fontWeight: '400' }],
+        'title-sm': ['16px', { lineHeight: '22px', letterSpacing: '0.8px', fontWeight: '400' }],
+        'label-caps': ['13px', { lineHeight: '18px', letterSpacing: '2px', fontWeight: '700' }],
+        'body-md': ['15px', { lineHeight: '21px', letterSpacing: '0.2px', fontWeight: '500' }],
+        'body-sm': ['13px', { lineHeight: '18px', letterSpacing: '0.2px', fontWeight: '500' }],
+        'caption-xs': ['12px', { lineHeight: '16px', letterSpacing: '0.4px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '180ms',
+        'cta-pulse': '2200ms',
+        'light-sweep': '4500ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'cta-pulse': '0ms',
+        'light-sweep': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'cta-pulse': 'ease-in-out',
+        'light-sweep': 'ease-in-out',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&amp;family=Bitter:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    @keyframes logoSweep {
+      0%, 65% { transform: translateX(-140%) skewX(-22deg); opacity: 0; }
+      75% { opacity: 0.55; }
+      90%, 100% { transform: translateX(160%) skewX(-22deg); opacity: 0; }
+    }
+    @keyframes emberFloat {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      20% { opacity: 0.75; }
+      80% { opacity: 0.45; }
+      100% { transform: translateY(-110px) translateX(28px) scale(0.4); opacity: 0; }
+    }
+    @keyframes steamPuff {
+      0% { transform: translate(0, 0) scale(0.5); opacity: 0.8; }
+      60% { transform: translate(-10px, -18px) scale(1.1); opacity: 0.45; }
+      100% { transform: translate(-22px, -32px) scale(1.45); opacity: 0; }
+    }
+    .logo-sweep {
+      animation: logoSweep 4.5s ease-in-out infinite;
+    }
+    .ember {
+      animation: emberFloat 5.5s ease-in-out infinite;
+    }
+    .steam-1 { animation: steamPuff 1.8s ease-out infinite; }
+    .steam-2 { animation: steamPuff 1.8s ease-out 0.6s infinite; }
+    .steam-3 { animation: steamPuff 1.8s ease-out 1.2s infinite; }
+  </style>
+</head>
+<body class="bg-night-indigo text-dark-on-surface font-body antialiased selection:bg-gold selection:text-ink">
+  <div class="relative min-h-[1024px] w-full overflow-hidden flex flex-col justify-between" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Full-bleed Key Art Background -->
+    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBo4QZM2_jxWVYqJOXUUTE5whcp74Nvn8p9kX4YK1TD76oD9SbqnKigCp6Jxs3XmV5LOJ85pg_bI-PTOybKYV0BZGvXPTQZ7KAGouB5YH8AAnppZCoqBxPQcZkTEb26aRPid5rnyvn6J1zKyaYbaQlZgEmUBOYx9OFIkHjVGbQq54tid87cAPgLZF8cQIDegw1jTY0Ric2ptbW0ClOzBpVLTmjemhLF4vwX_ikFfpviANfZDcnQHVI5zw" alt="Outlaw on horseback chasing The Lost Gold Train under a full desert moon" class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none">
+
+    <!-- Vignette & Bottom Gradient Scrim -->
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 42%, rgba(11,19,38,0.08) 38%, rgba(11,19,38,0.72) 100%);"></div>
+    <div class="absolute inset-x-0 bottom-0 h-[52%] pointer-events-none" style="background: linear-gradient(to top, rgba(11,19,38,0.96) 0%, rgba(11,19,38,0.84) 45%, rgba(11,19,38,0) 100%);"></div>
+    <div class="absolute inset-x-0 top-0 h-28 pointer-events-none" style="background: linear-gradient(to bottom, rgba(11,19,38,0.75) 0%, rgba(11,19,38,0) 100%);"></div>
+
+    <!-- Subtle Moon Glow Top Right & Drifting Embers -->
+    <div class="absolute -top-12 -right-12 w-96 h-96 rounded-full pointer-events-none opacity-35" style="background: radial-gradient(circle, rgba(255,214,107,0.45) 0%, rgba(255,214,107,0) 70%);"></div>
+    <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      <span class="ember absolute bottom-28 left-[18%] w-1.5 h-1.5 rounded-full bg-gold-bright"></span>
+      <span class="ember absolute bottom-36 left-[34%] w-1 h-1 rounded-full bg-gold" style="animation-delay: 1.4s;"></span>
+      <span class="ember absolute bottom-24 left-[62%] w-1.5 h-1.5 rounded-full bg-gold-bright" style="animation-delay: 2.6s;"></span>
+      <span class="ember absolute bottom-40 left-[78%] w-1 h-1 rounded-full bg-gold" style="animation-delay: 3.7s;"></span>
+      <span class="ember absolute bottom-32 left-[48%] w-1 h-1 rounded-full bg-gold-bright" style="animation-delay: 0.8s;"></span>
+    </div>
+
+    <!-- 2. TOP BAR (thin, transparent) -->
+    <header class="relative z-20 w-full flex items-center justify-between px-xl pt-lg pb-sm">
+      <div class="flex items-center gap-sm">
+        <svg class="w-5 h-5 text-gold-bright drop-shadow" viewBox="0 0 24 24" fill="currentColor" stroke="#23140A" stroke-width="1.2" aria-hidden="true">
+          <path d="M12 2l2.6 5.6 6.2.8-4.5 4.3 1.1 6.1L12 15.9l-5.4 2.9 1.1-6.1-4.5-4.3 6.2-.8L12 2z"></path>
+        </svg>
+        <span class="font-label text-label-caps text-gold-bright uppercase tracking-widest drop-shadow" data-design-text-token="label-caps">ALL ABOARD</span>
+      </div>
+
+      <div class="flex items-center gap-sm">
+        <!-- COMPONENT: button-icon (Sound) -->
+        <button id="sound-toggle" data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="Toggle sound" aria-pressed="true" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-wood-dark/85 border-2 border-brass text-gold-bright transition-colors duration-state-change ease-state-change hover:bg-wood hover:border-gold-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-bright">
+          <svg id="sound-on-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="sound-off-icon" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- COMPONENT: button-icon (Fullscreen) -->
+        <button id="fullscreen-toggle" data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="Toggle fullscreen" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-wood-dark/85 border-2 border-brass text-gold-bright transition-colors duration-state-change ease-state-change hover:bg-wood hover:border-gold-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-bright">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 3. LOGO (Upper third, centred, warm gold glow behind it) -->
+    <section class="relative z-10 flex flex-col items-center justify-start pt-xs">
+      <div class="relative flex items-center justify-center">
+        <div class="absolute inset-0 -inset-x-16 -inset-y-8 rounded-full pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(242,177,58,0.42) 0%, rgba(255,214,107,0.16) 45%, rgba(242,177,58,0) 75%);"></div>
+        <div class="relative overflow-hidden rounded-lg">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrBrYQN0imHW_yiw1fNdOEjrGb6f6Xqv13W2bIuVxu0zBU9yORtCcz_vjj0ZJHhUsggRji105is1xfVS5cgG5-0WZHGQ5kdOnBqOFcSBQoK6Vz9PnnlQUEoJzUSxjoa-BtcgQUjgQ-yzV0x2M7BetIYjqWcw1D2mdo1loJbW3enmg27iw6IJ0Y58NuLxXtoqJpTd9hCkYV7hJbgX1k0qYVzYR1HY6b-btQdCDm3WUkLKg5c7Az2b4xxAoLQ" alt="The Lost Gold Train" class="relative h-56 w-auto object-contain select-none" style="filter: drop-shadow(0 12px 24px rgba(11,19,38,0.85));">
+          <div class="logo-sweep absolute inset-y-0 w-24 pointer-events-none" style="background: linear-gradient(90deg, rgba(255,214,107,0) 0%, rgba(255,214,107,0.45) 50%, rgba(255,214,107,0) 100%);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Centre Stage preserving Outlaw on horseback & Gold Train -->
+    <div class="flex-1 min-h-48" aria-hidden="true"></div>
+
+    <!-- Bottom Band: Feature Teasers, Hero Railway Loading Bar, Legal Footer -->
+    <main class="relative z-20 w-full flex flex-col items-center gap-lg px-xl pb-lg">
+
+      <!-- 4. FEATURE TEASERS (3 small parchment cards on wood frames with brass corner rivets) -->
+      <section aria-label="Game features" class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-lg items-stretch">
+        <!-- Card 1: Sheriff Badge -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="relative h-full bg-wood border-2 border-ink rounded-md p-xs shadow-2xl">
+          <span class="absolute top-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <div class="h-full bg-parchment text-on-parchment border border-brass rounded-sm px-md py-sm flex items-center gap-md">
+            <div class="shrink-0 w-10 h-10 flex items-center justify-center">
+              <svg class="w-9 h-9" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <path d="M18 3l3.9 7.8 8.6 1.3-6.2 6.1 1.5 8.6L18 22.8l-7.8 4 1.5-8.6-6.2-6.1 8.6-1.3L18 3z" fill="#F2B13A" stroke="#23140A" stroke-width="2" stroke-linejoin="round"></path>
+                <circle cx="18" cy="3" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+                <circle cx="30.5" cy="12.1" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+                <circle cx="25.8" cy="26.8" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+                <circle cx="10.2" cy="26.8" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+                <circle cx="5.5" cy="12.1" r="1.8" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-display text-title-sm text-on-parchment uppercase leading-tight" data-design-text-token="title-sm">EXPANDING SYMBOLS</h2>
+              <p class="font-body text-body-sm text-on-parchment leading-snug text-pretty" data-design-text-token="body-sm">One symbol takes the reels in free spins</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Power Dynamite -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="relative h-full bg-wood border-2 border-ink rounded-md p-xs shadow-2xl">
+          <span class="absolute top-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <div class="h-full bg-parchment text-on-parchment border border-brass rounded-sm px-md py-sm flex items-center gap-md">
+            <div class="shrink-0 w-10 h-10 flex items-center justify-center">
+              <svg class="w-9 h-9" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <rect x="8" y="13" width="6" height="17" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"></rect>
+                <rect x="15" y="11" width="6" height="19" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"></rect>
+                <rect x="22" y="13" width="6" height="17" rx="2" fill="#9E2B25" stroke="#23140A" stroke-width="2"></rect>
+                <rect x="7" y="18" width="22" height="4" fill="#3B2414" stroke="#23140A" stroke-width="1.5"></rect>
+                <path d="M18 11 C18 7, 23 6, 26 4" stroke="#23140A" stroke-width="2" stroke-linecap="round"></path>
+                <circle cx="27" cy="4" r="2.5" fill="#FFD66B" stroke="#9E2B25" stroke-width="1.2"></circle>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-display text-title-sm text-on-parchment uppercase leading-tight" data-design-text-token="title-sm">POWER DYNAMITE</h2>
+              <p class="font-body text-body-sm text-on-parchment leading-snug text-pretty" data-design-text-token="body-sm">Blasts in bigger wins</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Gold Bars -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="relative h-full bg-wood border-2 border-ink rounded-md p-xs shadow-2xl">
+          <span class="absolute top-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <span class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-brass-light border border-ink" aria-hidden="true"></span>
+          <div class="h-full bg-parchment text-on-parchment border border-brass rounded-sm px-md py-sm flex items-center gap-md">
+            <div class="shrink-0 w-10 h-10 flex items-center justify-center">
+              <svg class="w-9 h-9" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <polygon points="7,27 11,19 21,19 25,27" fill="#F2B13A" stroke="#23140A" stroke-width="2" stroke-linejoin="round"></polygon>
+                <polygon points="15,27 19,19 29,19 33,27" fill="#FFD66B" stroke="#23140A" stroke-width="2" stroke-linejoin="round"></polygon>
+                <polygon points="11,19 15,11 25,11 29,19" fill="#FFD66B" stroke="#23140A" stroke-width="2" stroke-linejoin="round"></polygon>
+                <path d="M16 14h6" stroke="#23140A" stroke-width="1.5" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-display text-title-sm text-on-parchment uppercase leading-tight" data-design-text-token="title-sm">WIN UP TO 5,500x</h2>
+              <p class="font-body text-body-sm text-on-parchment leading-snug text-pretty" data-design-text-token="body-sm">Ride the gold train</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 5 & 6. STATUS LINE + HERO RAILWAY TRACK LOADING BAR (60% width, centred) -->
+      <section aria-label="Loading progress" data-component-id="loading-linear" data-component-type="loading" data-component-variant="linear" class="w-full md:w-[60%] max-w-5xl mx-auto flex flex-col gap-sm">
+        <!-- Status Line -->
+        <div class="flex items-center justify-between px-sm">
+          <span id="status-message" aria-live="polite" class="font-display text-title-sm text-parchment drop-shadow" data-design-text-token="title-sm">Stoking the Engine...</span>
+          <span class="font-display text-headline-md text-gold-bright tabular-nums drop-shadow" data-design-text-token="headline-md">64%</span>
+        </div>
+
+        <!-- Railway Track Bar -->
+        <div class="relative flex items-center py-md" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" aria-label="Game loading progress">
+          <!-- Left Brass End Cap -->
+          <div class="relative z-20 w-4 h-9 bg-brass border-2 border-ink rounded-l-sm flex flex-col justify-between py-1 items-center shrink-0 shadow-md">
+            <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
+          </div>
+
+          <!-- Track Body -->
+          <div class="relative flex-1 h-5 bg-wood-dark/95 border-y-2 border-ink">
+            <!-- Wooden Sleepers -->
+            <div class="absolute inset-x-0 -bottom-2 h-2 flex justify-between px-sm pointer-events-none" aria-hidden="true">
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+              <span class="w-2.5 h-2 bg-wood border border-ink rounded-sm"></span>
+            </div>
+
+            <!-- Iron Rail Highlights -->
+            <div class="absolute inset-x-0 top-0.5 h-0.5 bg-muted-mist/30 pointer-events-none"></div>
+            <div class="absolute inset-x-0 bottom-0.5 h-0.5 bg-muted-mist/20 pointer-events-none"></div>
+
+            <!-- Glowing Molten Gold Fill (64%) -->
+            <div class="relative h-full w-[64%] transition-all duration-state-change" style="background: linear-gradient(90deg, #C08604 0%, #F2B13A 55%, #FFD66B 100%); box-shadow: 0 0 18px rgba(242, 177, 58, 0.75);">
+              <!-- Small Black Steam Locomotive Progress Marker at 64% front -->
+              <div class="absolute -right-6 -top-11 w-14 h-12 pointer-events-none" aria-hidden="true">
+                <span class="steam-1 absolute left-6 -top-2 w-3 h-3 rounded-full bg-parchment/80"></span>
+                <span class="steam-2 absolute left-5 -top-3 w-3.5 h-3.5 rounded-full bg-parchment/70"></span>
+                <span class="steam-3 absolute left-7 -top-1 w-2.5 h-2.5 rounded-full bg-parchment/75"></span>
+
+                <svg class="w-14 h-12 drop-shadow-lg" viewBox="0 0 64 48" fill="none">
+                  <rect x="6" y="16" width="14" height="18" rx="1" fill="#23140A" stroke="#0B1326" stroke-width="1.5"></rect>
+                  <rect x="9" y="19" width="7" height="6" fill="#FFD66B" stroke="#23140A" stroke-width="1"></rect>
+                  <rect x="4" y="14" width="18" height="3" rx="1" fill="#9E2B25" stroke="#23140A" stroke-width="1.2"></rect>
+                  <rect x="20" y="20" width="26" height="14" rx="2" fill="#1A1614" stroke="#0B1326" stroke-width="1.5"></rect>
+                  <rect x="24" y="22" width="18" height="2" fill="#B8893A"></rect>
+                  <polygon points="38,20 36,10 44,10 42,20" fill="#23140A" stroke="#0B1326" stroke-width="1.5"></polygon>
+                  <rect x="35" y="8" width="10" height="3" rx="1" fill="#B8893A" stroke="#23140A" stroke-width="1"></rect>
+                  <circle cx="47" cy="25" r="3" fill="#FFD66B" stroke="#23140A" stroke-width="1.2"></circle>
+                  <polygon points="46,34 56,38 46,38" fill="#9E2B25" stroke="#23140A" stroke-width="1.5"></polygon>
+                  <circle cx="13" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"></circle>
+                  <circle cx="26" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"></circle>
+                  <circle cx="38" cy="37" r="4.5" fill="#3B2414" stroke="#B8893A" stroke-width="1.5"></circle>
+                  <line x1="13" y1="37" x2="38" y2="37" stroke="#FFD66B" stroke-width="1.5"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Brass End Cap -->
+          <div class="relative z-20 w-4 h-9 bg-brass border-2 border-ink rounded-r-sm flex flex-col justify-between py-1 items-center shrink-0 shadow-md">
+            <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. FOOTER -->
+      <footer class="pt-xs">
+        <p class="font-body text-caption-xs text-muted-mist text-center tracking-wide" data-design-text-token="caption-xs">18+ Play responsibly</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var messages = [
+        "Stoking the Engine...",
+        "Loading the Gold Cars...",
+        "Checking the Rails..."
+      ];
+      var idx = 0;
+      var statusEl = document.getElementById("status-message");
+      if (statusEl) {
+        setInterval(function () {
+          idx = (idx + 1) % messages.length;
+          statusEl.textContent = messages[idx];
+        }, 2600);
+      }
+
+      var soundBtn = document.getElementById("sound-toggle");
+      var onIcon = document.getElementById("sound-on-icon");
+      var offIcon = document.getElementById("sound-off-icon");
+      if (soundBtn && onIcon && offIcon) {
+        soundBtn.addEventListener("click", function () {
+          var muted = soundBtn.getAttribute("aria-pressed") === "true";
+          soundBtn.setAttribute("aria-pressed", muted ? "false" : "true");
+          onIcon.classList.toggle("hidden", muted);
+          offIcon.classList.toggle("hidden", !muted);
+        });
+      }
+
+      var fsBtn = document.getElementById("fullscreen-toggle");
+      if (fsBtn) {
+        fsBtn.addEventListener("click", function () {
+          try {
+            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+              document.documentElement.requestFullscreen();
+            } else if (document.exitFullscreen) {
+              document.exitFullscreen();
+            }
+          } catch (e) {}
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>

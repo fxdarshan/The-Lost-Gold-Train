@@ -101,6 +101,7 @@ window.ASSET_MANIFEST = {
     ui_outro_gold:          'assets/images/ui/outro/gold_pile.png',
 
     ui_splash_logo:         'assets/images/ui/ui_splash_logo.webp',
+    ui_splash_bg:           'assets/images/ui/ui_splash_bg.webp',   // loading screen backdrop: the night train key art
     ui_logo_anim:           'assets/images/ui/ui_logo_anim.webp',          // looping logo from Darshan's logo_animation.mp4 (2026-11-23, v2)
     // Buy Feature UI: Darshan's clean final PNGs (Lost_Gold_Train_Buy_Feature_CLEAN_FINAL.zip, 2026-11-21), one image
     // per control, unscaled; neighbour slivers trimmed by tools/asset-pipeline/clean_buy_ui_final.py (originals in
